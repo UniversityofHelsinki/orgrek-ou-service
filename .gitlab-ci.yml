@@ -1,0 +1,77 @@
+image: frolvlad/alpine-glibc
+
+before_script:
+  - apk update && apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python3 curl tar
+  - apk --no-cache add openjdk11 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+  - apk add maven
+
+# Define the stages
+stages:
+  - build
+  - deploy
+
+# Define the process for each stage
+
+build :
+  stage: build
+  tags:
+    - ohtu-build-1
+  script:
+    - java -version
+    - mvn install
+  artifacts:
+    name: orgrek-ous-build-$CI_BUILD_ID-$CI_BUILD_REF
+    paths:
+      - target/*.jar
+
+  # Define the process for deploy stage to development environment
+deploy_dev:
+  stage: deploy
+  tags:
+    - ohtu-build-1
+  environment:
+    name: development
+  only:
+    - main
+  script:
+    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
+    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # before any action, I connect to the OpenShift server with the appropriate credentials
+    # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
+    - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
+    - oc project organisaatiorekisteri
+    - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
+
+deploy_test:
+  stage: deploy
+  tags:
+    - ohtu-build-1
+  environment:
+    name: test
+  only:
+    - test
+  script:
+    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
+    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # before any action, I connect to the OpenShift server with the appropriate credentials
+    # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
+    - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
+    - oc project organisaatiorekisteri
+    - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
+
+deploy_prod:
+  stage: deploy
+  tags:
+    - ohtu-build-1
+  environment:
+    name: prod
+  only:
+    - prod
+  script:
+    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
+    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # before any action, I connect to the OpenShift server with the appropriate credentials
+    # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
+    - oc login https://$OPENSHIFT_ADDR_PROD:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_PROD --insecure-skip-tls-verify
+    - oc project organisaatiorekisteri
+    - oc start-build organisaatiorekisteri-ou-service-prod --from-dir=. --follow
