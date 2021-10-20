@@ -22,34 +22,8 @@ public class HierarchyController {
 
     @RequestMapping(method = GET, value = "/parents/{id}/{date}")
     public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
-
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-
         return hierarchyService.getParentNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
-
-
-        /*
-        List<Node> parents = orgUnitDao.getCurrentParentsByChildNodeId(nodeId, date);
-        List<NodeWrapper> wrapperList = orgUnitDao.getCurrentTypesByChildNodeId(nodeId, date);
-
-        List<NodeDTO> nodeDTOList = new ArrayList<>();
-
-        for (Node parent : parents) {
-            List<String> hierarchies = new ArrayList<>();
-            NodeDTO nodeDTO = new NodeDTO();
-            for (NodeWrapper wrapper : wrapperList) {
-                if (wrapper.getParentNodeId().equals(parent.getId())) {
-                    hierarchies.add(wrapper.getType());
-                }
-            }
-            nodeDTO.setNode(parent);
-            nodeDTO.setHierarchies(hierarchies);
-            nodeDTOList.add(nodeDTO);
-        }
-
-        return nodeDTOList;
-
-         */
     }
 }
