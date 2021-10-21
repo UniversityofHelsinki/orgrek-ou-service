@@ -20,7 +20,8 @@ public class HierarchyService {
 
     public Node[] getParentNodesByIdAndDate(String nodeId, String date) {
         RestTemplate restTemplate = new RestTemplate();
-        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
+        String parentNodesResourceUrl = "http://localhost:8000" + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
+        System.out.println(parentNodesResourceUrl);
         ResponseEntity<Node[]> response = restTemplate.getForEntity(parentNodesResourceUrl, Node[].class);
         return response.getBody();
     }
