@@ -38,21 +38,21 @@ public class HierarchyServiceTest {
         parents.add(parentNode);
 
         NodeWrapper nodeWrapper = new NodeWrapper();
-        nodeWrapper.setParentNodeId("19");
+        nodeWrapper.setNodeId("19");
         nodeWrapper.setType("tutkimus");
         parentNodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
-        nodeWrapper.setParentNodeId("19");
+        nodeWrapper.setNodeId("19");
         nodeWrapper.setType("talous");
         parentNodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
-        nodeWrapper.setParentNodeId("19");
+        nodeWrapper.setNodeId("19");
         nodeWrapper.setType("opetus");
         parentNodesIdsWithTypes.add(nodeWrapper);
 
-        List<NodeDTO> nodeDTOList = hierarchyService.getParentNodesWithTypes(parents, parentNodesIdsWithTypes);
+        List<NodeDTO> nodeDTOList = hierarchyService.getNodesWithTypes(parents, parentNodesIdsWithTypes);
 
         assertEquals(parents.size(), nodeDTOList.size());
         assertEquals(parents.get(0).getId(), nodeDTOList.get(0).getNode().getId());

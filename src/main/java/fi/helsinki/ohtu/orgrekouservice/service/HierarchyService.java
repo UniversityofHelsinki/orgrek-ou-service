@@ -18,33 +18,44 @@ public class HierarchyService {
     @Value("${server.url}")
     private String dbUrl;
 
+    RestTemplate restTemplate = new RestTemplate();
+
     public Node[] getParentNodesByIdAndDate(String nodeId, String date) {
-        RestTemplate restTemplate = new RestTemplate();
-        String parentNodesResourceUrl = "http://localhost:8000" + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
-        System.out.println(parentNodesResourceUrl);
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
         ResponseEntity<Node[]> response = restTemplate.getForEntity(parentNodesResourceUrl, Node[].class);
         return response.getBody();
     }
 
     public NodeWrapper[] getParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
-        RestTemplate restTemplate = new RestTemplate();
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
     }
 
-    public List<NodeDTO> getParentNodesWithTypes(List<Node> parentNodes, List<NodeWrapper> parentNodesIdsWithTypes) {
+    public Node[] getChildNodesByIdAndDate(String nodeId, String date) {
+        String childrenNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/" + nodeId + "/" + date;
+        ResponseEntity<Node[]> response = restTemplate.getForEntity(childrenNodesResourceUrl, Node[].class);
+        return response.getBody();
+    }
+
+    public NodeWrapper[] getChildNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String childNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(childNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
+
+    public List<NodeDTO> getNodesWithTypes(List<Node> nodes, List<NodeWrapper> nodesIdsWithTypes) {
         List<NodeDTO> nodeDTOList = new ArrayList<>();
 
-        for (Node parent : parentNodes) {
+        for (Node node : nodes) {
             List<String> hierarchies = new ArrayList<>();
             NodeDTO nodeDTO = new NodeDTO();
-            for (NodeWrapper wrapper : parentNodesIdsWithTypes) {
-                if (wrapper.getParentNodeId().equals(parent.getId())) {
+            for (NodeWrapper wrapper : nodesIdsWithTypes) {
+                if (wrapper.getNodeId().equals(node.getId())) {
                     hierarchies.add(wrapper.getType());
                 }
             }
-            nodeDTO.setNode(parent);
+            nodeDTO.setNode(node);
             nodeDTO.setHierarchies(hierarchies);
             nodeDTOList.add(nodeDTO);
         }

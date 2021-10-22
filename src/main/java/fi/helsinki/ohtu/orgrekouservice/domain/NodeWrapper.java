@@ -1,15 +1,15 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
 public class NodeWrapper {
-    private String parentNodeId;
+    private String nodeId;
     private String type;
 
-    public String getParentNodeId() {
-        return parentNodeId;
+    public String getNodeId() {
+        return nodeId;
     }
 
-    public void setParentNodeId(String parentNodeId) {
-        this.parentNodeId = parentNodeId;
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 
     public String getType() {

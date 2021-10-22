@@ -24,6 +24,13 @@ public class HierarchyController {
     public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-        return hierarchyService.getParentNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+        return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+    }
+
+    @RequestMapping(method = GET, value = "/children/{id}/{date}")
+    public List<NodeDTO> getChildNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+        List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date));
+        List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getChildNodeTypesByChildNodeIdAndDate(nodeId, date));
+        return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
     }
 }
