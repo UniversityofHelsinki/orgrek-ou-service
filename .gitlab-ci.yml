@@ -41,7 +41,6 @@ deploy_dev:
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
     - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
-
 deploy_test:
   stage: deploy
   tags:
@@ -58,7 +57,6 @@ deploy_test:
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
-
 deploy_prod:
   stage: deploy
   tags:
