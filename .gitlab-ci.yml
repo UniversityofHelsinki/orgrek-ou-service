@@ -55,7 +55,7 @@ deploy_dev:
   only:
     - main
   except:
-    schedules
+    - schedules
   script:
     - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
     - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
