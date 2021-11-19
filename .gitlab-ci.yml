@@ -13,6 +13,7 @@ cache:
 stages:
   - test
   - build
+  - audit_scan
   - deploy
 
 # Define the process for each stage
@@ -53,6 +54,8 @@ deploy_dev:
     name: development
   only:
     - main
+  except:
+    - schedules
   script:
     - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
     - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
@@ -61,6 +64,7 @@ deploy_dev:
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
     - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
+
 deploy_test:
   stage: deploy
   tags:
@@ -77,6 +81,7 @@ deploy_test:
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
+
 deploy_prod:
   stage: deploy
   tags:
@@ -93,3 +98,34 @@ deploy_prod:
     - oc login https://$OPENSHIFT_ADDR_PROD:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_PROD --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
     - oc start-build organisaatiorekisteri-ou-service-prod --from-dir=. --follow
+
+# Rules for the scheduled npm audit and outdated scans
+dependency scanning:
+  stage: audit_scan
+  tags:
+    - ohtu-build-1
+  allow_failure: true
+  only:
+    - schedules
+  script:
+    # Run OWASP audit and write outputs to a txt file.
+    - echo "=== Running OWASP diagnostics ==="
+    - export RESULT_FILE="./target/dependency-check-report.html"
+    - mvn clean install -Powasp-dependency-check
+    - echo "Done with OWASP diagnostics."
+    - echo "Sending results to Slack..."
+    # Send result file to "audit-logs" channel in Ohtu's Slack space (see https://api.slack.com/methods/files.upload).
+    - "curl -F file=@${CI_PROJECT_DIR}/$RESULT_FILE -F 'initial_comment=Orgrek-ou-service audit scan report' -F channels=${AUDIT_RESULT_SLACK_CHANNEL_ID} -F filename=$RESULT_FILE -F filetype=text -H 'Authorization: Bearer '${SLACK_FILE_UPLOAD_TOKEN} https://slack.com/api/files.upload"
+    - echo "Done with sending results to Slack."
+    - export RESULT_NEW_VERSIONS_FILE="./new-versions.txt"
+    - echo " === Scanning maven dependencies with newer versions ===" >> $RESULT_NEW_VERSIONS_FILE
+    - echo "" >> $RESULT_NEW_VERSIONS_FILE
+    - mvn versions:display-dependency-updates >> $RESULT_NEW_VERSIONS_FILE
+    - echo "" >> $RESULT_NEW_VERSIONS_FILE
+    - echo " === Scanning maven dependencies with plugin updates ===" >> $RESULT_NEW_VERSIONS_FILE
+    - echo "" >> $RESULT_NEW_VERSIONS_FILE
+    - mvn versions:display-plugin-updates >> $RESULT_NEW_VERSIONS_FILE
+    # Send result file to "audit-logs" channel in Ohtu's Slack space (see https://api.slack.com/methods/files.upload).
+    - "curl -F file=@${CI_PROJECT_DIR}/$RESULT_NEW_VERSIONS_FILE -F 'initial_comment=Orgrek-ou-service new maven dependencies versions / plugins report' -F channels=${AUDIT_RESULT_SLACK_CHANNEL_ID} -F filename=$RESULT_NEW_VERSIONS_FILE -F filetype=text -H 'Authorization: Bearer '${SLACK_FILE_UPLOAD_TOKEN} https://slack.com/api/files.upload"
+    - echo "Done with sending results to Slack."
+
