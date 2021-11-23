@@ -63,6 +63,9 @@ deploy_dev:
     # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
+    # list environment variables here
+    - oc set env dc/organisaatiorekisteri-ou-service-dev URL=$DB_POD_URL_DEV
+    - oc set env dc/organisaatiorekisteri-ou-service-dev PORT=$OU_SERVICE_PORT
     - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
 
 deploy_test:
@@ -80,6 +83,9 @@ deploy_test:
     # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
+    # list environment variables here
+    - oc set env dc/organisaatiorekisteri-ou-service-test URL=$DB_POD_URL_TEST
+    - oc set env dc/organisaatiorekisteri-ou-service-test PORT=$OU_SERVICE_PORT
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
 
 deploy_prod:
@@ -97,6 +103,9 @@ deploy_prod:
     # this parameter: `--insecure-skip-tls-verify` is important because we use a certificate signed by an unknown authority
     - oc login https://$OPENSHIFT_ADDR_PROD:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_PROD --insecure-skip-tls-verify
     - oc project organisaatiorekisteri
+    # list environment variables here
+    - oc set env dc/organisaatiorekisteri-ou-service-prod URL=$DB_POD_URL_PROD
+    - oc set env dc/organisaatiorekisteri-ou-service-prod PORT=$OU_SERVICE_PORT
     - oc start-build organisaatiorekisteri-ou-service-prod --from-dir=. --follow
 
 # Rules for the scheduled npm audit and outdated scans
