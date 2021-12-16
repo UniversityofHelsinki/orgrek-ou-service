@@ -20,14 +20,20 @@ public class HierarchyService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public Node[] getParentNodesByIdAndDate(String nodeId, String date) {
-        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
+    public Node[] getParentNodesByIdAndDate(String nodeId, String date, boolean isHistory) {
+        String history = isHistory ? "history/" : "";
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + history +  nodeId + "/" + date;
         ResponseEntity<Node[]> response = restTemplate.getForEntity(parentNodesResourceUrl, Node[].class);
         return response.getBody();
     }
 
-    public NodeWrapper[] getParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+    public NodeWrapper[]   getParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
+    public NodeWrapper[] getAllParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/history/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
     }

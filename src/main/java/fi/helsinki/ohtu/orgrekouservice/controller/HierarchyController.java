@@ -22,13 +22,25 @@ public class HierarchyController {
 
     @RequestMapping(method = GET, value = "/parents/{id}/{date}")
     public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
-        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date));
+        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, false));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getParentNodeTypesByChildNodeIdAndDate(nodeId, date));
+        return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+    }
+    @RequestMapping(method = GET, value = "/parents/history/{id}/{date}")
+    public List<NodeDTO> getParentHistoryNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, true  ));
+        List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getAllParentNodeTypesByChildNodeIdAndDate(nodeId, date));
         return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
     }
 
     @RequestMapping(method = GET, value = "/children/{id}/{date}")
     public List<NodeDTO> getChildNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+        List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date));
+        List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getChildNodeTypesByChildNodeIdAndDate(nodeId, date));
+        return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
+    }
+    @RequestMapping(method = GET, value = "/children/history/{id}/{date}")
+    public List<NodeDTO> getChildHistoryNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date));
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getChildNodeTypesByChildNodeIdAndDate(nodeId, date));
         return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
