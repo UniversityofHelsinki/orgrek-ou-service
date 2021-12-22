@@ -20,8 +20,17 @@ public class HierarchyService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public Node[] getParentNodesByIdAndDate(String nodeId, String date) {
-        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + nodeId + "/" + date;
+    private String historyParameter = "historyandcurrent/";
+    private String futureParameter = "futureandcurrent/";
+
+    public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
+       String timeParameter = "";
+        if(time == 0){
+            timeParameter = historyParameter;
+       }else if(time == 1){
+            timeParameter = futureParameter;
+        }
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + timeParameter +  nodeId + "/" + date;
         ResponseEntity<Node[]> response = restTemplate.getForEntity(parentNodesResourceUrl, Node[].class);
         return response.getBody();
     }
@@ -31,15 +40,44 @@ public class HierarchyService {
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
     }
+    public NodeWrapper[] getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/historyandcurrent/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
 
-    public Node[] getChildNodesByIdAndDate(String nodeId, String date) {
-        String childrenNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/" + nodeId + "/" + date;
+    public NodeWrapper[] getFutureAndCurrentParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/futureandcurrent/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
+
+    public Node[] getChildNodesByIdAndDate(String nodeId, String date, int time) {
+        String timeParameter = "";
+        if(time == 0){
+            timeParameter = historyParameter;
+        }else if(time == 1){
+            timeParameter = futureParameter;
+        }
+        String childrenNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/" + timeParameter + nodeId + "/" + date;
         ResponseEntity<Node[]> response = restTemplate.getForEntity(childrenNodesResourceUrl, Node[].class);
         return response.getBody();
     }
 
     public NodeWrapper[] getChildNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
         String childNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(childNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
+
+    public NodeWrapper[] getHistoryAndCurrentChildNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String childNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/historyandcurrent/types/" + nodeId + "/" + date;
+        ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(childNodesResourceUrl, NodeWrapper[].class);
+        return response.getBody();
+    }
+
+    public NodeWrapper[] getFutureAndCurrentChildNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
+        String childNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/futureandcurrent/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(childNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
     }
