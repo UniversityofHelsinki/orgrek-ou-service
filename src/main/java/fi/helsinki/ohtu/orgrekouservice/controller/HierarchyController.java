@@ -31,10 +31,8 @@ public class HierarchyController {
     public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 0));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-
-        hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes, date);
-
-        return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes, date);
+        return hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
     }
 
     @RequestMapping(method = GET, value = "/parents/futureandcurrent/{id}/{date}")

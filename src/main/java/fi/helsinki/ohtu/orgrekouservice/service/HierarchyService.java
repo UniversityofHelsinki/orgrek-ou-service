@@ -100,7 +100,7 @@ public class HierarchyService {
         }
     }
 
-    public NodeWrapper[] filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
+    public List<NodeWrapper> filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
        List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
         Map<String, Node> validHistoryAndCurrentNodes = new HashMap<String, Node>();
         Node node;
@@ -118,7 +118,7 @@ public class HierarchyService {
                 onlyHistoryAndCurrentNodes.add(onlyHistoryOrCurrentNode);
             }
         }
-        return onlyHistoryAndCurrentNodes.toArray(new NodeWrapper[0]);
+        return onlyHistoryAndCurrentNodes;
     }
 
     public List<NodeDTO> getNodesWithTypes(List<Node> nodes, List<NodeWrapper> nodesIdsWithTypes) {
