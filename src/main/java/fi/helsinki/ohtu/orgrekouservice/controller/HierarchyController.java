@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -27,11 +28,11 @@ public class HierarchyController {
         return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
     }
     @RequestMapping(method = GET, value = "/parents/historyandcurrent/{id}/{date}")
-    public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+    public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 0));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
 
-        hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes);
+        hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes, date);
 
         return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
     }

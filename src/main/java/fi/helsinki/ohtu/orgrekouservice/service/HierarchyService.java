@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -87,16 +90,17 @@ public class HierarchyService {
         return response.getBody();
     }
 
-    private boolean isNodeHistoryOrCurrentNode(Node node) {
-        Date now = new Date();
-        if (node.getStartDate() == null || node.getStartDate().before(now)) {
+    private boolean isNodeHistoryOrCurrentNode(Node node, String date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        Date nodeDate = formatter.parse(date);
+        if (node.getStartDate() == null || node.getStartDate().before(nodeDate)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public NodeWrapper[] filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList) {
+    public NodeWrapper[] filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
        List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
         Map<String, Node> validHistoryAndCurrentNodes = new HashMap<String, Node>();
         Node node;
@@ -107,7 +111,7 @@ public class HierarchyService {
             } else {
                 node = getNodeByNodeId(wrapper.getNodeId());
             }
-            if (isNodeHistoryOrCurrentNode(node)) {
+            if (isNodeHistoryOrCurrentNode(node, date)) {
                 validHistoryAndCurrentNodes.put(node.getId(), node);
                 onlyHistoryOrCurrentNode.setNodeId(wrapper.getNodeId());
                 onlyHistoryOrCurrentNode.setType(wrapper.getType());
