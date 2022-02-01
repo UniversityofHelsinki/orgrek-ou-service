@@ -62,6 +62,6 @@ public class HierarchyController {
         List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 1));
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(childNodesIdsWithTypes, date);
-        return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
+        return hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
     }
 }
