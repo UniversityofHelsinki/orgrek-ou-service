@@ -90,6 +90,16 @@ public class HierarchyService {
         return response.getBody();
     }
 
+    private boolean isNodeFutureOrCurrentNode(Node node, String date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        Date nodeDate = formatter.parse(date);
+        if (node.getEndDate() == null || node.getEndDate().after(nodeDate)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean isNodeHistoryOrCurrentNode(Node node, String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date nodeDate = formatter.parse(date);
@@ -98,6 +108,27 @@ public class HierarchyService {
         } else {
             return false;
         }
+    }
+
+    public List<NodeWrapper> filterOnlyFutureAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
+        List<NodeWrapper> onlyFutureAndCurrentNodes = new ArrayList<>();
+        Map<String, Node> validFutureAndCurrentNodes = new HashMap<String, Node>();
+        Node node;
+        for (NodeWrapper wrapper : nodeWrapperList) {
+            NodeWrapper onlyFutureOrCurrentNode = new NodeWrapper();
+            if (validFutureAndCurrentNodes.containsKey(wrapper.getNodeId())) {
+                node = validFutureAndCurrentNodes.get(wrapper.getNodeId());
+            } else {
+                node = getNodeByNodeId(wrapper.getNodeId());
+            }
+            if (isNodeFutureOrCurrentNode(node, date)) {
+                validFutureAndCurrentNodes.put(node.getId(), node);
+                onlyFutureOrCurrentNode.setNodeId(wrapper.getNodeId());
+                onlyFutureOrCurrentNode.setType(wrapper.getType());
+                onlyFutureAndCurrentNodes.add(onlyFutureOrCurrentNode);
+            }
+        }
+        return onlyFutureAndCurrentNodes;
     }
 
     public List<NodeWrapper> filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
