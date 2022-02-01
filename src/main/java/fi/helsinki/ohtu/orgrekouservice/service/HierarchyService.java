@@ -9,8 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class HierarchyService {
@@ -22,6 +21,12 @@ public class HierarchyService {
 
     private String historyParameter = "historyandcurrent/";
     private String futureParameter = "futureandcurrent/";
+
+    public Node getNodeByNodeId(String nodeId) {
+        String getNodeByIdResourceUrl = dbUrl + Constants.NODE_API_PATH + "/id/" + nodeId;
+        ResponseEntity<Node> response = restTemplate.getForEntity(getNodeByIdResourceUrl, Node.class);
+        return response.getBody();
+    }
 
     public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
        String timeParameter = "";
@@ -80,6 +85,36 @@ public class HierarchyService {
         String childNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/children/futureandcurrent/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(childNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
+    }
+
+    private boolean isNodeHistoryOrCurrentNode(Node node) {
+        Date now = new Date();
+        if (node.getStartDate() == null || node.getStartDate().before(now)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public NodeWrapper[] filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList) {
+       List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
+        Map<String, Node> validHistoryAndCurrentNodes = new HashMap<String, Node>();
+        Node node;
+        for (NodeWrapper wrapper : nodeWrapperList) {
+            NodeWrapper onlyHistoryOrCurrentNode = new NodeWrapper();
+            if (validHistoryAndCurrentNodes.containsKey(wrapper.getNodeId())) {
+                node = validHistoryAndCurrentNodes.get(wrapper.getNodeId());
+            } else {
+                node = getNodeByNodeId(wrapper.getNodeId());
+            }
+            if (isNodeHistoryOrCurrentNode(node)) {
+                validHistoryAndCurrentNodes.put(node.getId(), node);
+                onlyHistoryOrCurrentNode.setNodeId(wrapper.getNodeId());
+                onlyHistoryOrCurrentNode.setType(wrapper.getType());
+                onlyHistoryAndCurrentNodes.add(onlyHistoryOrCurrentNode);
+            }
+        }
+        return onlyHistoryAndCurrentNodes.toArray(new NodeWrapper[0]);
     }
 
     public List<NodeDTO> getNodesWithTypes(List<Node> nodes, List<NodeWrapper> nodesIdsWithTypes) {

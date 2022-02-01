@@ -30,6 +30,9 @@ public class HierarchyController {
     public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 0));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
+
+        hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes);
+
         return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
     }
 
