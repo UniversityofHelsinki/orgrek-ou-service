@@ -40,7 +40,7 @@ public class HierarchyController {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 1));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(parentNodesIdsWithTypes, date);
-        return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+        return hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
     }
 
     @RequestMapping(method = GET, value = "/children/{id}/{date}")
@@ -50,16 +50,18 @@ public class HierarchyController {
         return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
     }
     @RequestMapping(method = GET, value = "/children/historyandcurrent/{id}/{date}")
-    public List<NodeDTO> getChildHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+    public List<NodeDTO> getChildHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
         List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 0));
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
-        return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
+        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(childNodesIdsWithTypes, date);
+        return hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
     }
 
     @RequestMapping(method = GET, value = "/children/futureandcurrent/{id}/{date}")
-    public List<NodeDTO> getChildFutureAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
+    public List<NodeDTO> getChildFutureAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
         List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 1));
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
+        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(childNodesIdsWithTypes, date);
         return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
     }
 }
