@@ -1,5 +1,6 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
+import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
 import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.NodeWrapper;
@@ -11,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -48,6 +48,13 @@ public class HierarchyService {
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
         return response.getBody();
     }
+
+    public Attribute[] getNodeAttributesByNodeIdAndDate(int nodeId, String date) {
+        String nodeAttributesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/" + nodeId + "/" + date + "/attributes";
+        ResponseEntity<Attribute[]> response = restTemplate.getForEntity(nodeAttributesResourceUrl, Attribute[].class);
+        return response.getBody();
+    }
+
     public NodeWrapper[] getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/historyandcurrent/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
@@ -171,4 +178,15 @@ public class HierarchyService {
         return nodeDTOList;
     }
 
+    public List<NodeDTO> getNodesWithAttributes(List<Node> nodes, List<NodeDTO> nodeDTOs, String date) {
+
+        for (Node node : nodes) {
+            for(NodeDTO nodeDTO : nodeDTOs){
+                if(node.getId().equals(nodeDTO.getNode().getId())){
+                    nodeDTO.setAttributes(List.of(getNodeAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                }
+            }
+        }
+        return nodeDTOs;
+    }
 }

@@ -25,7 +25,8 @@ public class HierarchyController {
     public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 2));
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-        return hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
+        return hierarchyService.getNodesWithAttributes(parentNodes, nodeDTOS, date);
     }
     @RequestMapping(method = GET, value = "/parents/historyandcurrent/{id}/{date}")
     public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
@@ -47,7 +48,8 @@ public class HierarchyController {
     public List<NodeDTO> getChildNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 2));
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getChildNodeTypesByChildNodeIdAndDate(nodeId, date));
-        return hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
+        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
+        return hierarchyService.getNodesWithAttributes(childNodes, nodeDTOS, date);
     }
     @RequestMapping(method = GET, value = "/children/historyandcurrent/{id}/{date}")
     public List<NodeDTO> getChildHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {

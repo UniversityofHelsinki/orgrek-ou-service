@@ -5,6 +5,7 @@ import java.util.List;
 public class NodeDTO {
     private Node node;
     private List<String> hierarchies;
+    private List<Attribute> attributes;
 
 
     public Node getNode() {
@@ -21,6 +22,14 @@ public class NodeDTO {
 
     public void setHierarchies(List<String> hierarchies) {
         this.hierarchies = hierarchies;
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
 }
