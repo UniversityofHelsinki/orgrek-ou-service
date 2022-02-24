@@ -34,7 +34,7 @@ public class HierarchyController {
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes, date);
         List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
-        return hierarchyService.getNodesWithAttributes(parentNodes, nodeDTOS, date);
+        return hierarchyService.getNodesWithFutureOrHistoryAttributes(parentNodes, nodeDTOS, date, true);
     }
 
     @RequestMapping(method = GET, value = "/parents/futureandcurrent/{id}/{date}")
@@ -43,7 +43,7 @@ public class HierarchyController {
         List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(parentNodesIdsWithTypes, date);
         List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
-        return hierarchyService.getNodesWithAttributes(parentNodes, nodeDTOS, date);
+        return hierarchyService.getNodesWithFutureOrHistoryAttributes(parentNodes, nodeDTOS, date, false);
     }
 
     @RequestMapping(method = GET, value = "/children/{id}/{date}")
@@ -59,7 +59,7 @@ public class HierarchyController {
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(childNodesIdsWithTypes, date);
         List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
-        return hierarchyService.getNodesWithAttributes(childNodes, nodeDTOS, date);
+        return hierarchyService.getNodesWithFutureOrHistoryAttributes(childNodes, nodeDTOS, date, true);
     }
 
     @RequestMapping(method = GET, value = "/children/futureandcurrent/{id}/{date}")
@@ -68,6 +68,6 @@ public class HierarchyController {
         List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
         List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(childNodesIdsWithTypes, date);
         List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
-        return hierarchyService.getNodesWithAttributes(childNodes, nodeDTOS, date);
+        return hierarchyService.getNodesWithFutureOrHistoryAttributes(childNodes, nodeDTOS, date, false);
     }
 }

@@ -55,6 +55,18 @@ public class HierarchyService {
         return response.getBody();
     }
 
+    public Attribute[] getNodeHistoryAndCurrentAttributesByNodeIdAndDate(int nodeId, String date) {
+        String nodeAttributesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/historyandcurrent/" + nodeId + "/" + date + "/attributes";
+        ResponseEntity<Attribute[]> response = restTemplate.getForEntity(nodeAttributesResourceUrl, Attribute[].class);
+        return response.getBody();
+    }
+
+    public Attribute[] getNodeFutureAndCurrentAttributesByNodeIdAndDate(int nodeId, String date) {
+        String nodeAttributesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/futureandcurrent/" + nodeId + "/" + date + "/attributes";
+        ResponseEntity<Attribute[]> response = restTemplate.getForEntity(nodeAttributesResourceUrl, Attribute[].class);
+        return response.getBody();
+    }
+
     public NodeWrapper[] getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(String nodeId, String date) {
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/historyandcurrent/types/" + nodeId + "/" + date;
         ResponseEntity<NodeWrapper[]> response = restTemplate.getForEntity(parentNodesResourceUrl, NodeWrapper[].class);
@@ -184,6 +196,22 @@ public class HierarchyService {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
                     nodeDTO.setAttributes(List.of(getNodeAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                }
+            }
+        }
+        return nodeDTOs;
+    }
+
+    public List<NodeDTO> getNodesWithFutureOrHistoryAttributes(List<Node> nodes, List<NodeDTO> nodeDTOs, String date, boolean isHistory) {
+
+        for (Node node : nodes) {
+            for(NodeDTO nodeDTO : nodeDTOs){
+                if(node.getId().equals(nodeDTO.getNode().getId())){
+                    if(isHistory){
+                        nodeDTO.setAttributes(List.of(getNodeHistoryAndCurrentAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                    }else {
+                        nodeDTO.setAttributes(List.of(getNodeFutureAndCurrentAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                    }
                 }
             }
         }
