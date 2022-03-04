@@ -1,10 +1,8 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
-import fi.helsinki.ohtu.orgrekouservice.domain.Node;
-import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.NodeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.*;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,9 @@ public class HierarchyService {
 
     private String historyParameter = "historyandcurrent/";
     private String futureParameter = "futureandcurrent/";
+
+    @Autowired
+    private UtilService utilService;
 
     public Node getNodeByNodeId(String nodeId) {
         String getNodeByIdResourceUrl = dbUrl + Constants.NODE_API_PATH + "/id/" + nodeId;
@@ -109,6 +110,18 @@ public class HierarchyService {
         return response.getBody();
     }
 
+    public NodeEdgeHistoryWrapper[] getPredecessorsById(String nodeId) {
+        String predecessorsNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/predecessors/" + nodeId;
+        ResponseEntity<NodeEdgeHistoryWrapper[]> response = restTemplate.getForEntity(predecessorsNodesResourceUrl, NodeEdgeHistoryWrapper[].class);
+        return response.getBody();
+    }
+
+    public NodeEdgeHistoryWrapper[] getSuccessorsById(String nodeId) {
+        String successorsNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/successors/" + nodeId;
+        ResponseEntity<NodeEdgeHistoryWrapper[]> response = restTemplate.getForEntity(successorsNodesResourceUrl, NodeEdgeHistoryWrapper[].class);
+        return response.getBody();
+    }
+
     private boolean isNodeFutureOrCurrentNode(Node node, String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date nodeDate = formatter.parse(date);
@@ -186,12 +199,10 @@ public class HierarchyService {
             nodeDTO.setHierarchies(hierarchies);
             nodeDTOList.add(nodeDTO);
         }
-
         return nodeDTOList;
     }
 
     public List<NodeDTO> getNodesWithAttributes(List<Node> nodes, List<NodeDTO> nodeDTOs, String date) {
-
         for (Node node : nodes) {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
@@ -202,18 +213,45 @@ public class HierarchyService {
         return nodeDTOs;
     }
 
-    public List<NodeDTO> getNodesWithFutureOrHistoryAttributes(List<Node> nodes, List<NodeDTO> nodeDTOs, String date, boolean isHistory) {
+    public List<Attribute> chooseAttributes(int uniqueId, Date nodeDate, String date) throws ParseException {
+        List<Attribute> attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, date));
+        boolean hasNames = false;
+        if(!attributes.isEmpty()){
+            hasNames = utilService.isThereNameAttributes(attributes);
+        }
+        if(!hasNames){
+            String formattedDate = utilService.parseDateFromDatabase(nodeDate.toString());;
+            attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, formattedDate));
+        }
+        return attributes;
+    }
 
+    public List<NodeDTO> getNodesWithFutureOrHistoryAttributes(List<Node> nodes, List<NodeDTO> nodeDTOs, String date, boolean isHistory) throws ParseException {
         for (Node node : nodes) {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
                     if(isHistory){
-                        nodeDTO.setAttributes(List.of(getNodeHistoryAndCurrentAttributesByNodeIdAndDate(node.getUnique_id(), date)));
-                    }else {
-                        nodeDTO.setAttributes(List.of(getNodeFutureAndCurrentAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getEndDate(), date));
+                    }else{
+                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getStartDate(), date));
                     }
                 }
             }
+        }
+        return nodeDTOs;
+    }
+
+    public List<NodeDTO> getNodesWithPredecessorOrSuccessorAttributes(List<NodeEdgeHistoryWrapper> nodes, String date, boolean isPredecessor) throws ParseException {
+        List<NodeDTO> nodeDTOs = new ArrayList<>();
+        for (NodeEdgeHistoryWrapper nodeEdgeHistoryWrapper : nodes) {
+            NodeDTO nodeDTO = new NodeDTO();
+            nodeDTO.setNodeEdgeHistoryWrapper(nodeEdgeHistoryWrapper);
+            if(isPredecessor){
+                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUnique_id(), nodeEdgeHistoryWrapper.getEndDate(), date));
+            }else{
+                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUnique_id(), nodeEdgeHistoryWrapper.getStartDate(), date));
+            }
+            nodeDTOs.add(nodeDTO);
         }
         return nodeDTOs;
     }
