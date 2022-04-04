@@ -213,6 +213,16 @@ public class HierarchyService {
         return nodeDTOs;
     }
 
+    public List<Attribute> chooseHistoryOrFutureAttributes(int uniqueId, boolean isHistory, String date) throws ParseException {
+        List<Attribute> attributes;
+        if(isHistory){
+            attributes = List.of(getNodeHistoryAndCurrentAttributesByNodeIdAndDate(uniqueId, date));
+        }else{
+            attributes = List.of(getNodeFutureAndCurrentAttributesByNodeIdAndDate(uniqueId, date));
+        }
+        return attributes;
+    }
+
     public List<Attribute> chooseAttributes(int uniqueId, Date nodeDate, String date) throws ParseException {
         List<Attribute> attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, date));
         boolean hasNames = false;
@@ -230,11 +240,7 @@ public class HierarchyService {
         for (Node node : nodes) {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
-                    if(isHistory){
-                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getEndDate(), date));
-                    }else{
-                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getStartDate(), date));
-                    }
+                    nodeDTO.setAttributes(chooseHistoryOrFutureAttributes(node.getUnique_id(), isHistory, date));
                 }
             }
         }
