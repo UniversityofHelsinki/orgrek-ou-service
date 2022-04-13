@@ -24,7 +24,7 @@ public class EdgeService {
         return userObject;
     }
 
-    private List<String> filterHierarchyTypesForUser(List<String> types, User user){
+    public List<String> filterHierarchyTypesForUser(List<String> types, User user){
         List<String> hierarchyTypes = new ArrayList<>();
         for (String hierarchyType : types) {
             if (hierarchyType.equals(Constants.ECONOMY_HIERARCHY) || user.getRoles().stream().anyMatch(element -> Constants.MAPPED_ROLES.contains(element))) {
