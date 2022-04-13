@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.util;
 
 public class Constants {
+    public final static String EDGE_PATH = "/api/edge";
     public static final String NODE_API_PATH = "/api/node";
 
     public static final String NAME_FI = "name_fi";
