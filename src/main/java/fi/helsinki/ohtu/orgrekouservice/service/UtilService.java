@@ -46,9 +46,15 @@ public class UtilService {
                         break;
                 }
             }
-            nodeDTO.setDisplayNameFi(emo_lyhenne + name_fi + lyhenne );
-            nodeDTO.setDisplayNameSv(emo_lyhenne + name_sv + lyhenne );
-            nodeDTO.setDisplayNameEn(emo_lyhenne + name_en + lyhenne );
+            if(!name_fi.equals("")){
+                nodeDTO.setDisplayNameFi(emo_lyhenne + name_fi + lyhenne );
+            }
+            if(!name_sv.equals("")){
+                nodeDTO.setDisplayNameSv(emo_lyhenne + name_sv + lyhenne );
+            }
+            if(!name_en.equals("")){
+                nodeDTO.setDisplayNameEn(emo_lyhenne + name_en + lyhenne );
+            }
         }
         return nodeDTOS;
     }
@@ -60,18 +66,19 @@ public class UtilService {
         boolean isNameEn = false;
 
         for(Attribute attribute : attributes){
-            switch (attribute.getKey()) {
-                case Constants.NAME_FI:
-                    isNameFi = true;
-                    break;
-                case Constants.NAME_SV:
-                    isNameSv = true;
-                    break;
-                case Constants.NAME_EN:
-                    isNameEn = true;
-                    break;
+            if(attribute.getKey().equals(Constants.NAME_FI)){
+                isNameFi = true;
+                break;
+            }
+            if(attribute.getKey().equals(Constants.NAME_SV)){
+                isNameSv = true;
+                break;
+            }
+            if(attribute.getKey().equals(Constants.NAME_EN)){
+                isNameEn = true;
+                break;
             }
         }
-        return isNameEn && isNameFi && isNameSv;
+        return isNameFi || isNameEn || isNameSv;
     }
 }

@@ -213,25 +213,17 @@ public class HierarchyService {
         return nodeDTOs;
     }
 
-    public List<Attribute> chooseHistoryOrFutureAttributes(int uniqueId, boolean isHistory, String date) throws ParseException {
-        List<Attribute> attributes;
-        if(isHistory){
-            attributes = List.of(getNodeHistoryAndCurrentAttributesByNodeIdAndDate(uniqueId, date));
-        }else{
-            attributes = List.of(getNodeFutureAndCurrentAttributesByNodeIdAndDate(uniqueId, date));
-        }
-        return attributes;
-    }
-
     public List<Attribute> chooseAttributes(int uniqueId, Date nodeDate, String date) throws ParseException {
         List<Attribute> attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, date));
-        boolean hasNames = false;
-        if(!attributes.isEmpty()){
-            hasNames = utilService.isThereNameAttributes(attributes);
-        }
-        if(!hasNames){
-            String formattedDate = utilService.parseDateFromDatabase(nodeDate.toString());;
-            attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, formattedDate));
+        if(!attributes.isEmpty() && utilService.isThereNameAttributes(attributes)){
+            return attributes;
+        }else {
+            //if there aren't current name attributes
+            if(nodeDate!=null){
+                String formattedDate = utilService.parseDateFromDatabase(nodeDate.toString());;
+                attributes = List.of(getNodeAttributesByNodeIdAndDate(uniqueId, formattedDate));
+                return attributes;
+            }
         }
         return attributes;
     }
@@ -240,7 +232,11 @@ public class HierarchyService {
         for (Node node : nodes) {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
-                    nodeDTO.setAttributes(chooseHistoryOrFutureAttributes(node.getUnique_id(), isHistory, date));
+                    if(isHistory){
+                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getEndDate(), date));
+                    }else{
+                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getStartDate(), date));
+                    }
                 }
             }
         }
