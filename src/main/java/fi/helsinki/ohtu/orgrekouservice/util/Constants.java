@@ -17,4 +17,5 @@ public class Constants {
     public static final String ECONOMY_HIERARCHY = "talous";
 
     public static final List<String> MAPPED_ROLES = List.of("ROLE_ADMIN", "ROLE_WRITER", "ROLE_READER_ALL");
+    public static final String STEERING_API = "/api/steering/" ;
 }
