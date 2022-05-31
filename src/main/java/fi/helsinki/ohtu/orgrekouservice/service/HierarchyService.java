@@ -188,11 +188,11 @@ public class HierarchyService {
         List<NodeDTO> nodeDTOList = new ArrayList<>();
 
         for (Node node : nodes) {
-            List<String> hierarchies = new ArrayList<>();
+            List<NodeWrapper> hierarchies = new ArrayList<>();
             NodeDTO nodeDTO = new NodeDTO();
             for (NodeWrapper wrapper : nodesIdsWithTypes) {
                 if (wrapper.getNodeId().equals(node.getId())) {
-                    hierarchies.add(wrapper.getType());
+                    hierarchies.add(wrapper);
                 }
             }
             nodeDTO.setNode(node);
