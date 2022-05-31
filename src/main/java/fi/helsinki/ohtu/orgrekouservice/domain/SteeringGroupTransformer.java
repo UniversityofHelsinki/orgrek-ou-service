@@ -1,5 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,12 +42,12 @@ public class SteeringGroupTransformer {
         public DegreeProgramme(DegreeProgrammeDTO source, String lang) {
             this.iamGroup = source.getIamGroup();
             this.programmeCode = source.getProgrammeCode();
-            this.programmeName = lang.equals("fi") ? source.getProgrammeNameFi()
-                    : lang.equals("sv") ? source.getProgrammeNameSv()
-                    : lang.equals("en") ? source.getProgrammeNameEn() : "";
-            this.steeringGroupName = lang.equals("fi") ? source.getSteeringGroupNameFi()
-                    : lang.equals("sv") ? source.getSteeringGroupNameSv()
-                    : lang.equals("en") ? source.getSteeringGroupNameEn() : "";
+            this.programmeName = lang.equals(Constants.LANG_CODE_FI) ? source.getProgrammeNameFi()
+                    : lang.equals(Constants.LANG_CODE_SV) ? source.getProgrammeNameSv()
+                    : lang.equals(Constants.LANG_CODE_EN) ? source.getProgrammeNameEn() : "";
+            this.steeringGroupName = lang.equals(Constants.LANG_CODE_FI) ? source.getSteeringGroupNameFi()
+                    : lang.equals(Constants.LANG_CODE_SV) ? source.getSteeringGroupNameSv()
+                    : lang.equals(Constants.LANG_CODE_EN) ? source.getSteeringGroupNameEn() : "";
         }
 
         public String getIamGroup() {
@@ -66,15 +68,20 @@ public class SteeringGroupTransformer {
 
     }
 
-    public static Localized<Map<String, List<DegreeProgramme>>> transform(List<DegreeProgrammeDTO> input) {
-        return new Localized<>(
-                transform(input, "fi"),
-                transform(input, "sv"),
-                transform(input, "en"));
-    }
+    public static Localized<Map<String, Object>> transform(List<DegreeProgrammeDTO> input, List<TextDTO> degreeTitles) {
 
-    private static Map<String, List<DegreeProgramme>> transform(List<DegreeProgrammeDTO> input, String lang) {
-        return input.stream().collect(
+        Map<String, Object> fiMap = transform(input,  Constants.LANG_CODE_FI);
+        Map<String, Object> svMap = transform(input, Constants.LANG_CODE_SV);
+        Map<String, Object> enMap = transform(input, Constants.LANG_CODE_EN);
+
+        return new Localized<>(
+                buildListOfDegreeProgrammesAndTitlesByLanguage(Constants.LANG_CODE_FI, degreeTitles, fiMap),
+                buildListOfDegreeProgrammesAndTitlesByLanguage(Constants.LANG_CODE_SV, degreeTitles, svMap),
+                buildListOfDegreeProgrammesAndTitlesByLanguage(Constants.LANG_CODE_EN, degreeTitles, enMap)
+        );
+    }
+    private static Map<String,Object> transform(List<DegreeProgrammeDTO> input, String lang) {
+       return input.stream().collect(
                 Collectors.groupingBy(dto -> dto.getType(),
                         Collectors.mapping(in -> new DegreeProgramme(in, lang),
                                 Collectors.collectingAndThen(toList(), list -> sortedBySteeringGroupName(list)))));
@@ -86,4 +93,24 @@ public class SteeringGroupTransformer {
                 .collect(toList());
     }
 
+    private static String getTitleByLanguage(String lang, String degree, List<TextDTO> degreeTitles){
+        for (TextDTO textDTO: degreeTitles) {
+            if(textDTO.getLanguage().equals(lang) && textDTO.getKey().equals(degree)){
+                return textDTO.getValue();
+            }
+        }
+        return "";
+    }
+
+    private static LinkedHashMap<String, Object> buildListOfDegreeProgrammesAndTitlesByLanguage(String lang, List<TextDTO> degreeTitles,
+                                                                                                Map<String, Object>  degreeProgrammes ){
+        LinkedHashMap<String, Object> hashMap = new LinkedHashMap<>();
+        hashMap.put("bachelorsTitle", getTitleByLanguage(lang, Constants.BACHELORS_TITLE_TEXT_KEY, degreeTitles));
+        hashMap.put("bachelorsProgrammes", degreeProgrammes.get(Constants.BACHELORS_PROGRAMMES_KEY));
+        hashMap.put("mastersTitle", getTitleByLanguage(lang, Constants.MASTERS_TITLE_TEXT_KEY, degreeTitles));
+        hashMap.put("mastersProgrammes", degreeProgrammes.get(Constants.MASTERS_PROGRAMMES_KEY));
+        hashMap.put("doctoralsTitle", getTitleByLanguage(lang, Constants.DOCTORALS_TITLE_TEXT_KEY, degreeTitles));
+        hashMap.put("doctoralsProgrammes", degreeProgrammes.get(Constants.DOCTORALS_PROGRAMMES_KEY));
+        return hashMap;
+    }
 }
