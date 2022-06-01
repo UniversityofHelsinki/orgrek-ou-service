@@ -57,9 +57,9 @@ public class HierarchyServiceTest {
         assertEquals(nodes.size(), nodeDTOList.size());
         assertEquals(nodes.get(0).getId(), nodeDTOList.get(0).getNode().getId());
         assertEquals(3, nodeDTOList.get(0).getHierarchies().size());
-        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1));
-        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2));
+        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0).getType());
+        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1).getType());
+        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2).getType());
     }
 
 
@@ -115,12 +115,12 @@ public class HierarchyServiceTest {
         assertEquals(nodes.get(0).getId(), nodeDTOList.get(0).getNode().getId());
         assertEquals(nodes.get(1).getId(), nodeDTOList.get(1).getNode().getId());
         assertEquals(3, nodeDTOList.get(0).getHierarchies().size());
-        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1));
-        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2));
+        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0).getType());
+        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1).getType());
+        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2).getType());
         assertEquals(2, nodeDTOList.get(1).getHierarchies().size());
-        assertEquals("opetus", nodeDTOList.get(1).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(1).getHierarchies().get(1));
+        assertEquals("opetus", nodeDTOList.get(1).getHierarchies().get(0).getType());
+        assertEquals("talous", nodeDTOList.get(1).getHierarchies().get(1).getType());
     }
 
 }
