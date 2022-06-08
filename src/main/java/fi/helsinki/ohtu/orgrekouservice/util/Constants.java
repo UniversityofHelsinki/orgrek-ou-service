@@ -6,8 +6,8 @@ public class Constants {
     public final static String EDGE_PATH = "/api/edge";
     public static final String NODE_API_PATH = "/api/node";
 
-    public static final String STEERING_API = "/api/steering/";
-    public static final String DEGREE_TITLE_API = "/api/degreeTitles";
+    public static final String PUBLIC_STEERING_GROUPS_API = "/api/public/steeringGroups";
+    public static final String PUBLIC_DEGREE_TITLE_API = "/api/public/degreeTitles";
 
     public static final String NAME_FI = "name_fi";
     public static final String NAME_EN = "name_en";
