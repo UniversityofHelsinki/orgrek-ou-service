@@ -6,6 +6,8 @@ public class TextDTO {
     private String value;
     private String language;
 
+    public TextDTO() {}
+
     public String getKey() {
         return key;
     }
