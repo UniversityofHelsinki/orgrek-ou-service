@@ -9,14 +9,14 @@ public class NodeEdgeHistoryWrapper {
     private Date endDate;
     private Date edgeStartDate;
     private Date edgeEndDate;
-    private int uniqueId;
+    private int unique_id;
 
-    public int getUniqueId() {
-        return uniqueId;
+    public int getUnique_id() {
+        return unique_id;
     }
 
-    public void setUniqueId(int uniqueId) {
-        this.uniqueId = uniqueId;
+    public void setUnique_id(int unique_id) {
+        this.unique_id = unique_id;
     }
 
     public String getId() {

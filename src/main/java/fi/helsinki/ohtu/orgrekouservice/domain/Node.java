@@ -10,7 +10,7 @@ public class Node implements Serializable {
     private Date startDate;
     private Date endDate;
     private Timestamp timestamp;
-    private int uniqueId;
+    private int unique_id;
 
     public String getId() {
         return id;
@@ -52,11 +52,11 @@ public class Node implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public int getUniqueId() {
-        return uniqueId;
+    public int getUnique_id() {
+        return unique_id;
     }
 
-    public void setUniqueId(int uniqueId) {
-        this.uniqueId = uniqueId;
+    public void setUnique_id(int unique_id) {
+        this.unique_id = unique_id;
     }
 }
