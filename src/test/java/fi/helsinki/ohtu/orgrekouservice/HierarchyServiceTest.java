@@ -34,7 +34,7 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556984);
+        node.setUniqueId(47556984);
         nodes.add(node);
 
         NodeWrapper nodeWrapper = new NodeWrapper();
@@ -72,7 +72,7 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556984);
+        node.setUniqueId(47556984);
         nodes.add(node);
 
         node = new Node();
@@ -81,7 +81,7 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556985);
+        node.setUniqueId(47556985);
         nodes.add(node);
 
         NodeWrapper nodeWrapper = new NodeWrapper();
