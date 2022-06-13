@@ -16,11 +16,11 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -61,7 +61,7 @@ public class SteeringGroupTransformerTest {
     }
 
     @Test
-    public void testAllLanguageNodesHasSixChildren() {
+    public void testAllLanguageNodesHasSixChildElements() {
         assertThat(jsonTree.get("fi").size(), is(6));
         assertThat(jsonTree.get("sv").size(), is(6));
         assertThat(jsonTree.get("en").size(), is(6));
@@ -83,10 +83,27 @@ public class SteeringGroupTransformerTest {
     }
 
     @Test
-    public void  testProgrammeValuesAreAsExpected() {
-        JsonNode programme = jsonTree.get("fi").get("bachelorsProgrammes").get(0);
+    public void  testFourBachelorsSteeringGroupsExist() {
+        JsonNode programmes = jsonTree.get("fi").get("bachelorsProgrammes");
+        List<String> bachelorsSteeringGroupNames = programmes.findValues("steeringGroupName")
+                .stream()
+                .map(e -> e.asText())
+                .collect(Collectors.toList());
+        assertThat(bachelorsSteeringGroupNames, hasSize(4));
     }
 
+    @Test
+    public void  testBachelorsSteeringGroupsAreInAlphabeticalOrder() {
+        JsonNode programmes = jsonTree.get("fi").get("bachelorsProgrammes");
+        List<String> bachelorsSteeringGroupNames = programmes.findValues("steeringGroupName")
+                .stream()
+                .map(e -> e.asText())
+                .collect(Collectors.toList());
+        List<String> expectedNamesInOrder = Lists.newArrayList("Kasvatustieteiden kandiohjelman johtoryhmä", "Oikeusnotaarin koulutusohjelman johtoryhmä",
+                "Teologian ja uskonnontutkimuksen kandiohjelman johtoryhmä",
+                "Yhteiskuntatieteiden kandiohjelman johtoryhmä" );
+        assertThat(bachelorsSteeringGroupNames, contains(expectedNamesInOrder.toArray()));
+    }
 
 
 
