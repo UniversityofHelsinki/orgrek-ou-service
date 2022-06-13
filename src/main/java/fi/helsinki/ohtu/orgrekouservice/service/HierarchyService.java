@@ -158,7 +158,7 @@ public class HierarchyService {
                 onlyFutureOrCurrentNode.setNodeId(wrapper.getNodeId());
                 onlyFutureOrCurrentNode.setType(wrapper.getType());
                 onlyFutureOrCurrentNode.setStartDate(wrapper.getStartDate());
-                onlyFutureOrCurrentNode.setStartDate(wrapper.getEndDate());
+                onlyFutureOrCurrentNode.setEndDate(wrapper.getEndDate());
                 onlyFutureAndCurrentNodes.add(onlyFutureOrCurrentNode);
             }
         }
