@@ -210,7 +210,7 @@ public class HierarchyService {
         for (Node node : nodes) {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
-                    nodeDTO.setAttributes(List.of(getNodeAttributesByNodeIdAndDate(node.getUnique_id(), date)));
+                    nodeDTO.setAttributes(List.of(getNodeAttributesByNodeIdAndDate(node.getUniqueId(), date)));
                 }
             }
         }
@@ -237,9 +237,9 @@ public class HierarchyService {
             for(NodeDTO nodeDTO : nodeDTOs){
                 if(node.getId().equals(nodeDTO.getNode().getId())){
                     if(isHistory){
-                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getEndDate(), date));
+                        nodeDTO.setAttributes(chooseAttributes(node.getUniqueId(), node.getEndDate(), date));
                     }else{
-                        nodeDTO.setAttributes(chooseAttributes(node.getUnique_id(), node.getStartDate(), date));
+                        nodeDTO.setAttributes(chooseAttributes(node.getUniqueId(), node.getStartDate(), date));
                     }
                 }
             }
@@ -253,9 +253,9 @@ public class HierarchyService {
             NodeDTO nodeDTO = new NodeDTO();
             nodeDTO.setNodeEdgeHistoryWrapper(nodeEdgeHistoryWrapper);
             if(isPredecessor){
-                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUnique_id(), nodeEdgeHistoryWrapper.getEndDate(), date));
+                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUniqueId(), nodeEdgeHistoryWrapper.getEndDate(), date));
             }else{
-                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUnique_id(), nodeEdgeHistoryWrapper.getStartDate(), date));
+                nodeDTO.setAttributes(chooseAttributes(nodeEdgeHistoryWrapper.getUniqueId(), nodeEdgeHistoryWrapper.getStartDate(), date));
             }
             nodeDTOs.add(nodeDTO);
         }
