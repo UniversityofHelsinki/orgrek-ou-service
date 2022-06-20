@@ -118,7 +118,7 @@ deploy_prod:
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
 
 
-  # Define the process for deploy stage to development environment
+  # Define the process for deploy stage to new database development environment
 deploy_organisation_dev:
   stage: deploy
   tags:
