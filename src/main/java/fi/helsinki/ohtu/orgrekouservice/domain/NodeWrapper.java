@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class NodeWrapper {
     private String nodeId;
-    private String type;
+    private String hierarchy;
     // Edge start date and end date
     private Date startDate;
     private Date endDate;
@@ -17,12 +17,12 @@ public class NodeWrapper {
         this.nodeId = nodeId;
     }
 
-    public String getType() {
-        return type;
+    public String getHierarchy() {
+        return hierarchy;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setHierarchy(String hierarchy) {
+        this.hierarchy = hierarchy;
     }
 
     public Date getStartDate() {

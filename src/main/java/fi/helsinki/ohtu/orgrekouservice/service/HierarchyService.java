@@ -156,7 +156,7 @@ public class HierarchyService {
             if (isNodeFutureOrCurrentNode(node, date)) {
                 validFutureAndCurrentNodes.put(node.getId(), node);
                 onlyFutureOrCurrentNode.setNodeId(wrapper.getNodeId());
-                onlyFutureOrCurrentNode.setType(wrapper.getType());
+                onlyFutureOrCurrentNode.setHierarchy(wrapper.getHierarchy());
                 onlyFutureOrCurrentNode.setStartDate(wrapper.getStartDate());
                 onlyFutureOrCurrentNode.setEndDate(wrapper.getEndDate());
                 onlyFutureAndCurrentNodes.add(onlyFutureOrCurrentNode);
@@ -179,7 +179,7 @@ public class HierarchyService {
             if (isNodeHistoryOrCurrentNode(node, date)) {
                 validHistoryAndCurrentNodes.put(node.getId(), node);
                 onlyHistoryOrCurrentNode.setNodeId(wrapper.getNodeId());
-                onlyHistoryOrCurrentNode.setType(wrapper.getType());
+                onlyHistoryOrCurrentNode.setHierarchy(wrapper.getHierarchy());
                 onlyHistoryOrCurrentNode.setStartDate(wrapper.getStartDate());
                 onlyHistoryOrCurrentNode.setEndDate(wrapper.getEndDate());
                 onlyHistoryAndCurrentNodes.add(onlyHistoryOrCurrentNode);
