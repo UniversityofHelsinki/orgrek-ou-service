@@ -12,6 +12,8 @@ public class Pair {
 
     private String nameSv;
 
+    private String uniqueId;
+
     public String getChildNodeId() {
         return childNodeId;
     }
@@ -50,5 +52,13 @@ public class Pair {
 
     public void setNameSv(String nameSv) {
         this.nameSv = nameSv;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

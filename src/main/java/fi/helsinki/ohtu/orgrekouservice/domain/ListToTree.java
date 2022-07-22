@@ -1,14 +1,11 @@
-package fi.helsinki.ohtu.orgrekouservice.service;
+package fi.helsinki.ohtu.orgrekouservice.domain;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.Pair;
-import fi.helsinki.ohtu.orgrekouservice.domain.TreeNodeDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
 
-@Service
-public class ListToTreeService {
+public class ListToTree {
 
     public TreeNodeDTO createTree(List<Pair> pairs) {
         Map<String, TreeNodeDTO> map = new HashMap<>();
@@ -26,6 +23,7 @@ public class ListToTreeService {
             child.setNameFi(p.getNameFi());
             child.setNameEn(p.getNameEn());
             child.setNameSv(p.getNameSv());
+            child.setUniqueId(p.getUniqueId());
 
             TreeNodeDTO parent ;
             if (map.containsKey(p.getParentNodeId())) {
