@@ -10,9 +10,6 @@ import java.util.*;
 @Service
 public class ListToTreeService {
 
-    @Autowired
-    private HierarchyService hierarchyService;
-
     public TreeNodeDTO createTree(List<Pair> pairs) {
         Map<String, TreeNodeDTO> map = new HashMap<>();
 
@@ -20,8 +17,7 @@ public class ListToTreeService {
             TreeNodeDTO child ;
             if (map.containsKey(p.getChildNodeId())) {
                 child = map.get(p.getChildNodeId());
-            }
-            else {
+            } else {
                 child = new TreeNodeDTO();
                 map.put(p.getChildNodeId(),child);
             }
@@ -34,18 +30,13 @@ public class ListToTreeService {
             TreeNodeDTO parent ;
             if (map.containsKey(p.getParentNodeId())) {
                 parent = map.get(p.getParentNodeId());
-            }
-            else {
+            } else {
                 parent = new TreeNodeDTO();
                 map.put(p.getParentNodeId(),parent);
             }
             parent.setId(p.getParentNodeId());
             parent.addChild(child);
         }
-
-        map.get("a1").setNameFi("Helsingin yliopisto");
-        map.get("a1").setNameEn("University of Helsinki");
-        map.get("a1").setNameSv("Universitet");
         return map.get("a1");
     }
 }
