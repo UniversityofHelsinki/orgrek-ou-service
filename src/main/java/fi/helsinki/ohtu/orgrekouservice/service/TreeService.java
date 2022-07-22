@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,8 +18,8 @@ public class TreeService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public List<Pair> getTreeHierarchyData(String hierarchy){
-        String url = dbUrl + Constants.TREE_API_HIERARCHY + '/' + hierarchy;
+    public List<Pair> getTreeHierarchyData(String hierarchy, String date) {
+        String url = dbUrl + Constants.TREE_API_HIERARCHY + '/' + hierarchy + '/' + date;
         ResponseEntity<Pair[]> response = restTemplate.getForEntity(url, Pair[].class);
         return List.of(response.getBody());
     }

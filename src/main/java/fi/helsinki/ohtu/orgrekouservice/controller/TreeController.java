@@ -20,9 +20,9 @@ public class TreeController {
     @Autowired
     private TreeService treeService;
 
-    @RequestMapping(method = GET, value = "/{hierarchyType}")
-    public TreeNodeDTO getTree(@PathVariable("hierarchyType") String hierarchyType) {
-        List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyType);
+    @RequestMapping(method = GET, value = "/{hierarchyType}/{date}")
+    public TreeNodeDTO getTree(@PathVariable("hierarchyType") String hierarchyType, @PathVariable String date) {
+        List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyType, date);
         ListToTree listToTree = new ListToTree();
         return listToTree.createTree(pairs);
     }
