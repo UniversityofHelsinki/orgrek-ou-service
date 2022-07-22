@@ -27,6 +27,9 @@ public class ListToTreeService {
             }
             child.setId(p.getChildNodeId());
             child.setParentId(p.getParentNodeId());
+            child.setNameFi(p.getNameFi());
+            child.setNameEn(p.getNameEn());
+            child.setNameSv(p.getNameSv());
 
             TreeNodeDTO parent ;
             if (map.containsKey(p.getParentNodeId())) {
@@ -40,6 +43,9 @@ public class ListToTreeService {
             parent.addChild(child);
         }
 
+        map.get("a1").setNameFi("Helsingin yliopisto");
+        map.get("a1").setNameEn("University of Helsinki");
+        map.get("a1").setNameSv("Universitet");
         return map.get("a1");
     }
 }

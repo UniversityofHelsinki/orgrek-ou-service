@@ -10,6 +10,12 @@ public class TreeNodeDTO {
 
     private String parentId;
 
+    private String nameFi;
+
+    private String nameEn;
+
+    private String nameSv;
+
     private List<TreeNodeDTO> children = new ArrayList<>();
 
     public String getId() {
@@ -42,6 +48,30 @@ public class TreeNodeDTO {
 
     public void setChildren(List<TreeNodeDTO> children) {
         this.children = children;
+    }
+
+    public String getNameFi() {
+        return nameFi;
+    }
+
+    public void setNameFi(String nameFi) {
+        this.nameFi = nameFi;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameSv() {
+        return nameSv;
+    }
+
+    public void setNameSv(String nameSv) {
+        this.nameSv = nameSv;
     }
 
     public void addChild(TreeNodeDTO child) {
