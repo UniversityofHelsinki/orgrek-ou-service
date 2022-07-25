@@ -12,7 +12,7 @@ public class Pair {
 
     private String nameSv;
 
-    private String uniqueId;
+    private int uniqueId;
 
     public String getChildNodeId() {
         return childNodeId;
@@ -54,11 +54,11 @@ public class Pair {
         this.nameSv = nameSv;
     }
 
-    public String getUniqueId() {
+    public int getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId(String uniqueId) {
+    public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
     }
 }

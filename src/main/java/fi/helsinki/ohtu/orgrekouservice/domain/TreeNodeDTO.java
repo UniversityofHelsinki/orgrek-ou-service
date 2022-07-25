@@ -16,7 +16,7 @@ public class TreeNodeDTO {
 
     private String nameSv;
 
-    private String uniqueId;
+    private int uniqueId;
 
     private List<TreeNodeDTO> children = new ArrayList<>();
 
@@ -76,11 +76,11 @@ public class TreeNodeDTO {
         this.nameSv = nameSv;
     }
 
-    public String getUniqueId() {
+    public int getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId(String uniqueId) {
+    public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
     }
 
