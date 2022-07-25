@@ -37,12 +37,16 @@ public class ListToTree {
             child = new TreeNodeDTO();
             map.put(p.getChildNodeId(),child);
         }
+        updateChild(p, child);
+        return child;
+    }
+
+    private void updateChild(Pair p, TreeNodeDTO child) {
         child.setId(p.getChildNodeId());
         child.setParentId(p.getParentNodeId());
         child.setNameFi(p.getNameFi());
         child.setNameEn(p.getNameEn());
         child.setNameSv(p.getNameSv());
         child.setUniqueId(p.getUniqueId());
-        return child;
     }
 }
