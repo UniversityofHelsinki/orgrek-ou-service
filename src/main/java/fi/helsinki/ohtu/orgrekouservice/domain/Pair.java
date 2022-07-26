@@ -14,6 +14,8 @@ public class Pair {
 
     private int uniqueId;
 
+    private String code;
+
     public String getChildNodeId() {
         return childNodeId;
     }
@@ -60,5 +62,13 @@ public class Pair {
 
     public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

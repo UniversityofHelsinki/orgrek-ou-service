@@ -48,5 +48,6 @@ public class ListToTree {
         child.setNameEn(p.getNameEn());
         child.setNameSv(p.getNameSv());
         child.setUniqueId(p.getUniqueId());
+        child.setCode(p.getCode());
     }
 }
