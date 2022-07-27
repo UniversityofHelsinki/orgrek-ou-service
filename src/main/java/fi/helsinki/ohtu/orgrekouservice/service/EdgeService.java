@@ -3,6 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyList;
 import fi.helsinki.ohtu.orgrekouservice.domain.User;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,23 +36,21 @@ public class EdgeService {
         return hierarchyTypes;
     }
 
-    public List<HierarchyDTO> getHierarchyTypesForUser(String user) throws JsonProcessingException {
+    public List<HierarchyList> getHierarchyTypesForUser(String user) throws JsonProcessingException {
         User loggedUser = getUser(user);
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
         List<String> types = List.of(response);
         List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(types, loggedUser);
-
-
-        List<HierarchyDTO> hierarchyDTOList = new ArrayList<HierarchyDTO>();
+        List<HierarchyList> hierarchyList = new ArrayList<HierarchyList>();
 
         for (String filteredHierarchyType : filteredHierarchyTypes) {
-            HierarchyDTO hierarchyDTO = new HierarchyDTO();
-            hierarchyDTO.setLabel(filteredHierarchyType);
-            hierarchyDTO.setValue(filteredHierarchyType);
-            hierarchyDTOList.add(hierarchyDTO);
+            HierarchyList hl = new HierarchyList();
+            hl.setLabel(filteredHierarchyType);
+            hl.setValue(filteredHierarchyType);
+            hierarchyList.add(hl);
         }
 
-        return hierarchyDTOList;
+        return hierarchyList;
     }
 }
