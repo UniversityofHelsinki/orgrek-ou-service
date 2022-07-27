@@ -18,6 +18,8 @@ public class TreeNodeDTO {
 
     private int uniqueId;
 
+    private String code;
+
     private List<TreeNodeDTO> children = new ArrayList<>();
 
     public String getId() {
@@ -78,6 +80,14 @@ public class TreeNodeDTO {
 
     public int getUniqueId() {
         return uniqueId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public void setUniqueId(int uniqueId) {
