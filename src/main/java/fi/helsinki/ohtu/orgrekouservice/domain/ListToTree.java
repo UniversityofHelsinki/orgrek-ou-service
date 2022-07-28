@@ -1,11 +1,40 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
+import com.sun.source.tree.Tree;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class ListToTree {
+
+    public List<TreeNodeDTO> iterateTree(String hierarchy, List<TreeNodeDTO> list, Map<String, TreeNodeDTO> tmpMap) {
+        for (Map.Entry<String, TreeNodeDTO> stringTreeNodeDTOEntry : tmpMap.entrySet()) {
+            for (TreeNodeDTO treeNodeDTO : list) {
+                for (TreeNodeDTO child : treeNodeDTO.getChildren()) {
+                    for (TreeNodeDTO nodeDTO : stringTreeNodeDTOEntry.getValue().getChildren()) {
+                        if (nodeDTO.getUniqueId() == treeNodeDTO.getUniqueId()) {
+                            if (!nodeDTO.getHierarchies().contains(hierarchy)) {
+                                nodeDTO.getHierarchies().add(hierarchy);
+                            }
+                        }
+                        for (TreeNodeDTO nodeDTOChild : nodeDTO.getChildren()) {
+                            if (nodeDTOChild.getUniqueId() == child.getUniqueId()) {
+                                if (!child.getHierarchies().contains(hierarchy)) {
+                                    child.getHierarchies().add(hierarchy);
+                                }
+                            }
+                        }
+                    }
+                    iterateTree(hierarchy, child.getChildren(), tmpMap);
+                }
+            }
+        }
+        return list;
+    }
+
 
     public TreeNodeDTO createTree(List<Pair> pairs) {
         Map<String, TreeNodeDTO> map = new HashMap<>();
@@ -14,6 +43,7 @@ public class ListToTree {
             TreeNodeDTO child = getChild(map, p);
             updateParentChildRelation(map, p, child);
         }
+
         return map.get("a1");
     }
 

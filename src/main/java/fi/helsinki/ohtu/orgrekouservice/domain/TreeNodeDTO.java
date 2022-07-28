@@ -20,6 +20,8 @@ public class TreeNodeDTO {
 
     private String code;
 
+    ArrayList<String> hierarchies = new ArrayList<String>();
+
     private List<TreeNodeDTO> children = new ArrayList<>();
 
     public String getId() {
@@ -97,5 +99,28 @@ public class TreeNodeDTO {
     public void addChild(TreeNodeDTO child) {
         if (!children.contains(child) && child != null)
             children.add(child);
+    }
+
+    public ArrayList<String> getHierarchies() {
+        return hierarchies;
+    }
+
+    public void setHierarchies(ArrayList<String> hierarchies) {
+        this.hierarchies = hierarchies;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TreeNodeDTO that = (TreeNodeDTO) o;
+
+        return getUniqueId() == that.getUniqueId();
+    }
+
+    @Override
+    public int hashCode() {
+        return getUniqueId();
     }
 }
