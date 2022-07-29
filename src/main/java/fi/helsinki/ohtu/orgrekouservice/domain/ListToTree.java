@@ -36,11 +36,11 @@ public class ListToTree {
     }
 
 
-    public TreeNodeDTO createTree(List<Pair> pairs) {
+    public TreeNodeDTO createTree(List<Pair> pairs, String hierarchyType) {
         Map<String, TreeNodeDTO> map = new HashMap<>();
 
         for (Pair p:pairs) {
-            TreeNodeDTO child = getChild(map, p);
+            TreeNodeDTO child = getChild(map, p, hierarchyType);
             updateParentChildRelation(map, p, child);
         }
 
@@ -59,7 +59,7 @@ public class ListToTree {
         parent.addChild(child);
     }
 
-    private TreeNodeDTO getChild(Map<String, TreeNodeDTO> map, Pair p) {
+    private TreeNodeDTO getChild(Map<String, TreeNodeDTO> map, Pair p, String hierarchyType) {
         TreeNodeDTO child ;
         if (map.containsKey(p.getChildNodeId())) {
             child = map.get(p.getChildNodeId());
@@ -67,11 +67,11 @@ public class ListToTree {
             child = new TreeNodeDTO();
             map.put(p.getChildNodeId(),child);
         }
-        updateChild(p, child);
+        updateChild(p, child, hierarchyType);
         return child;
     }
 
-    private void updateChild(Pair p, TreeNodeDTO child) {
+    private void updateChild(Pair p, TreeNodeDTO child, String hierarchyType) {
         child.setId(p.getChildNodeId());
         child.setParentId(p.getParentNodeId());
         child.setNameFi(p.getNameFi());
@@ -79,5 +79,6 @@ public class ListToTree {
         child.setNameSv(p.getNameSv());
         child.setUniqueId(p.getUniqueId());
         child.setCode(p.getCode());
+        child.getHierarchies().add(hierarchyType);
     }
 }

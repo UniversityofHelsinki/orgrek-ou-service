@@ -28,19 +28,19 @@ public class TreeController {
         if (hierarchyTypes.size() == 1) {
             List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyTypes.get(0), date);
             ListToTree listToTree = new ListToTree();
-            return listToTree.createTree(pairs);
+            return listToTree.createTree(pairs, hierarchyTypes.get(0));
         } else {
             Map<String, TreeNodeDTO> map = new HashMap<>();
             for (String hierarchyType : hierarchyTypes) {
                 List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyType, date);
                 ListToTree listToTree = new ListToTree();
-                map.put(hierarchyType, listToTree.createTree(pairs));
+                map.put(hierarchyType, listToTree.createTree(pairs, hierarchyType));
             }
             List<TreeNodeDTO> list = new ArrayList<>();
             ListToTree listToTree = new ListToTree();
-            for (Map.Entry<String, TreeNodeDTO> stringTreeNodeDTOEntry : map.entrySet()) {
-                list.add(stringTreeNodeDTOEntry.getValue());
-                        List<TreeNodeDTO> tmpList = listToTree.iterateTree(stringTreeNodeDTOEntry.getKey(), stringTreeNodeDTOEntry.getValue().getChildren(), map);
+            for (Map.Entry<String, TreeNodeDTO> treeEntry : map.entrySet()) {
+                list.add(treeEntry.getValue());
+                        List<TreeNodeDTO> tmpList = listToTree.iterateTree(treeEntry.getKey(), treeEntry.getValue().getChildren(), map);
                         list.addAll(tmpList);
             }
 
