@@ -42,7 +42,7 @@ public class TreeController {
                 listToTree.iterateTree(treeEntry.getKey(), treeEntry.getValue().getChildren(), map);
                 list.add(treeEntry.getValue());
             }
-
+            // list contains all trees, this needs to be merged into single list
             return list.get(0);
         }
     }
