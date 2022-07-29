@@ -39,9 +39,8 @@ public class TreeController {
             List<TreeNodeDTO> list = new ArrayList<>();
             ListToTree listToTree = new ListToTree();
             for (Map.Entry<String, TreeNodeDTO> treeEntry : map.entrySet()) {
+                listToTree.iterateTree(treeEntry.getKey(), treeEntry.getValue().getChildren(), map);
                 list.add(treeEntry.getValue());
-                        List<TreeNodeDTO> tmpList = listToTree.iterateTree(treeEntry.getKey(), treeEntry.getValue().getChildren(), map);
-                        list.addAll(tmpList);
             }
 
             return list.get(0);
