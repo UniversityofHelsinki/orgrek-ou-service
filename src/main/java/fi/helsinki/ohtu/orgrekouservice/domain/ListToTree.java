@@ -11,10 +11,10 @@ import java.util.Map;
 public class ListToTree {
 
     public List<TreeNodeDTO> iterateTree(String hierarchy, List<TreeNodeDTO> list, Map<String, TreeNodeDTO> tmpMap) {
-        for (Map.Entry<String, TreeNodeDTO> stringTreeNodeDTOEntry : tmpMap.entrySet()) {
+        for (Map.Entry<String, TreeNodeDTO> treeNodeEntry : tmpMap.entrySet()) {
             for (TreeNodeDTO treeNodeDTO : list) {
                 for (TreeNodeDTO child : treeNodeDTO.getChildren()) {
-                    for (TreeNodeDTO nodeDTO : stringTreeNodeDTOEntry.getValue().getChildren()) {
+                    for (TreeNodeDTO nodeDTO : treeNodeEntry.getValue().getChildren()) {
                         if (nodeDTO.getUniqueId() == treeNodeDTO.getUniqueId()) {
                             if (!nodeDTO.getHierarchies().contains(hierarchy)) {
                                 nodeDTO.getHierarchies().add(hierarchy);
@@ -23,7 +23,7 @@ public class ListToTree {
                         for (TreeNodeDTO nodeDTOChild : nodeDTO.getChildren()) {
                             if (nodeDTOChild.getUniqueId() == child.getUniqueId()) {
                                 if (!child.getHierarchies().contains(hierarchy)) {
-                                    child.getHierarchies().add(hierarchy);
+                                    nodeDTO.getHierarchies().add(hierarchy);
                                 }
                             }
                         }
