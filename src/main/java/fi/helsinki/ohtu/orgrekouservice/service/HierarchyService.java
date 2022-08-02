@@ -32,6 +32,13 @@ public class HierarchyService {
         return response.getBody();
     }
 
+    public List<HierarchyFilter> getHierarchyFilters(String hierarchy) {
+        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/hierarchyfilter/" + hierarchy;
+        ResponseEntity<HierarchyFilter[]> response = restTemplate.getForEntity(predecessorsUrl, HierarchyFilter[].class);
+        List<HierarchyFilter> hierarchyFilters = List.of(response.getBody());
+        return hierarchyFilters;
+    }
+
     public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
        String timeParameter = "";
         if(time == 0){
