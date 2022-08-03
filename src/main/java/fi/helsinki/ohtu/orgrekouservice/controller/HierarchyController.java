@@ -33,7 +33,25 @@ public class HierarchyController {
 
         Attribute[] listAttributes = hierarchyService.getNodeAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy);
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
+        return selectedHierarchies;
+    }
+    @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
+    public Attribute[] getHistoryAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
+
+        Attribute[] listAttributes = hierarchyService.getNodeHistoryAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
+
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
+        return selectedHierarchies;
+    }
+    @RequestMapping(method = GET, value = "/futureandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
+    public Attribute[] getFutureAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
+
+        Attribute[] listAttributes = hierarchyService.getNodeFutureAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
+
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
         Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
         return selectedHierarchies;
     }
@@ -54,11 +72,14 @@ public class HierarchyController {
 
     /**
      * Call this every time when getNodeAttributesByNodeIdAndDate is called
+     *
      * @param hierarchy
+     * @param date
+     * @return
      */
-    private List<HierarchyFilter> getHierarchyFilters(String hierarchy) {
+    private List<HierarchyFilter> getHierarchyFilters(String hierarchy, String date) {
 
-        List<HierarchyFilter> hierarchyFilters = hierarchyService.getHierarchyFilters(hierarchy);
+        List<HierarchyFilter> hierarchyFilters = hierarchyService.getHierarchyFilters(hierarchy, date);
         return hierarchyFilters;
     }
 
