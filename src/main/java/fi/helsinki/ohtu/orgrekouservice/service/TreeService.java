@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Pair;
+import fi.helsinki.ohtu.orgrekouservice.domain.TreeNode;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,12 @@ public class TreeService {
     public List<Pair> getTreeHierarchyData(String hierarchy, String date) {
         String url = dbUrl + Constants.TREE_API_HIERARCHY + '/' + hierarchy + '/' + date;
         ResponseEntity<Pair[]> response = restTemplate.getForEntity(url, Pair[].class);
+        return List.of(response.getBody());
+    }
+
+    public List<TreeNode> getTreeNodes(String hierarchies, String date) {
+        String url = dbUrl + Constants.TREE_API_HIERARCHY + '/' + hierarchies + '/' + date;
+        ResponseEntity<TreeNode[]> response = restTemplate.getForEntity(url, TreeNode[].class);
         return List.of(response.getBody());
     }
 
