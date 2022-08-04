@@ -18,33 +18,6 @@ public class TreeController {
 
     @Autowired
     private TreeService treeService;
-
-    /*
-    @RequestMapping(method = GET, value = "/{hierarchyTypes}/{date}")
-    public TreeNodeDTO getTree(@PathVariable List<String> hierarchyTypes, @PathVariable String date) {
-        if (hierarchyTypes.size() == 1) {
-            List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyTypes.get(0), date);
-            ListToTree listToTree = new ListToTree();
-            return listToTree.createTree(pairs, hierarchyTypes.get(0));
-        } else {
-            Map<String, TreeNodeDTO> map = new HashMap<>();
-            for (String hierarchyType : hierarchyTypes) {
-                List<Pair> pairs = treeService.getTreeHierarchyData(hierarchyType, date);
-                ListToTree listToTree = new ListToTree();
-                map.put(hierarchyType, listToTree.createTree(pairs, hierarchyType));
-            }
-            List<TreeNodeDTO> list = new ArrayList<>();
-            ListToTree listToTree = new ListToTree();
-            for (Map.Entry<String, TreeNodeDTO> treeEntry : map.entrySet()) {
-                listToTree.iterateTree(treeEntry.getKey(), treeEntry.getValue().getChildren(), map);
-                list.add(treeEntry.getValue());
-            }
-            // list contains all trees, this needs to be merged into single list
-            return list.get(0);
-        }
-    }
-
-     */
     private Comparator<TreeNode> byCodeAndName = (a, b) -> {
         if (a.getChildCode() == null && b.getChildCode() == null) {
             return a.getChildName().compareTo(b.getChildName());
