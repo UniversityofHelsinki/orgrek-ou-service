@@ -34,4 +34,7 @@ public class Constants {
     public static final String LANG_CODE_FI = "fi";
     public static final String LANG_CODE_EN = "en";
     public static final String LANG_CODE_SV = "sv";
+    public static final String HISTORY = "history";
+    public static final String FUTURE = "future";
+    public static final String NOW = "now";
 }

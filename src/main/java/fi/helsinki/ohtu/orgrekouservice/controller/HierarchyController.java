@@ -3,6 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 import fi.helsinki.ohtu.orgrekouservice.domain.*;
 import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
 import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class HierarchyController {
 
         Attribute[] listAttributes = hierarchyService.getNodeAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.NOW);
         Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
         return selectedHierarchies;
     }
@@ -42,7 +43,7 @@ public class HierarchyController {
 
         Attribute[] listAttributes = hierarchyService.getNodeHistoryAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.HISTORY);
         Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
         return selectedHierarchies;
     }
@@ -51,7 +52,7 @@ public class HierarchyController {
 
         Attribute[] listAttributes = hierarchyService.getNodeFutureAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date);
+        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.FUTURE);
         Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
         return selectedHierarchies;
     }
@@ -77,9 +78,9 @@ public class HierarchyController {
      * @param date
      * @return
      */
-    private List<HierarchyFilter> getHierarchyFilters(String hierarchy, String date) {
+    private List<HierarchyFilter> getHierarchyFilters(String hierarchy, String date, String whichtime) {
 
-        List<HierarchyFilter> hierarchyFilters = hierarchyService.getHierarchyFilters(hierarchy, date);
+        List<HierarchyFilter> hierarchyFilters = hierarchyService.getHierarchyFilters(hierarchy, date, whichtime);
         return hierarchyFilters;
     }
 
