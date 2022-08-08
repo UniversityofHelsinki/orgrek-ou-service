@@ -62,7 +62,8 @@ public class HierarchyController {
 
         Arrays.stream(listAttributes).forEach(attribute -> {
             hierarchyFilters.forEach(hierarchy -> {
-                if (attribute.getKey().equalsIgnoreCase(hierarchy.getKey()) &&  (hierarchy.getValue() == null || attribute.getValue().equalsIgnoreCase(hierarchy.getValue()))) {
+                if (attribute.getKey().equalsIgnoreCase(hierarchy.getKey()) &&
+                        (hierarchy.getValue() == null || attribute.getValue().equalsIgnoreCase(hierarchy.getValue())) && !attributeArr.contains(attribute)) {
                     attributeArr.add(attribute);
                 }
             });
