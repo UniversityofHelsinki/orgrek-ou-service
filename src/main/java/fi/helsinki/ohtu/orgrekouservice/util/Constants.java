@@ -37,4 +37,6 @@ public class Constants {
     public static final String HISTORY = "history";
     public static final String FUTURE = "future";
     public static final String NOW = "now";
+    public static final String MAINARI = "mainari_tunnus";
+    public static final String LASKUTUS_TUNNUS = "laskutus_tunnus";
 }

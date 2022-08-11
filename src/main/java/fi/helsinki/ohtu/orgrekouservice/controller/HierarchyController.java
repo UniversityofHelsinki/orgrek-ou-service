@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.*;
+import fi.helsinki.ohtu.orgrekouservice.service.EdgeService;
 import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
 import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
@@ -13,6 +14,7 @@ import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -29,22 +31,33 @@ public class HierarchyController {
     @Autowired
     private FullNameService fullNameService;
 
+    @Autowired
+    private EdgeService edgeService;
+
     @RequestMapping(method = GET, value = "/{id}/{date}/{selectedHierarchy}/attributes")
     public Attribute[] getNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
 
         Attribute[] listAttributes = hierarchyService.getNodeAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.NOW);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
+        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.NOW);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
+        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
+        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
+
         return selectedHierarchies;
     }
+
+
     @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
     public Attribute[] getHistoryAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
 
         Attribute[] listAttributes = hierarchyService.getNodeHistoryAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.HISTORY);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
+        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.HISTORY);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
+        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
+        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
+
         return selectedHierarchies;
     }
     @RequestMapping(method = GET, value = "/futureandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
@@ -52,17 +65,65 @@ public class HierarchyController {
 
         Attribute[] listAttributes = hierarchyService.getNodeFutureAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
 
-        List<HierarchyFilter> hierarchyFilters = getHierarchyFilters(selectedHierarchy, date, Constants.FUTURE);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, hierarchyFilters);
+        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.FUTURE);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
+        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
+        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
+
         return selectedHierarchies;
     }
 
-    private Attribute[] onlySelectedHierarchies(Attribute[] listAttributes, List<HierarchyFilter> hierarchyFilters) {
+    /**
+     * Check if all hierarchies are selected
+     * @param selectedHierarchies
+     * @return
+     */
+    private boolean areAllHierarchiesSelected(String selectedHierarchies) {
+
+        String[] hierarchyArr = selectedHierarchies.split(",");
+        int selectedHierarchiesCount = hierarchyArr.length;
+
+        List<String> types = edgeService.getHierarchyTypes();
+        int typesCount = types.size() - 1; //subtract history
+
+        return (selectedHierarchiesCount == typesCount);
+    }
+    private Attribute[] allOtherHierarchies(Attribute[] listAttributes, List<HierarchyFilter> allHierarchyFilters, Attribute[] selectedAttributes, boolean allHierarhiesSelected) {
         List<Attribute> attributeArr = new ArrayList<>();
+        List<Attribute> selectedAttrList =  new ArrayList<Attribute>(Arrays.asList(selectedAttributes));
 
         Arrays.stream(listAttributes).forEach(attribute -> {
-            hierarchyFilters.forEach(hierarchy -> {
-                if (attribute.getKey().equalsIgnoreCase(hierarchy.getKey()) &&
+            //mainari and laskutus_tunnus attributes are shown if all hierarchies are selected
+            //no neeed to check selectedAttrList, because mainari and laskutus_tunnus are not in HIERARCHY_FILTER table.
+            if (allHierarhiesSelected && (attribute.getKey().equalsIgnoreCase(Constants.MAINARI) || attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS)) && !attributeArr.contains(attribute)) {
+                attributeArr.add(attribute);
+            } else if (!attribute.getKey().equalsIgnoreCase(Constants.MAINARI) && !attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS))  {
+                boolean notFoundInHierarchyFilters = isFoundInAllHierarchyFilters(allHierarchyFilters, attribute);
+                //attributes which are not found in hierarchy_filter table are shown
+                if (notFoundInHierarchyFilters && !attributeArr.contains(attribute) && !selectedAttrList.contains(attribute)) {
+                    attributeArr.add(attribute);
+                }
+            }
+        });
+        selectedAttrList.addAll(attributeArr);
+
+        return selectedAttrList.toArray(new Attribute[]{});
+    }
+    private boolean isFoundInAllHierarchyFilters(List<HierarchyFilter> allHierarchyFilters, Attribute attribute) {
+        Stream<HierarchyFilter> attributeStream = allHierarchyFilters.stream().filter(
+                o -> o.getKey().equalsIgnoreCase(attribute.getKey()) &&
+                        (o.getValue() == null || o.getValue().equalsIgnoreCase(attribute.getValue()))
+        );
+        return (attributeStream.count() == 0);
+    }
+    private Attribute[] onlySelectedHierarchies(Attribute[] listAttributes, String selectedAttributes, List<HierarchyFilter> allHierarchyFilters) {
+        List<Attribute> attributeArr = new ArrayList<>();
+        String[] selectedAttributesArr = selectedAttributes.split(",");
+        List<String> selectedAttributeList = Arrays.asList(selectedAttributesArr);
+
+        Arrays.stream(listAttributes).forEach(attribute -> {
+            allHierarchyFilters.forEach(hierarchy -> {
+                if (selectedAttributeList.contains(hierarchy.getHierarchy()) && attribute.getKey().equalsIgnoreCase(hierarchy.getKey()) &&
                         (hierarchy.getValue() == null || attribute.getValue().equalsIgnoreCase(hierarchy.getValue())) && !attributeArr.contains(attribute)) {
                     attributeArr.add(attribute);
                 }
@@ -71,20 +132,11 @@ public class HierarchyController {
 
         return attributeArr.toArray(new Attribute[]{});
     }
+    private List<HierarchyFilter> getAllHierarchyFilters(String date, String whichtime) {
 
-    /**
-     * Call this every time when getNodeAttributesByNodeIdAndDate is called
-     *
-     * @param hierarchy
-     * @param date
-     * @return
-     */
-    private List<HierarchyFilter> getHierarchyFilters(String hierarchy, String date, String whichtime) {
-
-        List<HierarchyFilter> hierarchyFilters = hierarchyService.getHierarchyFilters(hierarchy, date, whichtime);
+        List<HierarchyFilter> hierarchyFilters = hierarchyService.getAllHierarchyFilters(date, whichtime);
         return hierarchyFilters;
     }
-
     @RequestMapping(method = GET, value = "/parents/{id}/{date}")
     public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
         List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 2));

@@ -53,4 +53,11 @@ public class EdgeService {
 
         return hierarchyList;
     }
+    public List<String> getHierarchyTypes() {
+        String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
+        String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
+        List<String> types = List.of(response);
+
+        return types;
+    }
 }
