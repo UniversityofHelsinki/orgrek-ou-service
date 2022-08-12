@@ -93,14 +93,17 @@ public class HierarchyController {
         List<Attribute> selectedAttrList =  new ArrayList<Attribute>(Arrays.asList(selectedAttributes));
 
         Arrays.stream(listAttributes).forEach(attribute -> {
-            //mainari and laskutus_tunnus attributes are shown if all hierarchies are selected
-            //no neeed to check selectedAttrList, because mainari and laskutus_tunnus are not in HIERARCHY_FILTER table.
+            if (attribute.getKey().equalsIgnoreCase(Constants.TYPE)) {
+                //do not show in this case (attribute can be in selectedAttrList)
+            } else
             if (allHierarhiesSelected && (attribute.getKey().equalsIgnoreCase(Constants.MAINARI) || attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS)) && !attributeArr.contains(attribute)) {
+                //mainari and laskutus_tunnus attributes are shown if all hierarchies are selected
+                //no neeed to check selectedAttrList, because mainari and laskutus_tunnus are not in HIERARCHY_FILTER table.
                 attributeArr.add(attribute);
             } else if (!attribute.getKey().equalsIgnoreCase(Constants.MAINARI) && !attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS))  {
                 boolean notFoundInHierarchyFilters = isFoundInAllHierarchyFilters(allHierarchyFilters, attribute);
-                //attributes which are not found in hierarchy_filter table are shown
                 if (notFoundInHierarchyFilters && !attributeArr.contains(attribute) && !selectedAttrList.contains(attribute)) {
+                    //attributes which are not found in hierarchy_filter table are shown
                     attributeArr.add(attribute);
                 }
             }
