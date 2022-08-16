@@ -36,22 +36,14 @@ public class EdgeService {
         return hierarchyTypes;
     }
 
-    public List<HierarchyList> getHierarchyTypesForUser(String user) throws JsonProcessingException {
+    public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
         User loggedUser = getUser(user);
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
         List<String> types = List.of(response);
         List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(types, loggedUser);
-        List<HierarchyList> hierarchyList = new ArrayList<HierarchyList>();
 
-        for (String filteredHierarchyType : filteredHierarchyTypes) {
-            HierarchyList hl = new HierarchyList();
-            hl.setLabel(filteredHierarchyType);
-            hl.setValue(filteredHierarchyType);
-            hierarchyList.add(hl);
-        }
-
-        return hierarchyList;
+        return filteredHierarchyTypes;
     }
     public List<String> getHierarchyTypes() {
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
