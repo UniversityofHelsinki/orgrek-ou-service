@@ -80,4 +80,13 @@ public class FullNameController {
         }
         return fullNames.stream().sorted(byDates).collect(Collectors.groupingBy(FullName::getLanguage));
     }
+
+    @RequestMapping(method = GET, value = "/favorable/{id}/{date}")
+    public Map<String, List<FullName>> getFavorableNames(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+        List<FullName> fullNames = fullNameService.getFavorableNames(uniqueId, date);
+        if (fullNames.isEmpty()) {
+            return emptyMap();
+        }
+        return fullNames.stream().sorted(byDates).collect(Collectors.groupingBy(FullName::getLanguage));
+    }
 }

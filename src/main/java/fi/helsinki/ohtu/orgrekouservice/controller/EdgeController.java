@@ -20,7 +20,7 @@ public class EdgeController {
     private EdgeService edgeService;
 
     @RequestMapping(method = GET, value = "/types", headers = "user", produces = "application/json")
-    public List<HierarchyList> getHierarchyTypes(@RequestHeader String user) throws JsonProcessingException {
+    public List<String> getHierarchyTypes(@RequestHeader String user) throws JsonProcessingException {
         return edgeService.getHierarchyTypesForUser(user);
     }
 

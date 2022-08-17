@@ -65,6 +65,12 @@ public class FullNameService {
                 }
         }
 
+        public List<FullName> getFavorableNames(int uniqueId, String date) {
+                String url = dbUrl + Constants.FULL_NAME_API_PATH + "/favorable/" + uniqueId + "/" + date;
+                ResponseEntity<FullName[]> names = restTemplate.getForEntity(url, FullName[].class);
+                return List.of(names.getBody());
+        }
+
         public void fillFullNames(List<NodeDTO> nodes, String date, Function<NodeDTO, Integer> uniqueIdFn, Function<NodeDTO, String> nodeIdFn) {
                 List<Integer> uniqueIds = nodes.stream().map(uniqueIdFn::apply).collect(Collectors.toList());
                 Map<String, List<FullName>> fullNames = getFullNamesByUniqueIdsAndDate(uniqueIds, date);
