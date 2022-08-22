@@ -2,6 +2,8 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyList;
 import fi.helsinki.ohtu.orgrekouservice.domain.User;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +41,15 @@ public class EdgeService {
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
         List<String> types = List.of(response);
-        List filteredHierarchyTypes = filterHierarchyTypesForUser(types, loggedUser);
+        List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(types, loggedUser);
+
         return filteredHierarchyTypes;
+    }
+    public List<String> getHierarchyTypes() {
+        String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
+        String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
+        List<String> types = List.of(response);
+
+        return types;
     }
 }

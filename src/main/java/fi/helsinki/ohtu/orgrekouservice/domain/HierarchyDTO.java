@@ -2,19 +2,16 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import java.util.Date;
 
-public class NodeWrapper {
-    private String nodeId;
+public class HierarchyDTO {
+
     private String hierarchy;
-    // Edge start date and end date
     private Date startDate;
     private Date endDate;
 
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
+    public HierarchyDTO(Relative relative) {
+        this.hierarchy = relative.getHierarchy();
+        this.startDate = relative.getEdgeStartDate();
+        this.endDate = relative.getEdgeEndDate();
     }
 
     public String getHierarchy() {
@@ -40,4 +37,5 @@ public class NodeWrapper {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
 }

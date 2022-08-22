@@ -9,6 +9,10 @@ public class Constants {
     public static final String PUBLIC_STEERING_GROUPS_API = "/api/public/steeringGroups";
     public static final String PUBLIC_DEGREE_TITLE_API = "/api/public/degreeTitles";
 
+    public static final String FULL_NAME_API_PATH = "/api/node/fullname";
+
+    public static final String TREE_API_HIERARCHY = "/api/tree";
+
     public static final String NAME_FI = "name_fi";
     public static final String NAME_EN = "name_en";
     public static final String NAME_SV = "name_sv";
@@ -30,4 +34,10 @@ public class Constants {
     public static final String LANG_CODE_FI = "fi";
     public static final String LANG_CODE_EN = "en";
     public static final String LANG_CODE_SV = "sv";
+    public static final String HISTORY = "history";
+    public static final String FUTURE = "future";
+    public static final String NOW = "now";
+    public static final String MAINARI = "mainari_tunnus";
+    public static final String LASKUTUS_TUNNUS = "laskutus_tunnus";
+    public static final String TYPE = "type";
 }

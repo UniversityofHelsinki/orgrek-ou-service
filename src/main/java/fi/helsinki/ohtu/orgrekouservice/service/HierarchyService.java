@@ -31,7 +31,12 @@ public class HierarchyService {
         ResponseEntity<Node> response = restTemplate.getForEntity(getNodeByIdResourceUrl, Node.class);
         return response.getBody();
     }
-
+    public List<HierarchyFilter> getAllHierarchyFilters(String date, String whichtime) {
+        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/hierarchyfilter/" + date + "/" + whichtime;
+        ResponseEntity<HierarchyFilter[]> response = restTemplate.getForEntity(predecessorsUrl, HierarchyFilter[].class);
+        List<HierarchyFilter> hierarchyFilters = List.of(response.getBody());
+        return hierarchyFilters;
+    }
     public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
        String timeParameter = "";
         if(time == 0){
@@ -156,7 +161,7 @@ public class HierarchyService {
             if (isNodeFutureOrCurrentNode(node, date)) {
                 validFutureAndCurrentNodes.put(node.getId(), node);
                 onlyFutureOrCurrentNode.setNodeId(wrapper.getNodeId());
-                onlyFutureOrCurrentNode.setType(wrapper.getType());
+                onlyFutureOrCurrentNode.setHierarchy(wrapper.getHierarchy());
                 onlyFutureOrCurrentNode.setStartDate(wrapper.getStartDate());
                 onlyFutureOrCurrentNode.setEndDate(wrapper.getEndDate());
                 onlyFutureAndCurrentNodes.add(onlyFutureOrCurrentNode);
@@ -179,7 +184,7 @@ public class HierarchyService {
             if (isNodeHistoryOrCurrentNode(node, date)) {
                 validHistoryAndCurrentNodes.put(node.getId(), node);
                 onlyHistoryOrCurrentNode.setNodeId(wrapper.getNodeId());
-                onlyHistoryOrCurrentNode.setType(wrapper.getType());
+                onlyHistoryOrCurrentNode.setHierarchy(wrapper.getHierarchy());
                 onlyHistoryOrCurrentNode.setStartDate(wrapper.getStartDate());
                 onlyHistoryOrCurrentNode.setEndDate(wrapper.getEndDate());
                 onlyHistoryAndCurrentNodes.add(onlyHistoryOrCurrentNode);
@@ -260,5 +265,76 @@ public class HierarchyService {
             nodeDTOs.add(nodeDTO);
         }
         return nodeDTOs;
+    }
+
+    public List<Relative> getPredecessors(Integer uniqueId, String date) {
+        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/predecessors1/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(predecessorsUrl, Relative[].class);
+        List<Relative> predecessors = List.of(response.getBody());
+        return predecessors;
+    }
+
+    public List<Relative> getSuccessors(Integer uniqueId, String date) {
+        String successorsUrl = dbUrl + Constants.NODE_API_PATH + "/successors1/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(successorsUrl, Relative[].class);
+        List<Relative> successors = List.of(response.getBody());
+        return successors;
+    }
+
+    public List<Relative> getChildren(Integer uniqueId, String date) {
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
+        List<Relative> children = List.of(response.getBody());
+        return children;
+    }
+
+    public List<Relative> getParents(Integer uniqueId, String date) {
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
+        List<Relative> parents = List.of(response.getBody());
+        return parents;
+    }
+
+
+    public List<Relative> getFutureAndCurrentChildren(Integer uniqueId, String date) {
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/futureandcurrent/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
+        List<Relative> children = List.of(response.getBody());
+        return children;
+    }
+
+    public List<Relative> getFutureAndCurrentParents(Integer uniqueId, String date) {
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/futureandcurrent/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
+        List<Relative> parents = List.of(response.getBody());
+        return parents;
+    }
+
+    public List<Relative> getHistoryAndCurrentChildren(Integer uniqueId, String date) {
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/historyandcurrent/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
+        List<Relative> children = List.of(response.getBody());
+        return children;
+    }
+
+    public List<Relative> getHistoryAndCurrentParents(Integer uniqueId, String date) {
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/historyandcurrent/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
+        List<Relative> parents = List.of(response.getBody());
+        return parents;
+    }
+
+    public List<Relative> getAllParents(Integer uniqueId, String date) {
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/all/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
+        List<Relative> parents = List.of(response.getBody());
+        return parents;
+    }
+
+    public List<Relative> getAllChildren(Integer uniqueId, String date) {
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/all/" + uniqueId + "/" + date;
+        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
+        List<Relative> children = List.of(response.getBody());
+        return children;
     }
 }

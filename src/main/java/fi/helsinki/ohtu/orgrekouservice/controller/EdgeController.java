@@ -1,6 +1,8 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyList;
 import fi.helsinki.ohtu.orgrekouservice.service.EdgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
