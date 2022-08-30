@@ -32,7 +32,7 @@ public class HierarchyService {
         return response.getBody();
     }
     public List<HierarchyFilter> getAllHierarchyFilters(String date, String whichtime) {
-        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/hierarchyfilter/" + date + "/" + whichtime;
+        String predecessorsUrl = dbUrl + "/api" + "/hierarchyfilter/" + date + "/" + whichtime;
         ResponseEntity<HierarchyFilter[]> response = restTemplate.getForEntity(predecessorsUrl, HierarchyFilter[].class);
         List<HierarchyFilter> hierarchyFilters = List.of(response.getBody());
         return hierarchyFilters;
