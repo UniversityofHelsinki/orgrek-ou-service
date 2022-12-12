@@ -65,6 +65,7 @@ deploy_dev:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-dev URL=$DB_POD_URL_DEV
     - oc set env dc/organisaatiorekisteri-ou-service-dev PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-dev TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
     # patch build config
@@ -88,6 +89,7 @@ deploy_test:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-test URL=$DB_POD_URL_TEST
     - oc set env dc/organisaatiorekisteri-ou-service-test PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-test TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
     # patch build config
@@ -111,6 +113,7 @@ deploy_prod:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-prod URL=$DB_POD_URL_PROD
     - oc set env dc/organisaatiorekisteri-ou-service-prod PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-prod TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-prod --from-dir=. --follow
     # patch build config
@@ -138,6 +141,7 @@ deploy_organisation_dev:
     # list environment variables here
     - oc set env dc/organisation-ou-service-dev URL=$DB_POD_URL_ORGANISATION_DEV
     - oc set env dc/organisation-ou-service-dev PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisation-ou-service-dev TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisation-ou-service-dev --from-dir=. --follow
     # patch build config
