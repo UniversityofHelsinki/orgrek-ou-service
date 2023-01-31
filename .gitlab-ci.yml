@@ -71,8 +71,8 @@ deploy_dev:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-dev --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-dev --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
-    # set pod memory quota to 300 MB and limit to 500 MB
-    - oc set resources dc/organisaatiorekisteri-ou-service-dev --limits=memory=500Mi --requests=memory=300Mi
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-dev --limits=memory=500Mi --requests=memory=200Mi
 
 
 deploy_test:
@@ -98,8 +98,8 @@ deploy_test:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
-    # set pod memory quota to 300 MB and limit to 500 MB
-    - oc set resources dc/organisaatiorekisteri-ou-service-test --limits=memory=500Mi --requests=memory=300Mi
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-test --limits=memory=500Mi --requests=memory=200Mi
 
 deploy_prod:
   stage: deploy
@@ -124,8 +124,8 @@ deploy_prod:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
-    # set pod memory quota to 300 MB and limit to 500 MB
-    - oc set resources dc/organisaatiorekisteri-ou-service-prod --limits=memory=500Mi --requests=memory=300Mi
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-prod --limits=memory=500Mi --requests=memory=200Mi
 
 # Rules for the scheduled npm audit and outdated scans
 dependency scanning:
