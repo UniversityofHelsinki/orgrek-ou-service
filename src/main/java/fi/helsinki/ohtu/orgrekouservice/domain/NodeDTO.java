@@ -5,7 +5,7 @@ import java.util.List;
 public class NodeDTO {
     private Node node;
     private NodeEdgeHistoryWrapper nodeEdgeHistoryWrapper;
-    private List<String> hierarchies;
+    private List<NodeWrapper> hierarchies;
     private List<Attribute> attributes;
     private String displayNameFi;
     private String displayNameSv;
@@ -19,11 +19,11 @@ public class NodeDTO {
         this.node = node;
     }
 
-    public List<String> getHierarchies() {
+    public List<NodeWrapper> getHierarchies() {
         return hierarchies;
     }
 
-    public void setHierarchies(List<String> hierarchies) {
+    public void setHierarchies(List<NodeWrapper> hierarchies) {
         this.hierarchies = hierarchies;
     }
 

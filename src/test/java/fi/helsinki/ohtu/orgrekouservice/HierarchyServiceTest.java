@@ -34,22 +34,22 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556984);
+        node.setUniqueId(47556984);
         nodes.add(node);
 
         NodeWrapper nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("tutkimus");
+        nodeWrapper.setHierarchy("tutkimus");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("talous");
+        nodeWrapper.setHierarchy("talous");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("opetus");
+        nodeWrapper.setHierarchy("opetus");
         nodesIdsWithTypes.add(nodeWrapper);
 
         List<NodeDTO> nodeDTOList = hierarchyService.getNodesWithTypes(nodes, nodesIdsWithTypes);
@@ -57,9 +57,9 @@ public class HierarchyServiceTest {
         assertEquals(nodes.size(), nodeDTOList.size());
         assertEquals(nodes.get(0).getId(), nodeDTOList.get(0).getNode().getId());
         assertEquals(3, nodeDTOList.get(0).getHierarchies().size());
-        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1));
-        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2));
+        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0).getHierarchy());
+        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1).getHierarchy());
+        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2).getHierarchy());
     }
 
 
@@ -72,7 +72,7 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556984);
+        node.setUniqueId(47556984);
         nodes.add(node);
 
         node = new Node();
@@ -81,32 +81,32 @@ public class HierarchyServiceTest {
         node.setStartDate(null);
         node.setEndDate(null);
         node.setTimestamp(null);
-        node.setUnique_id(47556985);
+        node.setUniqueId(47556985);
         nodes.add(node);
 
         NodeWrapper nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("tutkimus");
+        nodeWrapper.setHierarchy("tutkimus");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("talous");
+        nodeWrapper.setHierarchy("talous");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("19");
-        nodeWrapper.setType("opetus");
+        nodeWrapper.setHierarchy("opetus");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("20");
-        nodeWrapper.setType("opetus");
+        nodeWrapper.setHierarchy("opetus");
         nodesIdsWithTypes.add(nodeWrapper);
 
         nodeWrapper = new NodeWrapper();
         nodeWrapper.setNodeId("20");
-        nodeWrapper.setType("talous");
+        nodeWrapper.setHierarchy("talous");
         nodesIdsWithTypes.add(nodeWrapper);
 
         List<NodeDTO> nodeDTOList = hierarchyService.getNodesWithTypes(nodes, nodesIdsWithTypes);
@@ -115,12 +115,12 @@ public class HierarchyServiceTest {
         assertEquals(nodes.get(0).getId(), nodeDTOList.get(0).getNode().getId());
         assertEquals(nodes.get(1).getId(), nodeDTOList.get(1).getNode().getId());
         assertEquals(3, nodeDTOList.get(0).getHierarchies().size());
-        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1));
-        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2));
+        assertEquals("tutkimus", nodeDTOList.get(0).getHierarchies().get(0).getHierarchy());
+        assertEquals("talous", nodeDTOList.get(0).getHierarchies().get(1).getHierarchy());
+        assertEquals("opetus", nodeDTOList.get(0).getHierarchies().get(2).getHierarchy());
         assertEquals(2, nodeDTOList.get(1).getHierarchies().size());
-        assertEquals("opetus", nodeDTOList.get(1).getHierarchies().get(0));
-        assertEquals("talous", nodeDTOList.get(1).getHierarchies().get(1));
+        assertEquals("opetus", nodeDTOList.get(1).getHierarchies().get(0).getHierarchy());
+        assertEquals("talous", nodeDTOList.get(1).getHierarchies().get(1).getHierarchy());
     }
 
 }

@@ -2,22 +2,16 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import java.util.Date;
 
-public class NodeEdgeHistoryWrapper {
+public class Relative {
     private String id;
-    private String name;
+    private Integer uniqueId;
     private Date startDate;
     private Date endDate;
+    private String hierarchy;
     private Date edgeStartDate;
     private Date edgeEndDate;
-    private int uniqueId;
-
-    public int getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(int uniqueId) {
-        this.uniqueId = uniqueId;
-    }
+    private String fullName;
+    private String language;
 
     public String getId() {
         return id;
@@ -27,12 +21,12 @@ public class NodeEdgeHistoryWrapper {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getUniqueId() {
+        return uniqueId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUniqueId(Integer uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public Date getStartDate() {
@@ -51,6 +45,14 @@ public class NodeEdgeHistoryWrapper {
         this.endDate = endDate;
     }
 
+    public String getHierarchy() {
+        return hierarchy;
+    }
+
+    public void setHierarchy(String hierarchy) {
+        this.hierarchy = hierarchy;
+    }
+
     public Date getEdgeStartDate() {
         return edgeStartDate;
     }
@@ -65,6 +67,22 @@ public class NodeEdgeHistoryWrapper {
 
     public void setEdgeEndDate(Date edgeEndDate) {
         this.edgeEndDate = edgeEndDate;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
 }

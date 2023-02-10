@@ -71,4 +71,30 @@ public class Attribute {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Attribute)) {
+            return false;
+        }
+        Attribute oa = (Attribute) o;
+        if (this.id != null && oa.id != null && this.id == oa.id) {
+            return true;
+        } else if (this.id == null && oa.id == null) {
+            return this.getKey().equals(oa.getKey()) &&
+                    this.getValue().equals(oa.getValue());
+        }
+        return false;
+    }
 }

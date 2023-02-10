@@ -65,6 +65,7 @@ deploy_dev:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-dev URL=$DB_POD_URL_DEV
     - oc set env dc/organisaatiorekisteri-ou-service-dev PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-dev TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-dev --from-dir=. --follow
     # patch build config
@@ -88,6 +89,7 @@ deploy_test:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-test URL=$DB_POD_URL_TEST
     - oc set env dc/organisaatiorekisteri-ou-service-test PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-test TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
     # patch build config
@@ -112,11 +114,40 @@ deploy_prod:
     # list environment variables here
     - oc set env dc/organisaatiorekisteri-ou-service-prod URL=$DB_POD_URL_PROD
     - oc set env dc/organisaatiorekisteri-ou-service-prod PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisaatiorekisteri-ou-service-prod TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-prod --from-dir=. --follow
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
+
+
+  # Define the process for deploy stage to new database development environment
+deploy_organisation_dev:
+  stage: deploy
+  tags:
+    - ohtu-build-1
+  environment:
+    name: development
+  only:
+    - organisation-dev
+  except:
+    - schedules
+  script:
+    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
+    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # before any action, I connect to the OpenShift server with the appropriate credentials
+    - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST
+    - oc project organisaatiorekisteri
+    # list environment variables here
+    - oc set env dc/organisation-ou-service-dev URL=$DB_POD_URL_ORGANISATION_DEV
+    - oc set env dc/organisation-ou-service-dev PORT=$OU_SERVICE_PORT
+    - oc set env dc/organisation-ou-service-dev TZ="Europe/Helsinki"
+    # start build process
+    - oc start-build organisation-ou-service-dev --from-dir=. --follow
+    # patch build config
+    - oc patch bc/organisation-ou-service-dev --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
+    - oc patch bc/organisation-ou-service-dev --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
 
 # Rules for the scheduled npm audit and outdated scans
 dependency scanning:
