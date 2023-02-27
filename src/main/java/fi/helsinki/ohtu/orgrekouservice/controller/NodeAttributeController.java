@@ -18,6 +18,9 @@ public class NodeAttributeController {
     @PutMapping("/names")
     public ResponseEntity<List<Attribute>> updateNameAttributes(@RequestBody List<Attribute> attributes) {
         try {
+            /*
+                Here goes the validation logic
+             */
             nodeAttributeService.updateNodeNameAttributes(attributes);
             return new ResponseEntity<>(attributes, HttpStatus.OK);
         } catch (Exception e) {
