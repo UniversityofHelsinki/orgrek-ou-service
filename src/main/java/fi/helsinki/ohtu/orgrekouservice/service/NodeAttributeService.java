@@ -42,4 +42,17 @@ public class NodeAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Attribute> addNodeNameAttributes(List<Attribute> nodeNameAttributes) {
+        try {
+            String addNodeNameAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/name/attributes";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(nodeNameAttributes,headers);
+            ResponseEntity<Attribute[]> response = restTemplate.exchange(addNodeNameAttributesUrl, HttpMethod.POST,  requestEntity, Attribute[].class);
+            return List.of(response.getBody());
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

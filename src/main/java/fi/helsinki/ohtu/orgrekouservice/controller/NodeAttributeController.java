@@ -40,4 +40,16 @@ public class NodeAttributeController {
         }
     }
 
+    @PostMapping("/names")
+    public ResponseEntity<List<Attribute>> addNameAttributes(@RequestBody List<Attribute> attributes) {
+        try {
+            /*
+                Here goes the validation logic
+             */
+            nodeAttributeService.addNodeNameAttributes(attributes);
+            return new ResponseEntity<>(attributes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(attributes, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
