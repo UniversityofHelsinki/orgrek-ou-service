@@ -1,5 +1,6 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class NodeAttributeController {
     @Autowired
     private NodeAttributeService nodeAttributeService;
 
+    @JsonSerialize
+    public class EmptyJsonBody {
+    }
+
     @RequestMapping(method = GET, value = "/names/{id}")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
@@ -28,28 +33,15 @@ public class NodeAttributeController {
     }
 
     @PutMapping("/names")
-    public ResponseEntity<List<Attribute>> updateNameAttributes(@RequestBody List<Attribute> attributes) {
+    public ResponseEntity updateNameAttributes(@RequestBody List<Attribute> attributes) {
         try {
             /*
                 Here goes the validation logic
              */
             nodeAttributeService.updateNodeNameAttributes(attributes);
-            return new ResponseEntity<>(attributes, HttpStatus.OK);
+            return new ResponseEntity<>(new EmptyJsonBody(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(attributes, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/names")
-    public ResponseEntity<List<Attribute>> addNameAttributes(@RequestBody List<Attribute> attributes) {
-        try {
-            /*
-                Here goes the validation logic
-             */
-            nodeAttributeService.addNodeNameAttributes(attributes);
-            return new ResponseEntity<>(attributes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(attributes, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new EmptyJsonBody(), HttpStatus.BAD_REQUEST);
         }
     }
 }

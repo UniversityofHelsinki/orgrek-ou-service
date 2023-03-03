@@ -11,25 +11,19 @@ public class Attribute {
     private Date startDate;
     private Date endDate;
 
-    public Attribute() {
-        this(null, null);
-    }
+    private boolean isNew;
 
-    public Attribute(String key, String value) {
-        this(null, key, value, null, null);
-    }
+    private boolean deleted;
 
-    public Attribute(Integer id, String key, String value, Date startDate, Date endDate) {
-        this(null, id, key, value, startDate, endDate);
-    }
-
-    public Attribute(String nodeId, Integer id, String key, String value, Date startDate, Date endDate) {
+    public Attribute(Integer id, String nodeId, String key, String value, Date startDate, Date endDate, boolean isNew, boolean deleted) {
         this.id = id;
+        this.nodeId = nodeId;
         this.key = key;
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.nodeId = nodeId;
+        this.isNew = isNew;
+        this.deleted = deleted;
     }
 
     public String getNodeId() {
@@ -78,6 +72,22 @@ public class Attribute {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
