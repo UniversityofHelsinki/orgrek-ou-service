@@ -20,7 +20,7 @@ public class NodeAttributeService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private Map<String, List<Attribute>> extractAttributesToMap(List<Attribute> nodeNameAttributes) {
+    public Map<String, List<Attribute>> extractAttributesToMap(List<Attribute> nodeNameAttributes) {
         try {
             Map<String , List<Attribute>> nameAttributesMap = new HashMap();
             List<Attribute> newAttributes = new ArrayList<>();

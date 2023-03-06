@@ -26,6 +26,7 @@ public class Attribute {
         this.deleted = deleted;
     }
 
+
     public String getNodeId() {
         return nodeId;
     }
