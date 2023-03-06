@@ -21,23 +21,27 @@ public class NodeAttributeService {
     RestTemplate restTemplate = new RestTemplate();
 
     private Map<String, List<Attribute>> extractAttributesToMap(List<Attribute> nodeNameAttributes) {
-        Map<String , List<Attribute>> nameAttributesMap = new HashMap();
-        List<Attribute> newAttributes = new ArrayList<>();
-        List<Attribute> updatedAttributes = new ArrayList<>();
-        List<Attribute> deletedAttributes = new ArrayList<>();
-        for (Attribute nodeNameAttribute : nodeNameAttributes) {
-            if (nodeNameAttribute.isNew()) {
-                newAttributes.add(nodeNameAttribute);
-            } else if (nodeNameAttribute.isDeleted()) {
-                deletedAttributes.add(nodeNameAttribute);
-            } else {
-                updatedAttributes.add(nodeNameAttribute);
+        try {
+            Map<String , List<Attribute>> nameAttributesMap = new HashMap();
+            List<Attribute> newAttributes = new ArrayList<>();
+            List<Attribute> updatedAttributes = new ArrayList<>();
+            List<Attribute> deletedAttributes = new ArrayList<>();
+            for (Attribute nodeNameAttribute : nodeNameAttributes) {
+                if (nodeNameAttribute.isNew()) {
+                    newAttributes.add(nodeNameAttribute);
+                } else if (nodeNameAttribute.isDeleted()) {
+                    deletedAttributes.add(nodeNameAttribute);
+                } else {
+                    updatedAttributes.add(nodeNameAttribute);
+                }
             }
+            nameAttributesMap.put("newAttributes" , newAttributes);
+            nameAttributesMap.put("updatedAttributes", updatedAttributes);
+            nameAttributesMap.put("deletedAttributes", deletedAttributes);
+            return nameAttributesMap;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        nameAttributesMap.put("newAttributes" , newAttributes);
-        nameAttributesMap.put("updatedAttributes", updatedAttributes);
-        nameAttributesMap.put("deletedAttributes", deletedAttributes);
-        return nameAttributesMap;
     }
 
     public void updateNodeNameAttributes(List<Attribute> nodeNameAttributes) {
