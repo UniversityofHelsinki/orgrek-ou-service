@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -17,10 +19,6 @@ public class NodeAttributeController {
 
     @Autowired
     private NodeAttributeService nodeAttributeService;
-
-    @JsonSerialize
-    public class EmptyJsonBody {
-    }
 
     @RequestMapping(method = GET, value = "/names/{id}")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
@@ -39,9 +37,9 @@ public class NodeAttributeController {
                 Here goes the validation logic
              */
             nodeAttributeService.updateNodeNameAttributes(attributes);
-            return new ResponseEntity<>(new EmptyJsonBody(), HttpStatus.OK);
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new EmptyJsonBody(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
 }
