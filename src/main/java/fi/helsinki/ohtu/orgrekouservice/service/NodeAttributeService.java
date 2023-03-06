@@ -35,9 +35,9 @@ public class NodeAttributeService {
                     updatedAttributes.add(nodeNameAttribute);
                 }
             }
-            nameAttributesMap.put("newAttributes" , newAttributes);
-            nameAttributesMap.put("updatedAttributes", updatedAttributes);
-            nameAttributesMap.put("deletedAttributes", deletedAttributes);
+            nameAttributesMap.put(Constants.NEW_ATTRIBUTES , newAttributes);
+            nameAttributesMap.put(Constants.UPDATED_ATTRIBUTES, updatedAttributes);
+            nameAttributesMap.put(Constants.DELETED_ATTRIBUTES, deletedAttributes);
             return nameAttributesMap;
         } catch (Exception e) {
             throw new RuntimeException(e);

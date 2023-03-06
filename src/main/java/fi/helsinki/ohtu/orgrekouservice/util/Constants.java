@@ -40,4 +40,8 @@ public class Constants {
     public static final String MAINARI = "mainari_tunnus";
     public static final String LASKUTUS_TUNNUS = "laskutus_tunnus";
     public static final String TYPE = "type";
+
+    public static final String NEW_ATTRIBUTES = "newAttributes";
+    public static final String UPDATED_ATTRIBUTES = "updatedAttributes";
+    public static final String DELETED_ATTRIBUTES = "deletedAttributes";
 }
