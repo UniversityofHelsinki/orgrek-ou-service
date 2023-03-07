@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import java.util.Date;
 
+
 public class Attribute {
 
     private Integer id;
@@ -14,6 +15,10 @@ public class Attribute {
     private boolean isNew;
 
     private boolean deleted;
+
+
+    public Attribute() {
+    }
 
     public Attribute(Integer id, String nodeId, String key, String value, Date startDate, Date endDate, boolean isNew, boolean deleted) {
         this.id = id;
