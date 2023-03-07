@@ -3,6 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
 import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +25,9 @@ public class UtilServiceTest {
 
     @Test
     public void testThereIsAllThreeNameAttributes(){
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
-        Attribute nameEnAttribute = new Attribute("name_en", "University of Helsinki Centre for Continuing Education");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
+        Attribute nameEnAttribute = new Attribute(12345, "12345", "name_en", "University of Helsinki Centre for Continuing Education", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -39,8 +40,8 @@ public class UtilServiceTest {
 
     @Test
     public void testThereIsTwoNameAttributes(){
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -52,7 +53,7 @@ public class UtilServiceTest {
 
     @Test
     public void testThereIsOneNameAttributes(){
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
 
@@ -61,9 +62,10 @@ public class UtilServiceTest {
         assertTrue(isThereNameAttribute);
     }
 
+
     @Test
     public void testThereAreNoNameAttributes(){
-        Attribute emoAttribute = new Attribute("emo_lyhenne", "HY");
+        Attribute emoAttribute = new Attribute(123, "123", "emo_lyhenne", "HY", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(emoAttribute);
 
@@ -72,14 +74,15 @@ public class UtilServiceTest {
         assertFalse(isThereNameAttribute);
     }
 
+
     @Test
     public void testNodesGetDisplayNamesWithEmoAndLyhenne() {
         NodeDTO nodeDTO = new NodeDTO();
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
-        Attribute nameEnAttribute = new Attribute("name_en", "University of Helsinki Centre for Continuing Education");
-        Attribute emoAttribute = new Attribute("emo_lyhenne", "HY");
-        Attribute lyhenneAttribute = new Attribute("lyhenne", "HYKK");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
+        Attribute nameEnAttribute = new Attribute(12345, "12345", "name_en", "University of Helsinki Centre for Continuing Education", null, null, false, false);
+        Attribute emoAttribute = new Attribute(123, "123","emo_lyhenne", "HY", null, null, false, false);
+        Attribute lyhenneAttribute = new Attribute(123, "123", "lyhenne", "HYKK", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -98,10 +101,10 @@ public class UtilServiceTest {
     @Test
     public void testNodesGetDisplayNamesWithLyhenne() {
         NodeDTO nodeDTO = new NodeDTO();
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
-        Attribute nameEnAttribute = new Attribute("name_en", "University of Helsinki Centre for Continuing Education");
-        Attribute lyhenneAttribute = new Attribute("lyhenne", "HYKK");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
+        Attribute nameEnAttribute = new Attribute(12345, "12345", "name_en", "University of Helsinki Centre for Continuing Education", null, null, false, false);
+        Attribute lyhenneAttribute = new Attribute(123, "123", "lyhenne", "HYKK", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -119,10 +122,10 @@ public class UtilServiceTest {
     @Test
     public void testNodesGetDisplayNamesWithEmo() {
         NodeDTO nodeDTO = new NodeDTO();
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
-        Attribute nameEnAttribute = new Attribute("name_en", "University of Helsinki Centre for Continuing Education");
-        Attribute emoAttribute = new Attribute("emo_lyhenne", "HY");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
+        Attribute nameEnAttribute = new Attribute(12345, "12345", "name_en", "University of Helsinki Centre for Continuing Education", null, null, false, false);
+        Attribute emoAttribute = new Attribute(123, "123", "emo_lyhenne", "HY", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -140,9 +143,9 @@ public class UtilServiceTest {
     @Test
     public void testNodesGetDisplayNamesWithoutEmoAndLyhenne() {
         NodeDTO nodeDTO = new NodeDTO();
-        Attribute nameFiAttribute = new Attribute("name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut");
-        Attribute nameSvAttribute = new Attribute("name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster");
-        Attribute nameEnAttribute = new Attribute("name_en", "University of Helsinki Centre for Continuing Education");
+        Attribute nameFiAttribute = new Attribute(123, "123", "name_fi", "Helsingin yliopiston koulutus- ja kehittämispalvelut", null, null, false, false);
+        Attribute nameSvAttribute = new Attribute(1234, "1234", "name_sv", "Helsingfors universitets utbildnings- och utvecklingstjänster", null, null, false, false);
+        Attribute nameEnAttribute = new Attribute(12345, "12345", "name_en", "University of Helsinki Centre for Continuing Education", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(nameFiAttribute);
         attributes.add(nameSvAttribute);
@@ -159,8 +162,8 @@ public class UtilServiceTest {
     @Test
     public void testNodesGetEmptyDisplayNamesWithoutNameAttributes() {
         NodeDTO nodeDTO = new NodeDTO();
-        Attribute emoAttribute = new Attribute("emo_lyhenne", "HY");
-        Attribute lyhenneAttribute = new Attribute("lyhenne", "HYKK");
+        Attribute emoAttribute = new Attribute(123, "123", "emo_lyhenne", "HY", null, null, false, false);
+        Attribute lyhenneAttribute = new Attribute(123, "123", "lyhenne", "HYKK", null, null, false, false);
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(emoAttribute);
         attributes.add(lyhenneAttribute);
