@@ -267,6 +267,10 @@ public class HierarchyController {
         return results;
     }
 
+    private List<Relative> filterRelativesBy(List<String> hierarchies, List<Relative> in) {
+        return in.stream().filter(r -> hierarchies.contains(r.getHierarchy())).collect(Collectors.toList());
+    }
+
     @RequestMapping(method = GET, value = "/predecessors1/{id}/{date}")
     public Map<String, List<Relative>> getPredecessors1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<Relative> predecessors = hierarchyService.getPredecessors(uniqueId, date);
@@ -285,31 +289,34 @@ public class HierarchyController {
         return successors.stream().sorted(byNameRelative).collect(Collectors.groupingBy(Relative::getLanguage));
     }
 
-    @RequestMapping(method = GET, value = "/parents1/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getParents1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    private Map<String, List<RelativeDTO>> byLanguage(List<String> selectedHierarchies, List<Relative> relatives) {
+        if (relatives.isEmpty()) {
+            return emptyMap();
+        }
+        return combineHierarchies(relatives).stream().filter(r ->
+                r.getHierarchies().stream().map(h -> h.getHierarchy()).anyMatch(selectedHierarchies::contains)
+        ).sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+    }
+
+    @RequestMapping(method = GET, value = "/parents1/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getParents1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getParents(uniqueId, date);
-        if (parents.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(parents).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/futureandcurrent/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getFutureAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/parents1/futureandcurrent/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getFutureAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getFutureAndCurrentParents(uniqueId, date);
-        if (parents.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(parents).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/historyandcurrent/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getHistoryAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/parents1/historyandcurrent/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getHistoryAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getHistoryAndCurrentParents(uniqueId, date);
-        if (parents.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(parents).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, parents);
     }
 
     @RequestMapping(method = GET, value = "/parents1/all/{id}/{date}")
@@ -320,31 +327,25 @@ public class HierarchyController {
         }
         return combineHierarchies(parents).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
     }
-    @RequestMapping(method = GET, value = "/children1/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getChildren1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/children1/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getChildren1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getChildren(uniqueId, date);
-        if (children.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(children).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/futureandcurrent/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getFutureAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/children1/futureandcurrent/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getFutureAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getFutureAndCurrentChildren(uniqueId, date);
-        if (children.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(children).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/historyandcurrent/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getHistoryAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/children1/historyandcurrent/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getHistoryAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getHistoryAndCurrentChildren(uniqueId, date);
-        if (children.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(children).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, children);
     }
 
     @RequestMapping(method = GET, value = "/children1/all/{id}/{date}")
