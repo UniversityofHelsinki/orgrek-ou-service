@@ -42,7 +42,7 @@ public class NodeAttributeController {
                 nodeAttributeService.updateNodeNameAttributes(attributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
             } else {
-                return new ResponseEntity(attributes, response.getStatusCode());
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
             }
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
