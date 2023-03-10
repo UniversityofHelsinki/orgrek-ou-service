@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class NodeAttributeValidationService {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
+        return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     };
 
 }
