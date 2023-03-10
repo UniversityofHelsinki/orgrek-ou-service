@@ -3,6 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
+import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class NodeAttributeController {
     @Autowired
     private NodeAttributeService nodeAttributeService;
 
+    @Autowired
+    private NodeAttributeValidationService nodeAttributeValidationService;
+
     @RequestMapping(method = GET, value = "/names/{id}")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
@@ -33,11 +37,13 @@ public class NodeAttributeController {
     @PutMapping("/names")
     public ResponseEntity updateNameAttributes(@RequestBody List<Attribute> attributes) {
         try {
-            /*
-                Here goes the validation logic
-             */
-            nodeAttributeService.updateNodeNameAttributes(attributes);
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(attributes);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                nodeAttributeService.updateNodeNameAttributes(attributes);
+                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(attributes, response.getStatusCode());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
