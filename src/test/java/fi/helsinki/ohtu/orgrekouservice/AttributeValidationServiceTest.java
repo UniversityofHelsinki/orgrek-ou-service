@@ -41,6 +41,7 @@ public class AttributeValidationServiceTest {
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
         validAttribute1.setKey("moro");
+        validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
         validAttribute1.setNew(false);
@@ -49,6 +50,7 @@ public class AttributeValidationServiceTest {
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
         validAttribute2.setKey("moro");
+        validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
         validAttribute2.setNew(false);
@@ -84,6 +86,7 @@ public class AttributeValidationServiceTest {
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
         inValidAttribute1.setKey("moro");
+        inValidAttribute1.setValue("morjensta pöytään");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
         inValidAttribute1.setNew(false);
@@ -92,6 +95,7 @@ public class AttributeValidationServiceTest {
         inValidAttribute2.setId(1234);
         inValidAttribute2.setNodeId("12345");
         inValidAttribute2.setKey("moro");
+        inValidAttribute2.setValue("morjensta pöytään");
         inValidAttribute2.setStartDate(startDate);
         inValidAttribute2.setEndDate(endDate);
         inValidAttribute2.setNew(false);
@@ -138,6 +142,7 @@ public class AttributeValidationServiceTest {
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
         inValidAttribute1.setKey("moro");
+        inValidAttribute1.setValue("morjensta pöytään");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
         inValidAttribute1.setNew(false);
@@ -176,6 +181,7 @@ public class AttributeValidationServiceTest {
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
         inValidAttribute1.setKey("moro");
+        inValidAttribute1.setValue("morjensta pöytään");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
         inValidAttribute1.setNew(false);
