@@ -11,12 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,8 +24,16 @@ public class AttributeValidationServiceTest {
 
     @Test
     public void testAttributesWithValidDatesShouldReturnEmptyArrayWithStatusCode200() {
-        Date startDate = new Date(2022,1,15);
-        Date endDate = new Date(2022,1,20);
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 20);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -62,9 +65,18 @@ public class AttributeValidationServiceTest {
     }
 
     @Test
-    public void testAttributesWithInValidDatesShouldReturnNodeArrayWithStatusCode422() {
-        Date startDate = new Date(2022,1,15);
-        Date endDate = new Date(2022,1,5);
+    public void testTwoAttributesWithInValidDatesShouldReturnInvalidNodeArrayWithSizeOfTwoStatusCode422() {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 5);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -105,6 +117,77 @@ public class AttributeValidationServiceTest {
         assertEquals(2, result.size());
         assertEquals(expectedFirstAttributeDTO, result.get(0));
         assertEquals(expectedSecondAttributeDTO, result.get(1));
+    }
+
+
+    @Test
+    public void testAttributeWithDatesSeparatedByOneDayOrLessShouldReturnInvalidNodeArrayWithSizeOfTwoStatusCode422() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 16);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute inValidAttribute1 = new Attribute();
+        inValidAttribute1.setId(123);
+        inValidAttribute1.setNodeId("1234");
+        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setStartDate(startDate);
+        inValidAttribute1.setEndDate(endDate);
+        inValidAttribute1.setNew(false);
+        inValidAttribute1.setDeleted(false);
+
+        attributeList.add(inValidAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
+        expectedFirstAttributeDTO.setId(123);
+        expectedFirstAttributeDTO.setNodeId("1234");
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+        assertEquals(1, result.size());
+        assertEquals(expectedFirstAttributeDTO, result.get(0));
+    }
+
+    @Test
+    public void testAttributeWithDatesSeparatedByTwoDaysOrMoreShouldReturnValidNodeArrayWithSizeOfZeroStatusCode422() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 17);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute inValidAttribute1 = new Attribute();
+        inValidAttribute1.setId(123);
+        inValidAttribute1.setNodeId("1234");
+        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setStartDate(startDate);
+        inValidAttribute1.setEndDate(endDate);
+        inValidAttribute1.setNew(false);
+        inValidAttribute1.setDeleted(false);
+
+        attributeList.add(inValidAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0, result.size());
     }
 
 }
