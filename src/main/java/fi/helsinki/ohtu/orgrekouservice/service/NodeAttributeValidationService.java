@@ -33,17 +33,8 @@ public class NodeAttributeValidationService {
 
         for (Attribute nodeAttribute : nodeAttributes) {
             AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
-            if (nodeAttribute.getStartDate() != null && nodeAttribute.getEndDate() != null) {
-                LocalDate convertedEndDate = convertToLocalDate(nodeAttribute.getEndDate());
-                convertedEndDate = convertedEndDate.minusDays(1);
-                Date convertedDate = convertToDateViaInstant(convertedEndDate);
-                if (nodeAttribute.getStartDate().after(convertedDate)) {
-                    attributeValidationDTO.setId(nodeAttribute.getId());
-                    attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-                    attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
-                    errorMessages.add(attributeValidationDTO);
-                }
-            }
+            validateName(errorMessages, nodeAttribute, attributeValidationDTO);
+            validateDates(errorMessages, nodeAttribute, attributeValidationDTO);
         }
 
         if (!errorMessages.isEmpty()) {
@@ -51,6 +42,31 @@ public class NodeAttributeValidationService {
         }
 
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+    }
+
+    private void validateName(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, AttributeValidationDTO attributeValidationDTO) {
+        if (nodeAttribute.getValue() == null) {
+            attributeValidationDTO.setId(nodeAttribute.getId());
+            attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+            errorMessages.add(attributeValidationDTO);
+        }
     };
+
+    private void validateDates(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, AttributeValidationDTO attributeValidationDTO) {
+        if (nodeAttribute.getStartDate() != null && nodeAttribute.getEndDate() != null) {
+            LocalDate convertedEndDate = convertToLocalDate(nodeAttribute.getEndDate());
+            convertedEndDate = convertedEndDate.minusDays(1);
+            Date convertedDate = convertToDateViaInstant(convertedEndDate);
+            if (nodeAttribute.getStartDate().after(convertedDate)) {
+                attributeValidationDTO.setId(nodeAttribute.getId());
+                attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
+                errorMessages.add(attributeValidationDTO);
+            }
+        }
+    }
+
+    ;
 
 }
