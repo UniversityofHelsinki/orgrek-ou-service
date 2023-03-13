@@ -32,9 +32,8 @@ public class NodeAttributeValidationService {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
 
         for (Attribute nodeAttribute : nodeAttributes) {
-            AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
-            validateName(errorMessages, nodeAttribute, attributeValidationDTO);
-            validateDates(errorMessages, nodeAttribute, attributeValidationDTO);
+            validateName(errorMessages, nodeAttribute);
+            validateDates(errorMessages, nodeAttribute);
         }
 
         if (!errorMessages.isEmpty()) {
@@ -44,7 +43,8 @@ public class NodeAttributeValidationService {
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     }
 
-    private void validateName(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, AttributeValidationDTO attributeValidationDTO) {
+    private void validateName(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+        AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty()) {
             attributeValidationDTO.setId(nodeAttribute.getId());
             attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
@@ -53,7 +53,8 @@ public class NodeAttributeValidationService {
         }
     };
 
-    private void validateDates(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, AttributeValidationDTO attributeValidationDTO) {
+    private void validateDates(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+        AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (nodeAttribute.getStartDate() != null && nodeAttribute.getEndDate() != null) {
             LocalDate convertedEndDate = convertToLocalDate(nodeAttribute.getEndDate());
             convertedEndDate = convertedEndDate.minusDays(1);
