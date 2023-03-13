@@ -45,7 +45,7 @@ public class NodeAttributeValidationService {
     }
 
     private void validateName(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, AttributeValidationDTO attributeValidationDTO) {
-        if (nodeAttribute.getValue() == null) {
+        if (nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty()) {
             attributeValidationDTO.setId(nodeAttribute.getId());
             attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
             attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);

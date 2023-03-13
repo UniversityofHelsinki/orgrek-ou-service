@@ -164,7 +164,7 @@ public class AttributeValidationServiceTest {
     }
 
     @Test
-    public void testAttributeWithDatesSeparatedByTwoDaysOrMoreShouldReturnValidNodeArrayWithSizeOfZeroStatusCode422() {
+    public void testAttributeWithDatesSeparatedByTwoDaysOrMoreShouldReturnValidNodeArrayWithSizeOfZeroStatusCode200() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
@@ -194,6 +194,120 @@ public class AttributeValidationServiceTest {
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(0, result.size());
+    }
+
+
+    @Test
+    public void testValidNameAttributeShouldReturnNodeArrayWithSizeOfZeroStatusCode200() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 17);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute validAttribute1 = new Attribute();
+        validAttribute1.setId(123);
+        validAttribute1.setNodeId("1234");
+        validAttribute1.setKey("moro");
+        validAttribute1.setValue("morjensta pöytään");
+        validAttribute1.setStartDate(startDate);
+        validAttribute1.setEndDate(endDate);
+        validAttribute1.setNew(false);
+        validAttribute1.setDeleted(false);
+
+        attributeList.add(validAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testAttributeWithNullNameShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 17);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute validAttribute1 = new Attribute();
+        validAttribute1.setId(123);
+        validAttribute1.setNodeId("1234");
+        validAttribute1.setKey("moro");
+        validAttribute1.setValue(null);
+        validAttribute1.setStartDate(startDate);
+        validAttribute1.setEndDate(endDate);
+        validAttribute1.setNew(false);
+        validAttribute1.setDeleted(false);
+
+        attributeList.add(validAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+        assertEquals(1, result.size());
+
+        AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
+        expectedFirstAttributeDTO.setId(123);
+        expectedFirstAttributeDTO.setNodeId("1234");
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+
+        assertEquals(expectedFirstAttributeDTO, result.get(0));
+    }
+
+    @Test
+    public void testAttributeWithEmptyNameShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 17);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute validAttribute1 = new Attribute();
+        validAttribute1.setId(123);
+        validAttribute1.setNodeId("1234");
+        validAttribute1.setKey("moro");
+        validAttribute1.setValue("");
+        validAttribute1.setStartDate(startDate);
+        validAttribute1.setEndDate(endDate);
+        validAttribute1.setNew(false);
+        validAttribute1.setDeleted(false);
+
+        attributeList.add(validAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+        assertEquals(1, result.size());
+
+        AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
+        expectedFirstAttributeDTO.setId(123);
+        expectedFirstAttributeDTO.setNodeId("1234");
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+
+        assertEquals(expectedFirstAttributeDTO, result.get(0));
     }
 
 }
