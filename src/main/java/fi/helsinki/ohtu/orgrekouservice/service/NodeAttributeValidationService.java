@@ -53,7 +53,7 @@ public class NodeAttributeValidationService {
 
     private void validateNameLength(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
-        if (nodeAttribute.getValue() != null || !nodeAttribute.getValue().isEmpty()) {
+        if (nodeAttribute.getValue() != null) {
             if (nodeAttribute.getValue().length() > Constants.ATTRIBUTE_NAME_MAXIMUM_LENGTH) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
