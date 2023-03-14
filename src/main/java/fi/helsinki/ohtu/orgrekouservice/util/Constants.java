@@ -47,4 +47,8 @@ public class Constants {
 
     public static final String ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_after_end_date";
     public static final String ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY = "attribute_name_is_mandatory";
+    public static final String ATTRIBUTE_NAME_LENGTH_VALIDATION_MESSAGE_KEY = "attribute_name_is_too_long";
+
+    public static final int ATTRIBUTE_NAME_MAXIMUM_LENGTH = 250;
+
 }
