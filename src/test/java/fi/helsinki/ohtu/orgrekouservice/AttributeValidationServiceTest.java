@@ -357,6 +357,51 @@ public class AttributeValidationServiceTest {
     };
 
     @Test
+    public void testAttributeNameUnder250MarksShouldReturnNodeArrayWithSizeOfZeroStatusCode200() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 17);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int tooLongString = Constants.ATTRIBUTE_NAME_MAXIMUM_LENGTH;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(tooLongString)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute inValidAttribute1 = new Attribute();
+        inValidAttribute1.setId(123);
+        inValidAttribute1.setNodeId("1234");
+        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setValue(generatedString);
+        inValidAttribute1.setStartDate(startDate);
+        inValidAttribute1.setEndDate(endDate);
+        inValidAttribute1.setNew(false);
+        inValidAttribute1.setDeleted(false);
+
+        attributeList.add(inValidAttribute1);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0, result.size());
+
+    };
+
+    @Test
     public void testAttributeNameTooLongShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, 1);
