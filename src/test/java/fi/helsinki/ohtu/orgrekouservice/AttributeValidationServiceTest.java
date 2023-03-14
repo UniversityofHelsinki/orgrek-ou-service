@@ -381,17 +381,17 @@ public class AttributeValidationServiceTest {
                 .toString();
 
         List<Attribute> attributeList = new ArrayList<>();
-        Attribute inValidAttribute1 = new Attribute();
-        inValidAttribute1.setId(123);
-        inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
-        inValidAttribute1.setValue(generatedString);
-        inValidAttribute1.setStartDate(startDate);
-        inValidAttribute1.setEndDate(endDate);
-        inValidAttribute1.setNew(false);
-        inValidAttribute1.setDeleted(false);
+        Attribute validAttribute1 = new Attribute();
+        validAttribute1.setId(123);
+        validAttribute1.setNodeId("1234");
+        validAttribute1.setKey("moro");
+        validAttribute1.setValue(generatedString);
+        validAttribute1.setStartDate(startDate);
+        validAttribute1.setEndDate(endDate);
+        validAttribute1.setNew(false);
+        validAttribute1.setDeleted(false);
 
-        attributeList.add(inValidAttribute1);
+        attributeList.add(validAttribute1);
 
         ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
 
