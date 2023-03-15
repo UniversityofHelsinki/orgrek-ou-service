@@ -250,10 +250,15 @@ public class HierarchyController {
         }
     };
 
-    private Collection<RelativeDTO> combineHierarchies(List<Relative> relatives) {
+
+    private Collection<RelativeDTO> combineHierarchies(List<Relative> relatives, List<String> selectedHierarchies) {
         Map<String, Map<String, RelativeDTO>> hierarchiesCombined = new HashMap<>();
         List<RelativeDTO> results = new ArrayList<>();
+        boolean includeAllHierarchies = selectedHierarchies == null;
         relatives.forEach(p -> {
+            if (!includeAllHierarchies && !selectedHierarchies.contains(p.getHierarchy())) {
+                return;
+            }
             if (!hierarchiesCombined.containsKey(p.getId())) {
                 hierarchiesCombined.put(p.getId(), new HashMap<>());
             }
@@ -265,6 +270,10 @@ public class HierarchyController {
             hierarchiesCombined.get(p.getId()).get(p.getLanguage()).addHierarchy(p);
         });
         return results;
+    }
+
+    private Collection<RelativeDTO> combineHierarchies(List<Relative> relatives) {
+        return combineHierarchies(relatives, null);
     }
 
     private List<Relative> filterRelativesBy(List<String> hierarchies, List<Relative> in) {
@@ -293,7 +302,7 @@ public class HierarchyController {
         if (relatives.isEmpty()) {
             return emptyMap();
         }
-        return combineHierarchies(relatives).stream().filter(r ->
+        return combineHierarchies(relatives, selectedHierarchies).stream().filter(r ->
                 r.getHierarchies().stream().map(h -> h.getHierarchy()).anyMatch(selectedHierarchies::contains)
         ).sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
     }
@@ -319,13 +328,11 @@ public class HierarchyController {
         return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/all/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getAllParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/parents1/all/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getAllParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getAllParents(uniqueId, date);
-        if (parents.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(parents).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, parents);
     }
     @RequestMapping(method = GET, value = "/children1/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getChildren1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
@@ -348,12 +355,10 @@ public class HierarchyController {
         return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/all/{id}/{date}")
-    public Map<String, List<RelativeDTO>> getAllChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/children1/all/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getAllChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getAllChildren(uniqueId, date);
-        if (children.isEmpty()) {
-            return emptyMap();
-        }
-        return combineHierarchies(children).stream().sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        return byLanguage(selectedHierarchies, children);
     }
 }
