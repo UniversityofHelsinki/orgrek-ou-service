@@ -46,4 +46,5 @@ public class Constants {
     public static final String DELETED_ATTRIBUTES = "deletedAttributes";
 
     public static final String ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_after_end_date";
+    public static final String ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY = "attribute_name_is_mandatory";
 }
