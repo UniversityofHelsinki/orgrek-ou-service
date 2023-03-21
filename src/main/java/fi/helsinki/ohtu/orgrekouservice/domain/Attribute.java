@@ -1,5 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 
@@ -80,6 +82,7 @@ public class Attribute {
         this.id = id;
     }
 
+    @JsonProperty("isNew")
     public boolean isNew() {
         return isNew;
     }

@@ -48,4 +48,19 @@ public class NodeAttributeController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/types")
+    public ResponseEntity updateTypeAttributes(@RequestBody List<Attribute> attributes) {
+        try {
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(attributes);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                nodeAttributeService.updateNodeTypeAttributes(attributes);
+                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

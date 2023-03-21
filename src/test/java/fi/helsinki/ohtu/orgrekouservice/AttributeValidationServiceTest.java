@@ -265,7 +265,7 @@ public class AttributeValidationServiceTest {
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
         expectedFirstAttributeDTO.setNodeId("1234");
-        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
 
         assertEquals(expectedFirstAttributeDTO, result.get(0));
     };
@@ -305,7 +305,7 @@ public class AttributeValidationServiceTest {
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
         expectedFirstAttributeDTO.setNodeId("1234");
-        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
 
         assertEquals(expectedFirstAttributeDTO, result.get(0));
     };
@@ -345,7 +345,7 @@ public class AttributeValidationServiceTest {
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
         expectedFirstAttributeDTO.setNodeId("1234");
-        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
 
         AttributeValidationDTO expectedSecondAttributeDTO = new AttributeValidationDTO();
         expectedSecondAttributeDTO.setId(123);
@@ -447,7 +447,7 @@ public class AttributeValidationServiceTest {
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
         expectedFirstAttributeDTO.setNodeId("1234");
-        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_LENGTH_VALIDATION_MESSAGE_KEY);
+        expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
 
         assertEquals(expectedFirstAttributeDTO, result.get(0));
 
