@@ -31,8 +31,8 @@ public class NodeAttributeValidationService {
     public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
-            validateName(errorMessages, nodeAttribute);
-            validateNameLength(errorMessages, nodeAttribute);
+            validateValue(errorMessages, nodeAttribute);
+            validateValueLength(errorMessages, nodeAttribute);
             validateDates(errorMessages, nodeAttribute);
         }
         if (!errorMessages.isEmpty()) {
@@ -41,23 +41,23 @@ public class NodeAttributeValidationService {
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     }
 
-    private void validateName(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+    private void validateValue(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty()) {
             attributeValidationDTO.setId(nodeAttribute.getId());
             attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
             errorMessages.add(attributeValidationDTO);
         }
     };
 
-    private void validateNameLength(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+    private void validateValueLength(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (nodeAttribute.getValue() != null) {
             if (nodeAttribute.getValue().length() > Constants.ATTRIBUTE_NAME_MAXIMUM_LENGTH) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_LENGTH_VALIDATION_MESSAGE_KEY);
+                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
             }
         }
