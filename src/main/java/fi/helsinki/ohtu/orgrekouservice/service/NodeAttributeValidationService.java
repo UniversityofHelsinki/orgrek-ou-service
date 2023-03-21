@@ -46,7 +46,7 @@ public class NodeAttributeValidationService {
         if (nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty()) {
             attributeValidationDTO.setId(nodeAttribute.getId());
             attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_VALIDATION_MESSAGE_KEY);
+            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
             errorMessages.add(attributeValidationDTO);
         }
     };
@@ -57,7 +57,7 @@ public class NodeAttributeValidationService {
             if (nodeAttribute.getValue().length() > Constants.ATTRIBUTE_NAME_MAXIMUM_LENGTH) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_NAME_LENGTH_VALIDATION_MESSAGE_KEY);
+                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
             }
         }
