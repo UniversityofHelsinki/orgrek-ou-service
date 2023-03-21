@@ -69,4 +69,17 @@ public class NodeAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateNodeTypeAttributes(List<Attribute> nodeTypeAttributes) {
+        try {
+            Map<String, List<Attribute>> nameAttributesMap = extractAttributesToMap(nodeTypeAttributes);
+            String updateNodeTypeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/type/attributes";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(nameAttributesMap, headers);
+            restTemplate.exchange(updateNodeTypeAttributesUrl, HttpMethod.PUT,  requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
