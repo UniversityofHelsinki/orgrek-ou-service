@@ -29,7 +29,7 @@ public class NodeAttributeController {
     @Autowired
     private NodeService nodeService;
 
-    @RequestMapping(method = GET, value = "/attributes/names/{id}")
+    @RequestMapping(method = GET, value = "/{id}/attributes/names")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeNameAttributesByNodeId(nodeUniqueId);
@@ -73,7 +73,7 @@ public class NodeAttributeController {
         }
     }
 
-    @RequestMapping(method = GET, value = "/types/{id}")
+    @RequestMapping(method = GET, value = "/{id}/attributes/types")
     public ResponseEntity<List<Attribute>> getNodeTypeAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeTypeAttributesByNodeId(nodeUniqueId);
