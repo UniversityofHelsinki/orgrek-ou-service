@@ -63,4 +63,14 @@ public class NodeAttributeController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @RequestMapping(method = GET, value = "/types/{id}")
+    public ResponseEntity<List<Attribute>> getNodeTypeAttributes (@PathVariable("id") int nodeUniqueId) {
+        try {
+            List<Attribute> nodeAttributes = nodeAttributeService.getNodeTypeAttributesByNodeId(nodeUniqueId);
+            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
