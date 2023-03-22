@@ -71,11 +71,7 @@ public class NodeAttributeService {
     public List<Attribute> getNodeNameAttributesByNodeId(int nodeUniqueId) {
         try {
             String nodeNameAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/name/attributes/" + nodeUniqueId;
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity(nodeNameAttributesUrl,headers);
-            ResponseEntity<Attribute[]> response = restTemplate.exchange(nodeNameAttributesUrl, HttpMethod.GET,  requestEntity, Attribute[].class);
-            return List.of(response.getBody());
+            return getNodeAttributes(nodeNameAttributesUrl);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
@@ -92,5 +88,22 @@ public class NodeAttributeService {
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Attribute> getNodeTypeAttributesByNodeId(int nodeUniqueId) {
+        try {
+            String nodeTypeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/type/attributes/" + nodeUniqueId;
+            return getNodeAttributes(nodeTypeAttributesUrl);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<Attribute> getNodeAttributes(String nodeAttributesUrl) throws RestClientException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributesUrl,headers);
+        ResponseEntity<Attribute[]> response = restTemplate.exchange(nodeAttributesUrl, HttpMethod.GET,  requestEntity, Attribute[].class);
+        return List.of(response.getBody());
     }
 }
