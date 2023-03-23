@@ -1,6 +1,5 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;

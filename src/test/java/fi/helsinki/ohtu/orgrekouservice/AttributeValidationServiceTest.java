@@ -231,7 +231,7 @@ public class AttributeValidationServiceTest {
     };
 
     @Test
-    public void testAttributeWithNullNameShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
+    public void testAttributeWithNullValueShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
