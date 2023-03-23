@@ -20,19 +20,30 @@ public class NodeAttributeService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public Map<String, List<Attribute>> extractAttributesToMap(List<Attribute> nodeNameAttributes) {
+    public List<Attribute> updateNodeIdToAttributes(List<Attribute> nodeAttributes, String nodeId) {
+        try {
+            for (Attribute nodeAttribute : nodeAttributes) {
+                nodeAttribute.setNodeId(nodeId);
+            }
+            return nodeAttributes;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    };
+
+    public Map<String, List<Attribute>> extractAttributesToMap(List<Attribute> nodeAttributes) {
         try {
             Map<String , List<Attribute>> nameAttributesMap = new HashMap();
             List<Attribute> newAttributes = new ArrayList<>();
             List<Attribute> updatedAttributes = new ArrayList<>();
             List<Attribute> deletedAttributes = new ArrayList<>();
-            for (Attribute nodeNameAttribute : nodeNameAttributes) {
-                if (nodeNameAttribute.isNew()) {
-                    newAttributes.add(nodeNameAttribute);
-                } else if (nodeNameAttribute.isDeleted()) {
-                    deletedAttributes.add(nodeNameAttribute);
+            for (Attribute nodeAttribute : nodeAttributes) {
+                if (nodeAttribute.isNew()) {
+                    newAttributes.add(nodeAttribute);
+                } else if (nodeAttribute.isDeleted()) {
+                    deletedAttributes.add(nodeAttribute);
                 } else {
-                    updatedAttributes.add(nodeNameAttribute);
+                    updatedAttributes.add(nodeAttribute);
                 }
             }
             nameAttributesMap.put(Constants.NEW_ATTRIBUTES , newAttributes);
