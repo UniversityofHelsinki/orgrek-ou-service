@@ -51,4 +51,6 @@ public class Constants {
 
     public static final int ATTRIBUTE_NAME_MAXIMUM_LENGTH = 250;
 
+    public static final String ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY = "attribute_id_is_mandatory";
+    public static final String ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_is_mandatory";
 }
