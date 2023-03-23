@@ -32,7 +32,6 @@ public class NodeAttributeController {
     @RequestMapping(method = GET, value = "/{id}/attributes/names")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
-            System.out.println("test");
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeNameAttributesByNodeId(nodeUniqueId);
             return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
         } catch (Exception e) {
