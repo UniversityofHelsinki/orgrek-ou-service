@@ -77,7 +77,7 @@ public class AttributeSanitationServiceTest {
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
-        Attribute validAttribute2 = new Attribute();
+        Attribute inValidAttribute2 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
         validAttribute1.setKey("moro");
@@ -87,17 +87,17 @@ public class AttributeSanitationServiceTest {
         validAttribute1.setNew(false);
         validAttribute1.setDeleted(false);
 
-        validAttribute2.setId(123);
-        validAttribute2.setNodeId("1234");
-        validAttribute2.setKey("moro");
-        validAttribute2.setValue("morjensta pöytään");
-        validAttribute2.setStartDate(startDate);
-        validAttribute2.setEndDate(endDate);
-        validAttribute2.setNew(true);
-        validAttribute2.setDeleted(true);
+        inValidAttribute2.setId(123);
+        inValidAttribute2.setNodeId("1234");
+        inValidAttribute2.setKey("moro");
+        inValidAttribute2.setValue("morjensta pöytään");
+        inValidAttribute2.setStartDate(startDate);
+        inValidAttribute2.setEndDate(endDate);
+        inValidAttribute2.setNew(true);
+        inValidAttribute2.setDeleted(true);
 
         attributeList.add(validAttribute1);
-        attributeList.add(validAttribute2);
+        attributeList.add(inValidAttribute2);
 
         List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributeList);
         assertEquals(1, sanitizedAttributes.size());
