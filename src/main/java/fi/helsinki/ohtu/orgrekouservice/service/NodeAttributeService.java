@@ -79,11 +79,11 @@ public class NodeAttributeService {
 
     public void updateNodeTypeAttributes(List<Attribute> nodeTypeAttributes) {
         try {
-            Map<String, List<Attribute>> nameAttributesMap = extractAttributesToMap(nodeTypeAttributes);
+            Map<String, List<Attribute>> typeAttributesMap = extractAttributesToMap(nodeTypeAttributes);
             String updateNodeTypeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/type/attributes";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity(nameAttributesMap, headers);
+            HttpEntity<Object> requestEntity = new HttpEntity(typeAttributesMap, headers);
             restTemplate.exchange(updateNodeTypeAttributesUrl, HttpMethod.PUT,  requestEntity, String.class);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
@@ -94,6 +94,27 @@ public class NodeAttributeService {
         try {
             String nodeTypeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/type/attributes/" + nodeUniqueId;
             return getNodeAttributes(nodeTypeAttributesUrl);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateNodeCodeAttributes(List<Attribute> nodeCodeAttributes) {
+        try {
+            Map<String, List<Attribute>> codeAttributesMap = extractAttributesToMap(nodeCodeAttributes);
+            String updateNodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/code/attributes";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(codeAttributesMap, headers);
+            restTemplate.exchange(updateNodeCodeAttributesUrl, HttpMethod.PUT, requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public List<Attribute> getNodeCodeAttributesByNodeId(int nodeUniqueId) {
+        try {
+            String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/code/attributes/" + nodeUniqueId;
+            return getNodeAttributes(nodeCodeAttributesUrl);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
