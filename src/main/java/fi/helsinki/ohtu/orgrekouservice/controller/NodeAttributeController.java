@@ -29,7 +29,7 @@ public class NodeAttributeController {
     @Autowired
     private NodeService nodeService;
 
-    @RequestMapping(method = GET, value = "/{id}/attributes/names")
+    @GetMapping("/{id}/attributes/names")
     public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeNameAttributesByNodeId(nodeUniqueId);
@@ -55,7 +55,15 @@ public class NodeAttributeController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/{id}/attributes/types")
+    public ResponseEntity<List<Attribute>> getNodeTypeAttributes (@PathVariable("id") int nodeUniqueId) {
+        try {
+            List<Attribute> nodeAttributes = nodeAttributeService.getNodeTypeAttributesByNodeId(nodeUniqueId);
+            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
     @PutMapping("/{id}/attributes/types")
     public ResponseEntity updateTypeAttributes(@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
@@ -68,16 +76,6 @@ public class NodeAttributeController {
             } else {
                 return new ResponseEntity(response.getBody(), response.getStatusCode());
             }
-        } catch (Exception e) {
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(method = GET, value = "/{id}/attributes/types")
-    public ResponseEntity<List<Attribute>> getNodeTypeAttributes (@PathVariable("id") int nodeUniqueId) {
-        try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeTypeAttributesByNodeId(nodeUniqueId);
-            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
