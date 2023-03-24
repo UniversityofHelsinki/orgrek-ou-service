@@ -49,15 +49,15 @@ public class NodeAttributeValidationService {
     };
 
     private void validateValue(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
-        validate(nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty(), nodeAttribute, Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY, errorMessages);
+        validate((nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty() && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateKey(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
-        validate(nodeAttribute.getKey() == null || nodeAttribute.getKey().isEmpty(), nodeAttribute, Constants.ATTRIBUTE_KEY_VALIDATION_MESSAGE_KEY, errorMessages);
+        validate((nodeAttribute.getKey() == null || nodeAttribute.getKey().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_KEY_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateStartDate(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
-        validate(nodeAttribute.getStartDate() == null, nodeAttribute, Constants.ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY, errorMessages);
+        validate((nodeAttribute.getStartDate() == null && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateValueLength(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
