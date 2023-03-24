@@ -106,4 +106,9 @@ public class NodeAttributeService {
         ResponseEntity<Attribute[]> response = restTemplate.exchange(nodeAttributesUrl, HttpMethod.GET,  requestEntity, Attribute[].class);
         return List.of(response.getBody());
     }
+
+    public List<Attribute> sanitizeAttributes(List<Attribute> attributes) {
+        attributes.removeIf(x -> x.isDeleted() || x.isNew());
+        return attributes;
+    }
 }
