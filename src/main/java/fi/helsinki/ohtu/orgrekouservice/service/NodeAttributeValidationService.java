@@ -75,10 +75,15 @@ public class NodeAttributeValidationService {
     private static void validate(boolean notValid, Attribute nodeAttribute, String attributeIdValidationMessageKey, List<AttributeValidationDTO> errorMessages) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (notValid) {
-            attributeValidationDTO.setId(nodeAttribute.getId());
-            attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-            attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
-            errorMessages.add(attributeValidationDTO);
+            if (nodeAttribute.getId() != null && nodeAttribute.getNodeId() != null) {
+                attributeValidationDTO.setId(nodeAttribute.getId());
+                attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
+                errorMessages.add(attributeValidationDTO);
+            } else {
+                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
+                errorMessages.add(attributeValidationDTO);
+            }
         }
     };
 
