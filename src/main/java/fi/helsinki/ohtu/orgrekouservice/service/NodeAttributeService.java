@@ -108,7 +108,7 @@ public class NodeAttributeService {
     }
 
     public List<Attribute> sanitizeAttributes(List<Attribute> attributes) {
-        attributes.removeIf(x -> x.isDeleted() || x.isNew());
+        attributes.removeIf(x -> x.isDeleted() && x.isNew());
         return attributes;
     }
 }
