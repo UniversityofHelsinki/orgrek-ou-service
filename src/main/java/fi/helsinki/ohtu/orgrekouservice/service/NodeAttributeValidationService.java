@@ -72,6 +72,7 @@ public class NodeAttributeValidationService {
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
+                logger.error("Validation failed for attribute: " + nodeAttribute.getNodeId() + " message : " + Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
             }
         }
     };
@@ -104,6 +105,7 @@ public class NodeAttributeValidationService {
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
+                logger.error("Validation failed for attribute: " + nodeAttribute.getNodeId() + " message : " + Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
             }
         }
     };
