@@ -3,6 +3,8 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @Service
 public class NodeAttributeValidationService {
+
+    static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
 
     public LocalDate convertToLocalDate(Date dateToConvert) {
         return LocalDate.ofInstant(
@@ -72,17 +76,19 @@ public class NodeAttributeValidationService {
         }
     };
 
-    private static void validate(boolean notValid, Attribute nodeAttribute, String attributeIdValidationMessageKey, List<AttributeValidationDTO> errorMessages) {
+    private static void validate(boolean notValid, Attribute nodeAttribute, String attributeValidationMessageKey, List<AttributeValidationDTO> errorMessages) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (notValid) {
             if (nodeAttribute.getId() != null && nodeAttribute.getNodeId() != null) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
+                attributeValidationDTO.setErrorMessage(attributeValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
+                logger.error("Validation failed for attribute: " + nodeAttribute.getNodeId() + " message : " + attributeValidationMessageKey);
             } else {
-                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
+                attributeValidationDTO.setErrorMessage(attributeValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
+                logger.error("Validation failed, message : " + attributeValidationMessageKey);
             }
         }
     };
