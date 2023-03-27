@@ -43,7 +43,7 @@ public class NodeAttributeController {
         try {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
-            List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
+            List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
             ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeNameAttributes(updatedAttributes);
@@ -60,7 +60,8 @@ public class NodeAttributeController {
     public ResponseEntity updateTypeAttributes(@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
-            List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
+            List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
+            List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
             ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeTypeAttributes(updatedAttributes);
