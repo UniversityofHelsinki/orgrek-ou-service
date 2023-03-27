@@ -31,24 +31,33 @@ public class NodeAttributeValidationService {
     public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
+            validateId(errorMessages, nodeAttribute);
+            validateKey(errorMessages, nodeAttribute);
             validateValue(errorMessages, nodeAttribute);
             validateValueLength(errorMessages, nodeAttribute);
+            validateStartDate(errorMessages, nodeAttribute);
             validateDates(errorMessages, nodeAttribute);
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
-    }
+    };
+
+    private void validateId(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+        validate(nodeAttribute.getId() == null, nodeAttribute, Constants.ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    };
 
     private void validateValue(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
-        AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
-        if (nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty()) {
-            attributeValidationDTO.setId(nodeAttribute.getId());
-            attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY);
-            errorMessages.add(attributeValidationDTO);
-        }
+        validate((nodeAttribute.getValue() == null || nodeAttribute.getValue().isEmpty() && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY, errorMessages);
+    };
+
+    private void validateKey(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+        validate((nodeAttribute.getKey() == null || nodeAttribute.getKey().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_KEY_VALIDATION_MESSAGE_KEY, errorMessages);
+    };
+
+    private void validateStartDate(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
+        validate((nodeAttribute.getStartDate() == null && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateValueLength(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
@@ -58,6 +67,21 @@ public class NodeAttributeValidationService {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_VALUE_LENGTH_VALIDATION_MESSAGE_KEY);
+                errorMessages.add(attributeValidationDTO);
+            }
+        }
+    };
+
+    private static void validate(boolean notValid, Attribute nodeAttribute, String attributeIdValidationMessageKey, List<AttributeValidationDTO> errorMessages) {
+        AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
+        if (notValid) {
+            if (nodeAttribute.getId() != null && nodeAttribute.getNodeId() != null) {
+                attributeValidationDTO.setId(nodeAttribute.getId());
+                attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
+                errorMessages.add(attributeValidationDTO);
+            } else {
+                attributeValidationDTO.setErrorMessage(attributeIdValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
             }
         }
