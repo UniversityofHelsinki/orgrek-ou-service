@@ -40,7 +40,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute2 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -49,7 +49,7 @@ public class AttributeValidationServiceTest {
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
-        validAttribute2.setKey("moro");
+        validAttribute2.setKey("name_fi");
         validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -59,7 +59,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(Arrays.asList() , response.getBody());
@@ -85,7 +85,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute2 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue("morjensta pöytään");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -94,7 +94,7 @@ public class AttributeValidationServiceTest {
 
         inValidAttribute2.setId(1234);
         inValidAttribute2.setNodeId("12345");
-        inValidAttribute2.setKey("moro");
+        inValidAttribute2.setKey("name_fi");
         inValidAttribute2.setValue("morjensta pöytään");
         inValidAttribute2.setStartDate(startDate);
         inValidAttribute2.setEndDate(endDate);
@@ -104,7 +104,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(inValidAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList,Constants.NAME_ATTRIBUTE);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -141,7 +141,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute1 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue("morjensta pöytään");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -150,7 +150,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -180,7 +180,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute1 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -189,7 +189,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -214,7 +214,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute1 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -223,7 +223,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -247,7 +247,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute1 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue(null);
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -256,7 +256,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -287,7 +287,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute1 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue("");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -296,7 +296,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -327,7 +327,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute1 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue("");
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -336,7 +336,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -384,7 +384,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute1 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue(generatedString);
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -393,7 +393,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -429,7 +429,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute1 = new Attribute();
         inValidAttribute1.setId(123);
         inValidAttribute1.setNodeId("1234");
-        inValidAttribute1.setKey("moro");
+        inValidAttribute1.setKey("name_fi");
         inValidAttribute1.setValue(generatedString);
         inValidAttribute1.setStartDate(startDate);
         inValidAttribute1.setEndDate(endDate);
@@ -438,7 +438,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -480,7 +480,7 @@ public class AttributeValidationServiceTest {
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
-        validAttribute2.setKey("moro");
+        validAttribute2.setKey("name_fi");
         validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -490,7 +490,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -520,7 +520,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute2 = new Attribute();
         validAttribute1.setId(null);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -529,7 +529,7 @@ public class AttributeValidationServiceTest {
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
-        validAttribute2.setKey("moro");
+        validAttribute2.setKey("name_fi");
         validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -539,7 +539,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());

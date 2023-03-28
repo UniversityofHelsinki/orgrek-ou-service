@@ -111,12 +111,14 @@ public class NodeAttributeValidationService {
     private void validateAttributeType(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, String attributeType) {
         List<String> attributeMap = Constants.ATTRIBUTE_TYPE_MAP.get(attributeType);
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
-        boolean isValid = attributeMap.contains(nodeAttribute.getKey());
-        if (!isValid) {
-            attributeValidationDTO.setId(nodeAttribute.getId());
-            attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
-            attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_TYPE_VALIDATION_MESSAGE_KEY);
-            errorMessages.add(attributeValidationDTO);
+        if (!nodeAttribute.getKey().isEmpty()) {
+            boolean isValid = attributeMap.contains(nodeAttribute.getKey());
+            if (!isValid) {
+                attributeValidationDTO.setId(nodeAttribute.getId());
+                attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_TYPE_VALIDATION_MESSAGE_KEY);
+                errorMessages.add(attributeValidationDTO);
+            }
         }
     };
 }
