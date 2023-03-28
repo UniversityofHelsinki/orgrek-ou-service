@@ -597,4 +597,49 @@ public class AttributeValidationServiceTest {
         expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_TYPE_VALIDATION_MESSAGE_KEY);
     };
 
+
+    @Test
+    public void testAttributesWithCorrectTypesShouldReturnEmptyArrayWithStatusCode200() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 15);
+        c.set(Calendar.YEAR, 2022);
+        Date startDate = c.getTime();
+
+        c.set(Calendar.MONTH, 1);
+        c.set(Calendar.DATE, 20);
+        c.set(Calendar.YEAR, 2022);
+        Date endDate = c.getTime();
+
+        List<Attribute> attributeList = new ArrayList<>();
+        Attribute validAttribute1 = new Attribute();
+        Attribute validAttribute2 = new Attribute();
+        validAttribute1.setId(12345);
+        validAttribute1.setNodeId("1234");
+        validAttribute1.setKey(Constants.CODE_ATTRIBUTES.get(0));
+        validAttribute1.setValue("morjensta pöytään");
+        validAttribute1.setStartDate(startDate);
+        validAttribute1.setEndDate(endDate);
+        validAttribute1.setNew(false);
+        validAttribute1.setDeleted(false);
+
+        validAttribute2.setId(1234);
+        validAttribute2.setNodeId("1234");
+        validAttribute2.setKey(Constants.CODE_ATTRIBUTES.get(1));
+        validAttribute2.setValue("morjensta pöytään");
+        validAttribute2.setStartDate(startDate);
+        validAttribute2.setEndDate(endDate);
+        validAttribute2.setNew(false);
+        validAttribute2.setDeleted(false);
+
+        attributeList.add(validAttribute1);
+        attributeList.add(validAttribute2);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.CODE_ATTRIBUTE);
+
+        List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0, result.size());
+
+    };
 }
