@@ -568,7 +568,7 @@ public class AttributeValidationServiceTest {
         Attribute inValidAttribute2 = new Attribute();
         validAttribute1.setId(12345);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("name_fi");
+        validAttribute1.setKey(Constants.NAME_FI);
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -577,7 +577,7 @@ public class AttributeValidationServiceTest {
 
         inValidAttribute2.setId(1234);
         inValidAttribute2.setNodeId("1234");
-        inValidAttribute2.setKey("type");
+        inValidAttribute2.setKey(Constants.TYPE);
         inValidAttribute2.setValue("morjensta pöytään");
         inValidAttribute2.setStartDate(startDate);
         inValidAttribute2.setEndDate(endDate);
