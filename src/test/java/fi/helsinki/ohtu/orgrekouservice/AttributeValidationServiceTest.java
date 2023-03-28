@@ -467,16 +467,16 @@ public class AttributeValidationServiceTest {
         Date endDate = c.getTime();
 
         List<Attribute> attributeList = new ArrayList<>();
-        Attribute validAttribute1 = new Attribute();
+        Attribute inValidAttribute1 = new Attribute();
         Attribute validAttribute2 = new Attribute();
-        validAttribute1.setId(123);
-        validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("");
-        validAttribute1.setValue("morjensta pöytään");
-        validAttribute1.setStartDate(startDate);
-        validAttribute1.setEndDate(endDate);
-        validAttribute1.setNew(false);
-        validAttribute1.setDeleted(false);
+        inValidAttribute1.setId(123);
+        inValidAttribute1.setNodeId("1234");
+        inValidAttribute1.setKey("");
+        inValidAttribute1.setValue("morjensta pöytään");
+        inValidAttribute1.setStartDate(startDate);
+        inValidAttribute1.setEndDate(endDate);
+        inValidAttribute1.setNew(false);
+        inValidAttribute1.setDeleted(false);
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
@@ -487,7 +487,7 @@ public class AttributeValidationServiceTest {
         validAttribute2.setNew(false);
         validAttribute2.setDeleted(false);
 
-        attributeList.add(validAttribute1);
+        attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
         ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
@@ -516,16 +516,16 @@ public class AttributeValidationServiceTest {
         Date endDate = c.getTime();
 
         List<Attribute> attributeList = new ArrayList<>();
-        Attribute validAttribute1 = new Attribute();
+        Attribute inValidAttribute1 = new Attribute();
         Attribute validAttribute2 = new Attribute();
-        validAttribute1.setId(null);
-        validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("name_fi");
-        validAttribute1.setValue("morjensta pöytään");
-        validAttribute1.setStartDate(startDate);
-        validAttribute1.setEndDate(endDate);
-        validAttribute1.setNew(false);
-        validAttribute1.setDeleted(false);
+        inValidAttribute1.setId(null);
+        inValidAttribute1.setNodeId("1234");
+        inValidAttribute1.setKey("name_fi");
+        inValidAttribute1.setValue("morjensta pöytään");
+        inValidAttribute1.setStartDate(startDate);
+        inValidAttribute1.setEndDate(endDate);
+        inValidAttribute1.setNew(false);
+        inValidAttribute1.setDeleted(false);
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
@@ -536,7 +536,7 @@ public class AttributeValidationServiceTest {
         validAttribute2.setNew(false);
         validAttribute2.setDeleted(false);
 
-        attributeList.add(validAttribute1);
+        attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
         ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
