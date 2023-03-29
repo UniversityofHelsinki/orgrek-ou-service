@@ -39,7 +39,7 @@ public class AttributeSanitationServiceTest {
         Attribute validAttribute2 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -48,7 +48,7 @@ public class AttributeSanitationServiceTest {
 
         validAttribute2.setId(123);
         validAttribute2.setNodeId("1234");
-        validAttribute2.setKey("moro");
+        validAttribute2.setKey("name_fi");
         validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -81,7 +81,7 @@ public class AttributeSanitationServiceTest {
         Attribute inValidAttribute2 = new Attribute();
         validAttribute1.setId(123);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey("moro");
+        validAttribute1.setKey("name_fi");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -90,7 +90,7 @@ public class AttributeSanitationServiceTest {
 
         inValidAttribute2.setId(123);
         inValidAttribute2.setNodeId("1234");
-        inValidAttribute2.setKey("moro");
+        inValidAttribute2.setKey("name_fi");
         inValidAttribute2.setValue("morjensta pöytään");
         inValidAttribute2.setStartDate(startDate);
         inValidAttribute2.setEndDate(endDate);
