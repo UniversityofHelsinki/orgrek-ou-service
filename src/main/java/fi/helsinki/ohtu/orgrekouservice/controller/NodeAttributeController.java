@@ -97,6 +97,7 @@ public class NodeAttributeController {
     public ResponseEntity updateCodeAttributes (@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
+            nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
             ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.CODE_ATTRIBUTE);
             if (response.getStatusCode().equals(HttpStatus.OK)) {

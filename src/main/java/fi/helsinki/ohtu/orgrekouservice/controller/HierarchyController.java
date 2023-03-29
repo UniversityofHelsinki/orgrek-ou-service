@@ -47,6 +47,27 @@ public class HierarchyController {
         return selectedHierarchies;
     }
 
+    private int codeAttributeComparator(Attribute a, Attribute b) {
+        int aIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(a.getKey());
+        int bIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(b.getKey());
+        return aIdx - bIdx;
+    }
+    @RequestMapping(method = GET, value = "/{id}/{date}/{selectedHierarchy}/attributes/codes")
+    public List<Attribute> getCodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
+
+        Attribute[] listAttributes = hierarchyService.getNodeAttributesByNodeIdAndDate(Integer.parseInt(id), date);
+
+        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.NOW);
+        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
+        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
+        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
+
+        List<Attribute> codeAttributes = Arrays.asList(selectedHierarchies).stream().filter(
+                attribute -> Constants.CODE_ATTRIBUTES.contains(attribute.getKey())
+        ).sorted(this::codeAttributeComparator).collect(Collectors.toList());
+        return codeAttributes;
+    }
+
 
     @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
     public Attribute[] getHistoryAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
