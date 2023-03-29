@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class NodeAttributeValidationService {
@@ -32,7 +29,7 @@ public class NodeAttributeValidationService {
                 .toInstant());
     }
 
-    public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes) {
+    public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes, String attributeType) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
             validateId(errorMessages, nodeAttribute);
@@ -41,12 +38,13 @@ public class NodeAttributeValidationService {
             validateValueLength(errorMessages, nodeAttribute);
             validateStartDate(errorMessages, nodeAttribute);
             validateDates(errorMessages, nodeAttribute);
+            validateAttributeType(errorMessages, nodeAttribute, attributeType);
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
-    };
+    }
 
     private void validateId(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
         validate(nodeAttribute.getId() == null, nodeAttribute, Constants.ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
@@ -106,6 +104,20 @@ public class NodeAttributeValidationService {
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
                 logger.error("Validation failed for attribute: " + nodeAttribute.getNodeId() + " message : " + Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
+            }
+        }
+    };
+
+    private void validateAttributeType(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, String attributeType) {
+        List<String> attributeMap = Constants.ATTRIBUTE_TYPE_MAP.get(attributeType);
+        AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
+        if (!nodeAttribute.getKey().isEmpty()) {
+            boolean isValid = attributeMap.contains(nodeAttribute.getKey());
+            if (!isValid) {
+                attributeValidationDTO.setId(nodeAttribute.getId());
+                attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
+                attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_TYPE_VALIDATION_MESSAGE_KEY);
+                errorMessages.add(attributeValidationDTO);
             }
         }
     };

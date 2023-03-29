@@ -5,6 +5,7 @@ import fi.helsinki.ohtu.orgrekouservice.domain.Node;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeService;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.NAME_ATTRIBUTE);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeNameAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -70,7 +71,7 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.TYPE_ATTRIBUTE);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeTypeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -97,7 +98,7 @@ public class NodeAttributeController {
         try {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.CODE_ATTRIBUTE);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeCodeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
