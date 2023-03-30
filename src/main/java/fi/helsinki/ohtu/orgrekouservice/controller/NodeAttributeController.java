@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -83,11 +84,21 @@ public class NodeAttributeController {
         }
     }
 
+    private int codeAttributeComparator(Attribute a, Attribute b) {
+        int aIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(a.getKey());
+        int bIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(b.getKey());
+        return aIdx - bIdx;
+    }
     @GetMapping("/{id}/attributes/codes")
     public ResponseEntity<List<Attribute>> getNodeCodeAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeCodeAttributesByNodeId(nodeUniqueId);
-            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
+            return new ResponseEntity<>(
+                    nodeAttributes.stream().sorted(
+                            this::codeAttributeComparator
+                    ).collect(Collectors.toList()),
+                    HttpStatus.OK
+            );
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
