@@ -64,6 +64,19 @@ public class Constants {
     public static final List<String> CODE_ATTRIBUTES = Arrays.asList("lyhenne", "emo_lyhenne","hr_lyhenne","iam_ryhma", "hr_tunnus", "laskutus_tunnus",
             "mainari_tunnus","oppiaine_tunnus","talous_tunnus","tutkimus_tunnus");
 
+    public static final List<String> CODE_ATTRIBUTES_ORDER = Arrays.asList(
+            "lyhenne",
+            "emo_lyhenne",
+            "iam_ryhma",
+            "talous_tunnus",
+            "hr_lyhenne",
+            "hr_tunnus",
+            "tutkimus_tunnus",
+            "oppiaine_tunnus",
+            "laskutus_tunnus",
+            "mainari_tunnus"
+    );
+
     public static final Map<String, List<String>> ATTRIBUTE_TYPE_MAP = new HashMap<>();
     static {
         ATTRIBUTE_TYPE_MAP.put(NAME_ATTRIBUTE,  Arrays.asList(NAME_FI, NAME_EN, NAME_SV));
