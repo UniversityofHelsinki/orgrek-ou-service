@@ -34,7 +34,7 @@ public class NodeAttributeValidationService {
                 .toInstant());
     }
 
-    public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes, String attributeType) {
+    public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes, List<SectionAttribute> sectionAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
             validateId(errorMessages, nodeAttribute);
@@ -43,7 +43,7 @@ public class NodeAttributeValidationService {
             validateValueLength(errorMessages, nodeAttribute);
             validateStartDate(errorMessages, nodeAttribute);
             validateDates(errorMessages, nodeAttribute);
-            validateAttributeType(errorMessages, nodeAttribute, attributeType);
+            validateAttributeType(errorMessages, nodeAttribute, sectionAttributes);
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -113,9 +113,8 @@ public class NodeAttributeValidationService {
         }
     };
 
-    private void validateAttributeType(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, String attributeType) {
+    private void validateAttributeType(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, List<SectionAttribute> sectionAttributes) {
         List<String> validAttributes = new ArrayList<>();
-        List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(attributeType);
         sectionAttributes.stream().forEach(sectionAttribute -> validAttributes.add(sectionAttribute.getAttr()));
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (!nodeAttribute.getKey().isEmpty()) {

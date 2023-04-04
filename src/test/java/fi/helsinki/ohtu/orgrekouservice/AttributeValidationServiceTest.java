@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.junit.jupiter.api.Test;
@@ -59,12 +60,31 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(Arrays.asList() , response.getBody());
 
     };
+
+
 
     @Test
     public void testTwoAttributesWithInValidDatesShouldReturnInvalidNodeArrayWithSizeOfTwoStatusCode422() {
@@ -104,7 +124,24 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(inValidAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList,Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList,sectionAttributes);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -122,6 +159,7 @@ public class AttributeValidationServiceTest {
         assertEquals(expectedFirstAttributeDTO, result.get(0));
         assertEquals(expectedSecondAttributeDTO, result.get(1));
     };
+
 
 
     @Test
@@ -150,7 +188,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -162,6 +217,7 @@ public class AttributeValidationServiceTest {
         assertEquals(1, result.size());
         assertEquals(expectedFirstAttributeDTO, result.get(0));
     };
+
 
     @Test
     public void testAttributeWithDatesSeparatedByTwoDaysOrMoreShouldReturnValidNodeArrayWithSizeOfZeroStatusCode200() {
@@ -189,7 +245,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -223,12 +296,30 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(0, result.size());
     };
+
 
     @Test
     public void testAttributeWithNullValueShouldReturnNodeArrayWithSizeOfOneStatusCode422() {
@@ -256,7 +347,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -296,7 +404,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -336,7 +461,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -393,7 +535,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -438,7 +597,24 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -490,7 +666,24 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -539,7 +732,24 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -587,7 +797,24 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(inValidAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("names");
+        sectionAttribute1.setAttr("name_fi");
+        SectionAttribute sectionAttribute2 = new SectionAttribute();
+        sectionAttribute2.setId(1);
+        sectionAttribute2.setSection("names");
+        sectionAttribute2.setAttr("name_sv");
+        SectionAttribute sectionAttribute3 = new SectionAttribute();
+        sectionAttribute3.setId(1);
+        sectionAttribute3.setSection("names");
+        sectionAttribute3.setAttr("name_sv");
+        sectionAttributes.add(sectionAttribute1);
+        sectionAttributes.add(sectionAttribute2);
+        sectionAttributes.add(sectionAttribute3);
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -596,6 +823,7 @@ public class AttributeValidationServiceTest {
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setErrorMessage(Constants.ATTRIBUTE_TYPE_VALIDATION_MESSAGE_KEY);
     };
+
 
 
     @Test
@@ -616,7 +844,7 @@ public class AttributeValidationServiceTest {
         Attribute validAttribute2 = new Attribute();
         validAttribute1.setId(12345);
         validAttribute1.setNodeId("1234");
-        validAttribute1.setKey(Constants.CODE_ATTRIBUTES.get(0));
+        validAttribute1.setKey("hr-tunnus");
         validAttribute1.setValue("morjensta pöytään");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -625,7 +853,7 @@ public class AttributeValidationServiceTest {
 
         validAttribute2.setId(1234);
         validAttribute2.setNodeId("1234");
-        validAttribute2.setKey(Constants.CODE_ATTRIBUTES.get(1));
+        validAttribute2.setKey("hr-tunnus");
         validAttribute2.setValue("morjensta pöytään");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -635,11 +863,21 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.CODE_ATTRIBUTES);
+        List<SectionAttribute> sectionAttributes = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("codes");
+        sectionAttribute1.setAttr("hr-tunnus");
+        sectionAttributes.add(sectionAttribute1);
+
+
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, sectionAttributes);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(0, result.size());
 
     };
+
+
 }

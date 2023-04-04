@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeService;
@@ -43,7 +44,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.NAME_ATTRIBUTES);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeNameAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -69,7 +71,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.TYPE_ATTRIBUTES);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeTypeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -100,7 +103,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.CODE_ATTRIBUTES);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeCodeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
