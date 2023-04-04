@@ -59,7 +59,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(Arrays.asList() , response.getBody());
@@ -104,7 +104,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(inValidAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList,Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList,Constants.NAME_ATTRIBUTES);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -150,7 +150,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         AttributeValidationDTO expectedFirstAttributeDTO = new AttributeValidationDTO();
         expectedFirstAttributeDTO.setId(123);
@@ -189,7 +189,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -223,7 +223,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -256,7 +256,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -296,7 +296,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -336,7 +336,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -393,7 +393,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(validAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -438,7 +438,7 @@ public class AttributeValidationServiceTest {
 
         attributeList.add(inValidAttribute1);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -490,7 +490,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -539,7 +539,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(inValidAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -587,7 +587,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(inValidAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.NAME_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -635,7 +635,7 @@ public class AttributeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.CODE_ATTRIBUTE);
+        ResponseEntity response =  nodeAttributeValidationService.validateNodeAttributes(attributeList, Constants.CODE_ATTRIBUTES);
 
         List<AttributeValidationDTO> result = (List<AttributeValidationDTO>) response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());

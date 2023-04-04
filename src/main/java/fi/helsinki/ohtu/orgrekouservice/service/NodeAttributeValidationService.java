@@ -2,9 +2,11 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ import java.util.*;
 
 @Service
 public class NodeAttributeValidationService {
+
+    @Autowired
+    private NodeAttributeService nodeAttributeService;
 
     static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
 
@@ -109,10 +114,12 @@ public class NodeAttributeValidationService {
     };
 
     private void validateAttributeType(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute, String attributeType) {
-        List<String> attributeMap = Constants.ATTRIBUTE_TYPE_MAP.get(attributeType);
+        List<String> validAttributes = new ArrayList<>();
+        List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(attributeType);
+        sectionAttributes.stream().forEach(sectionAttribute -> validAttributes.add(sectionAttribute.getAttr()));
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (!nodeAttribute.getKey().isEmpty()) {
-            boolean isValid = attributeMap.contains(nodeAttribute.getKey());
+            boolean isValid = validAttributes.contains(nodeAttribute.getKey());
             if (!isValid) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
