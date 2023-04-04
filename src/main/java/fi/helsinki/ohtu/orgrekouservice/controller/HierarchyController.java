@@ -47,7 +47,6 @@ public class HierarchyController {
         return selectedHierarchies;
     }
 
-
     @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
     public Attribute[] getHistoryAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
 
