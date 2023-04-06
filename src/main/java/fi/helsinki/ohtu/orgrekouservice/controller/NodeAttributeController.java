@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeService;
@@ -13,9 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/api/node")
@@ -46,7 +44,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.NAME_ATTRIBUTE);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeNameAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -72,7 +71,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.TYPE_ATTRIBUTE);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.TYPE_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeTypeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
@@ -84,19 +84,12 @@ public class NodeAttributeController {
         }
     }
 
-    private int codeAttributeComparator(Attribute a, Attribute b) {
-        int aIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(a.getKey());
-        int bIdx = Constants.CODE_ATTRIBUTES_ORDER.indexOf(b.getKey());
-        return aIdx - bIdx;
-    }
     @GetMapping("/{id}/attributes/codes")
     public ResponseEntity<List<Attribute>> getNodeCodeAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeCodeAttributesByNodeId(nodeUniqueId);
             return new ResponseEntity<>(
-                    nodeAttributes.stream().sorted(
-                            this::codeAttributeComparator
-                    ).collect(Collectors.toList()),
+                    nodeAttributes,
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -110,7 +103,8 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
-            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, Constants.CODE_ATTRIBUTE);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.CODE_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeCodeAttributes(updatedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
