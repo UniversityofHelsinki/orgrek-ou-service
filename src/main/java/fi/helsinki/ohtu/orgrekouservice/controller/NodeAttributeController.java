@@ -71,7 +71,7 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> sanitizedAttributes = nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(sanitizedAttributes, node.getId());
-            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.TYPE_ATTRIBUTES);
             ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeTypeAttributes(updatedAttributes);
@@ -103,7 +103,7 @@ public class NodeAttributeController {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             nodeAttributeService.sanitizeAttributes(attributes);
             List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
-            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.NAME_ATTRIBUTES);
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.CODE_ATTRIBUTES);
             ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 nodeAttributeService.updateNodeCodeAttributes(updatedAttributes);
