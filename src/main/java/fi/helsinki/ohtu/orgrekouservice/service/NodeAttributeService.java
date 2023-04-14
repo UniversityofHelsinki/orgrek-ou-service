@@ -121,6 +121,27 @@ public class NodeAttributeService {
         }
     }
 
+    public void updateNodeOtherAttributes(List<Attribute> nodeCodeAttributes) {
+        try {
+            Map<String, List<Attribute>> codeAttributesMap = extractAttributesToMap(nodeCodeAttributes);
+            String updateNodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(codeAttributesMap, headers);
+            restTemplate.exchange(updateNodeCodeAttributesUrl, HttpMethod.PUT, requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId) {
+        try {
+            String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
+            return getNodeAttributes(nodeCodeAttributesUrl);
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private List<Attribute> getNodeAttributes(String nodeAttributesUrl) throws RestClientException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
