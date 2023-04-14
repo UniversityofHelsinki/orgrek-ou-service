@@ -116,7 +116,7 @@ public class NodeAttributeController {
         }
     }
 
-    @GetMapping("/{id}/attributes/other")
+    @GetMapping("/{id}/attributes/others")
     public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId) {
         try {
             List<Attribute> nodeAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
@@ -129,7 +129,7 @@ public class NodeAttributeController {
         }
     }
 
-    @PutMapping("/{id}/attributes/other")
+    @PutMapping("/{id}/attributes/others")
     public ResponseEntity updateOtherAttributes (@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
             Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
