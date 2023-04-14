@@ -60,5 +60,5 @@ public class Constants {
     public static final String NAME_ATTRIBUTES = "names";
     public static final String TYPE_ATTRIBUTES = "types";
     public static final String CODE_ATTRIBUTES = "codes";
-
+    public static final String OTHER_ATTRIBUTES = "other_attributes";
 }

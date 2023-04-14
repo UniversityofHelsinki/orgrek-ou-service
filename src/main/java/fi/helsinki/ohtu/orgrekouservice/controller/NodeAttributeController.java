@@ -115,4 +115,37 @@ public class NodeAttributeController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/{id}/attributes/others")
+    public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId) {
+        try {
+            List<Attribute> nodeAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
+            return new ResponseEntity<>(
+                    nodeAttributes,
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}/attributes/others")
+    public ResponseEntity updateOtherAttributes (@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
+        try {
+            Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
+            nodeAttributeService.sanitizeAttributes(attributes);
+            List<Attribute> updatedAttributes = nodeAttributeService.updateNodeIdToAttributes(attributes, node.getId());
+            List<SectionAttribute> sectionAttributes = nodeAttributeService.getValidAttributesFor(Constants.OTHER_ATTRIBUTES);
+            ResponseEntity response = nodeAttributeValidationService.validateNodeAttributes(updatedAttributes, sectionAttributes);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                nodeAttributeService.updateNodeOtherAttributes(updatedAttributes);
+                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
