@@ -38,10 +38,10 @@ public class HierarchyService {
         return hierarchyFilters;
     }
     public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
-       String timeParameter = "";
+        String timeParameter = "";
         if(time == 0){
             timeParameter = historyParameter;
-       }else if(time == 1){
+        }else if(time == 1){
             timeParameter = futureParameter;
         }
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + timeParameter +  nodeId + "/" + date;
@@ -171,7 +171,7 @@ public class HierarchyService {
     }
 
     public List<NodeWrapper> filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
-       List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
+        List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
         Map<String, Node> validHistoryAndCurrentNodes = new HashMap<String, Node>();
         Node node;
         for (NodeWrapper wrapper : nodeWrapperList) {
@@ -336,5 +336,54 @@ public class HierarchyService {
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
         List<Relative> children = List.of(response.getBody());
         return children;
+    }
+
+    public List<RelationDTO> mergeRelativeMaps(Map<String, List<RelativeDTO>> relativeMaps) {
+        List<RelationDTO> relativeList = new ArrayList<>();
+        if (relativeMaps != null) {
+            relativeMaps.values().forEach(relativeDTOList -> {
+                relativeDTOList.forEach(relativeDTO -> {
+                    RelationDTO foundRelative = relativeList.stream()
+                            .filter(relative -> relativeDTO.getUniqueId().equals(relative.getUniqueId()))
+                            .findAny()
+                            .orElse(null);
+                    if (foundRelative != null) {
+                        System.out.println("found relative, update it");
+                        System.out.println(foundRelative.getUniqueId());
+                        updateRelation(relativeDTO , foundRelative);
+                    } else {
+                        System.out.println("did not found relative, add it");
+                        System.out.println(relativeDTO.getUniqueId());
+                        addNewRelation(relativeList, relativeDTO);
+                    }
+                });
+            });
+        }
+        return relativeList;
+    }
+
+    private static void updateRelation(RelativeDTO relativeDTO, RelationDTO foundRelative) {
+        List<FullNameDTO> fullNames = foundRelative.getFullNames();
+        addFullName(fullNames, relativeDTO);
+        foundRelative.setFullNames(fullNames);
+    }
+
+    private static void addNewRelation(List<RelationDTO> relativeList, RelativeDTO relativeDTO) {
+        RelationDTO relationDTO = new RelationDTO();
+        relationDTO.setId(relativeDTO.getId());
+        relationDTO.setUniqueId(relativeDTO.getUniqueId());
+        relationDTO.setHierarchies(relativeDTO.getHierarchies());
+        List<FullNameDTO> emptyFullNameList = new ArrayList<>();
+        List<FullNameDTO> fullNames = addFullName(emptyFullNameList, relativeDTO);
+        relationDTO.setFullNames(fullNames);
+        relativeList.add(relationDTO);
+    }
+
+    private static List<FullNameDTO> addFullName(List<FullNameDTO> fullNames, RelativeDTO relativeDTO) {
+        FullNameDTO fullNameDTO = new FullNameDTO();
+        fullNameDTO.setName(relativeDTO.getFullName());
+        fullNameDTO.setLanguage(relativeDTO.getLanguage());
+        fullNames.add(fullNameDTO);
+        return fullNames;
     }
 }

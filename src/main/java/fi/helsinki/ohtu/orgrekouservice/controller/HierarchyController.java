@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -359,5 +361,14 @@ public class HierarchyController {
         List<Relative> children = hierarchyService.getAllChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, children);
+    }
+
+    @RequestMapping(method = GET, value = "/{id}/allParents/{rawHierarchies}")
+    public List<RelationDTO> getAllParentsBySelectedHierarchies(@PathVariable("id") Integer uniqueId, @PathVariable("rawHierarchies") String rawHierarchies) {
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        List<Relative> parents = hierarchyService.getAllParents(uniqueId, formatter.format(new Date()));
+        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
+        Map<String, List<RelativeDTO>> parentsMap = byLanguage(selectedHierarchies, parents);
+        return hierarchyService.mergeRelativeMaps(parentsMap);
     }
 }
