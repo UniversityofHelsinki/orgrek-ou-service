@@ -4,7 +4,7 @@ import fi.helsinki.ohtu.orgrekouservice.domain.*;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -294,7 +294,6 @@ public class HierarchyService {
         List<Relative> parents = List.of(response.getBody());
         return parents;
     }
-
 
     public List<Relative> getFutureAndCurrentChildren(Integer uniqueId, String date) {
         String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/futureandcurrent/" + uniqueId + "/" + date;
