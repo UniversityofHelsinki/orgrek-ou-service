@@ -348,12 +348,8 @@ public class HierarchyService {
                             .findAny()
                             .orElse(null);
                     if (foundRelative != null) {
-                        System.out.println("found relative, update it");
-                        System.out.println(foundRelative.getUniqueId());
                         updateRelation(relativeDTO , foundRelative);
                     } else {
-                        System.out.println("did not found relative, add it");
-                        System.out.println(relativeDTO.getUniqueId());
                         addNewRelation(relativeList, relativeDTO);
                     }
                 });
