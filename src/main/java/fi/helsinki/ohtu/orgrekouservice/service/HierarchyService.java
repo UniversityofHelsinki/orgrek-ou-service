@@ -295,6 +295,7 @@ public class HierarchyService {
         return parents;
     }
 
+
     public List<Relative> getFutureAndCurrentChildren(Integer uniqueId, String date) {
         String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/futureandcurrent/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
