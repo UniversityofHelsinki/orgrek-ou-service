@@ -30,7 +30,7 @@ public class EdgeController {
         return edgeService.getHierarchyTypesForUser(user);
     }
 
-    @PutMapping("/{id}/parent/units")
+    @PutMapping("/parent/units")
     public ResponseEntity updateNameAttributes(@RequestBody List<EdgeWrapper> attributes) {
         try {
             List<EdgeWrapper> sanitizedAttributes = edgeService.sanitizeAttributes(attributes);
