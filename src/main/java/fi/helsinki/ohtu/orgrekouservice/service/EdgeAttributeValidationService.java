@@ -23,7 +23,7 @@ public class EdgeAttributeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
 
-    public ResponseEntity validateNodeAttributes(List<EdgeWrapper> nodeAttributes) {
+    public ResponseEntity validateEdgeAttributes(List<EdgeWrapper> nodeAttributes) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
         for (EdgeWrapper nodeAttribute : nodeAttributes) {
             validateId(errorMessages, nodeAttribute);

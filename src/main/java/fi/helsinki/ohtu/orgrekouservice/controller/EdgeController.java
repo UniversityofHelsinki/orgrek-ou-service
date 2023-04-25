@@ -32,7 +32,7 @@ public class EdgeController {
     public ResponseEntity updateNameAttributes(@RequestBody List<EdgeWrapper> attributes) {
         try {
             List<EdgeWrapper> sanitizedAttributes = edgeService.sanitizeAttributes(attributes);
-            ResponseEntity response = edgeAttributeValidationService.validateNodeAttributes(sanitizedAttributes);
+            ResponseEntity response = edgeAttributeValidationService.validateEdgeAttributes(sanitizedAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 edgeService.updateParents(sanitizedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);

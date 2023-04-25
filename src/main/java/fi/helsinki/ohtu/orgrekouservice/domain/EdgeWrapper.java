@@ -5,6 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public class EdgeWrapper {
+
+    public EdgeWrapper() { }
+
+    public EdgeWrapper(Integer id, String parentNodeId, String childNodeId, String hierarchy, Date startDate, Date endDate, boolean isNew, boolean deleted) {
+        setId(id);
+        setParentNodeId(parentNodeId);
+        setChildNodeId(childNodeId);
+        setHierarchy(hierarchy);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setNew(isNew);
+        setDeleted(deleted);
+    }
     private Integer id;
     private String parentNodeId;
     private String childNodeId;
