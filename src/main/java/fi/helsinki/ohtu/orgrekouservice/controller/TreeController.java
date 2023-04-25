@@ -60,7 +60,7 @@ public class TreeController {
         return node;
     }
 
-    @RequestMapping(method = GET, value = "/{hierarchyTypes:(?:[a-z]+,)*(?:[a-z]+)+}/{date}")
+    @RequestMapping(method = GET, value = "/{hierarchyTypes}/{date}")
     public Map<String, HierarchyNode> getTree(@PathVariable("hierarchyTypes") String hierarchyTypes, @PathVariable("date") String date) {
         List<TreeNode> treeNodes = treeService.getTreeNodes(hierarchyTypes, date);
         Map<String, List<TreeNode>> byParent = treeNodes.stream().collect(Collectors.groupingBy(TreeNode::getParentNodeId));
