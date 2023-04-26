@@ -1,9 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.EdgeValidationDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +19,15 @@ import java.util.List;
 @Service
 public class EdgeAttributeValidationService {
 
-    static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
+    static Logger logger = LoggerFactory.getLogger(EdgeAttributeValidationService.class);
 
     public ResponseEntity validateEdgeAttributes(List<EdgeWrapper> nodeAttributes) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
         for (EdgeWrapper nodeAttribute : nodeAttributes) {
             validateId(errorMessages, nodeAttribute);
-            validateKey(errorMessages, nodeAttribute);
-            validateValue(errorMessages, nodeAttribute);
-            //validateValueLength(errorMessages, nodeAttribute);
+            validateChildNodeId(errorMessages, nodeAttribute);
+            validateParentNodeId(errorMessages, nodeAttribute);
+            validateHierarchy(errorMessages, nodeAttribute);
             validateStartDate(errorMessages, nodeAttribute);
             validateDates(errorMessages, nodeAttribute);
         }
@@ -47,8 +45,16 @@ public class EdgeAttributeValidationService {
         validate((nodeAttribute.getParentNodeId() == null || nodeAttribute.getParentNodeId().isEmpty() && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateKey(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getChildNodeId() == null || nodeAttribute.getChildNodeId().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_KEY_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateChildNodeId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
+        validate((nodeAttribute.getChildNodeId() == null || nodeAttribute.getChildNodeId().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    };
+
+    private void validateParentNodeId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
+        validate((nodeAttribute.getParentNodeId() == null || nodeAttribute.getParentNodeId().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    };
+
+    private void validateHierarchy(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
+        validate((nodeAttribute.getHierarchy() == null || nodeAttribute.getHierarchy().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateStartDate(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
