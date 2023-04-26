@@ -27,4 +27,10 @@ public class NodeService {
             throw new RuntimeException(e);
         }
     }
+
+    public Node updateNodeIdToNode(Node foundNode, String id) {
+         Node updatedNode = foundNode;
+         updatedNode.setId(id);
+         return updatedNode;
+    }
 }

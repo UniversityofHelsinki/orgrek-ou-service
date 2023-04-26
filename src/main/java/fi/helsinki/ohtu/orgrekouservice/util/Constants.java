@@ -44,6 +44,7 @@ public class Constants {
     public static final String NEW_ATTRIBUTES = "newAttributes";
     public static final String UPDATED_ATTRIBUTES = "updatedAttributes";
     public static final String DELETED_ATTRIBUTES = "deletedAttributes";
+    public static final String NODE_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_after_end_date";
 
     public static final String ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_after_end_date";
     public static final String ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY = "attribute_value_is_mandatory";
