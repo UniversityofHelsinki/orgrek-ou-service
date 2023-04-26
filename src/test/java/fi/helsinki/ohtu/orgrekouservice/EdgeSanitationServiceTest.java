@@ -65,7 +65,7 @@ public class EdgeSanitationServiceTest {
     };
 
     @Test
-    public void testOneInValidAndOneValidAttributesShouldReturnOneAttributeAfterSanitation() {
+    public void testOneInValidAndOneValidEdgeWrapperShouldReturnOneAttributeAfterSanitation() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
