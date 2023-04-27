@@ -24,10 +24,10 @@ public class NodeController {
     public ResponseEntity updateNode(@PathVariable("id") int nodeUniqueId, @RequestBody Node node) {
         try {
             Node foundNode = nodeService.getNodeByUniqueId(nodeUniqueId);
-            Node updatedNode = nodeService.updateNodeIdToNode(node, foundNode.getId());
+            Node updatedNode = nodeService.updateNodeDates(foundNode, node);
             ResponseEntity response = nodeValidationService.validateNode(updatedNode);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                //nodeService.updateNode(updatedNode);
+                nodeService.updateNode(updatedNode);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
             } else {
                 return new ResponseEntity(response.getBody(), response.getStatusCode());
