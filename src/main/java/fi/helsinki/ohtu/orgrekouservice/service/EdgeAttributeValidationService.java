@@ -24,7 +24,9 @@ public class EdgeAttributeValidationService {
     public ResponseEntity validateEdgeAttributes(List<EdgeWrapper> nodeAttributes) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
         for (EdgeWrapper nodeAttribute : nodeAttributes) {
-            validateId(errorMessages, nodeAttribute);
+            if (!nodeAttribute.isNew()) {
+                validateId(errorMessages, nodeAttribute);
+            }
             validateChildNodeId(errorMessages, nodeAttribute);
             validateParentNodeId(errorMessages, nodeAttribute);
             validateHierarchy(errorMessages, nodeAttribute);
