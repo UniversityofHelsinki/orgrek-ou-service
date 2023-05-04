@@ -4,13 +4,14 @@ import fi.helsinki.ohtu.orgrekouservice.domain.*;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HierarchyService {
@@ -382,4 +383,40 @@ public class HierarchyService {
         fullNames.add(fullNameDTO);
         return fullNames;
     }
+
+    private List<Edge> sanitizeEdges(List<Edge> edges) {
+        return edges.stream().filter(edge -> !(edge.isDeleted() && edge.isNew())).collect(Collectors.toList());
+    }
+
+    private Map<String, List<Edge>> groupEdges(List<Edge> edges) {
+        Map<String, List<Edge>> container = new HashMap<>();
+        List<Edge> newEdges = new ArrayList<>();
+        List<Edge> deletedEdges = new ArrayList<>();
+        List<Edge> updatedEdges = new ArrayList<>();
+        for (Edge edge : edges) {
+            if (edge.isNew()) {
+                newEdges.add(edge);
+            } else if (edge.isDeleted()) {
+                deletedEdges.add(edge);
+            } else {
+                updatedEdges.add(edge);
+            }
+        }
+        container.put(Constants.NEW_EDGES, newEdges);
+        container.put(Constants.DELETED_EDGES, deletedEdges);
+        container.put(Constants.UPDATED_EDGES, updatedEdges);
+        return container;
+    }
+
+    public List<Edge> updateSuccessors(List<Edge> successors) {
+        List<Edge> sanitized = sanitizeEdges(successors);
+        Map<String, List<Edge>> stateGroupedEdges = groupEdges(sanitized);
+        String edgeURL = dbUrl + Constants.EDGE_PATH + "/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity(stateGroupedEdges, headers);
+        ResponseEntity<Map> a = restTemplate.exchange(edgeURL, HttpMethod.PUT,  requestEntity, Map.class);
+        return successors;
+    }
+
 }

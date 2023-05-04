@@ -62,4 +62,8 @@ public class Constants {
     public static final String TYPE_ATTRIBUTES = "types";
     public static final String CODE_ATTRIBUTES = "codes";
     public static final String OTHER_ATTRIBUTES = "other_attributes";
+
+    public static final String NEW_EDGES = "NEW";
+    public static final String UPDATED_EDGES = "UPDATED";
+    public static final String DELETED_EDGES = "DELETED";
 }
