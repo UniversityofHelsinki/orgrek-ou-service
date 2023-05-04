@@ -26,9 +26,9 @@ public class EdgeAttributeServiceTest {
     @Test
     public void testExtractEdgeWrappersToMapShouldReturnMapOfDifferenEdges() {
         List<EdgeWrapper> edgeWrapperList = new ArrayList<>();
-        EdgeWrapper edgeWrapperToBeUpdated = new EdgeWrapper(123, "6770", "3278", "henkilosto", null, null, false, false);
-        EdgeWrapper edgeWrapperToBeAdded = new EdgeWrapper(123, "6770", "3278", "henkilosto", null, null, true, false);
-        EdgeWrapper edgeWrapperToBeDeleted = new EdgeWrapper(123, "6770", "3278", "henkilosto", null, null, false, true);
+        EdgeWrapper edgeWrapperToBeUpdated = new EdgeWrapper(123, "6770", 93988778, "henkilosto", null, null, false, false);
+        EdgeWrapper edgeWrapperToBeAdded = new EdgeWrapper(123, "6770", 93988778, "henkilosto", null, null, true, false);
+        EdgeWrapper edgeWrapperToBeDeleted = new EdgeWrapper(123, "6770", 93988778, "henkilosto", null, null, false, true);
 
         edgeWrapperList.add(edgeWrapperToBeUpdated);
 

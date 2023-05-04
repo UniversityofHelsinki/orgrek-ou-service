@@ -40,7 +40,7 @@ public class EdgeSanitationServiceTest {
         EdgeWrapper validAttribute2 = new EdgeWrapper();
         validAttribute1.setId(123);
         validAttribute1.setParentNodeId("6770");
-        validAttribute1.setChildNodeId("3278");
+        validAttribute1.setChildUniqueId(93988778);
         validAttribute1.setHierarchy("henkilosto");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -49,7 +49,7 @@ public class EdgeSanitationServiceTest {
 
         validAttribute2.setId(123);
         validAttribute1.setParentNodeId("6770");
-        validAttribute1.setChildNodeId("3278");
+        validAttribute1.setChildUniqueId(93988778);
         validAttribute1.setHierarchy("henkilosto");
         validAttribute2.setStartDate(startDate);
         validAttribute2.setEndDate(endDate);
@@ -82,7 +82,7 @@ public class EdgeSanitationServiceTest {
         EdgeWrapper inValidAttribute2 = new EdgeWrapper();
         validAttribute1.setId(123);
         validAttribute1.setParentNodeId("6770");
-        validAttribute1.setChildNodeId("3278");
+        validAttribute1.setChildUniqueId(93988778);
         validAttribute1.setHierarchy("henkilosto");
         validAttribute1.setStartDate(startDate);
         validAttribute1.setEndDate(endDate);
@@ -91,7 +91,7 @@ public class EdgeSanitationServiceTest {
 
         inValidAttribute2.setId(123);
         validAttribute1.setParentNodeId("6770");
-        validAttribute1.setChildNodeId("3278");
+        validAttribute1.setChildUniqueId(93988778);
         validAttribute1.setHierarchy("henkilosto");
         inValidAttribute2.setStartDate(startDate);
         inValidAttribute2.setEndDate(endDate);

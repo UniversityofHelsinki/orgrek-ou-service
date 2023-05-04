@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.Node;
 import fi.helsinki.ohtu.orgrekouservice.service.EdgeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.service.EdgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class EdgeController {
         return edgeService.getHierarchyTypesForUser(user);
     }
 
-    @PutMapping("/parent/units")
+    @PutMapping("/parents")
     public ResponseEntity updateNameAttributes(@RequestBody List<EdgeWrapper> attributes) {
         try {
             List<EdgeWrapper> sanitizedAttributes = edgeService.sanitizeAttributes(attributes);

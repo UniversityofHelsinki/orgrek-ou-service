@@ -62,7 +62,7 @@ public class EdgeService {
         Edge edge = new Edge();
         edge.setId(edgeWrapper.getId());
         edge.setParentNodeId(edgeWrapper.getParentNodeId());
-        edge.setChildNodeId(edgeWrapper.getChildNodeId());
+        edge.setChildUniqueId(edgeWrapper.getChildUniqueId());
         edge.setStartDate(edgeWrapper.getStartDate());
         edge.setEndDate(edgeWrapper.getEndDate());
         edge.setHierarchy(edgeWrapper.getHierarchy());
@@ -95,7 +95,7 @@ public class EdgeService {
     public void updateParents(List<EdgeWrapper> nodeNameAttributes) {
         try {
             Map<String, List<Edge>> upperUnitsMap = extractAttributesToMap(nodeNameAttributes);
-            String updateNodeNameAttributesUrl = dbUrl + Constants.EDGE_PATH + "/parent/units";
+            String updateNodeNameAttributesUrl = dbUrl + Constants.EDGE_PATH + "/parents";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity(upperUnitsMap, headers);
