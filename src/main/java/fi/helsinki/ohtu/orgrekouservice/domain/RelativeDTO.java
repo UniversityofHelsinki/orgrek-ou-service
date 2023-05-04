@@ -6,6 +6,9 @@ import java.util.List;
 
 public class RelativeDTO {
     private String id;
+
+
+    private Integer edgeId;
     private Integer uniqueId;
     private Date startDate;
     private Date endDate;
@@ -20,6 +23,7 @@ public class RelativeDTO {
         this.endDate = relative.getEndDate();
         this.fullName = relative.getFullName();
         this.language = relative.getLanguage();
+        this.edgeId = relative.getEdgeId();
         this.hierarchies = new ArrayList<>();
     }
 
@@ -59,6 +63,13 @@ public class RelativeDTO {
         this.endDate = endDate;
     }
 
+    public Integer getEdgeId() {
+        return edgeId;
+    }
+
+    public void setEdgeId(Integer edgeId) {
+        this.edgeId = edgeId;
+    }
     public List<HierarchyDTO> getHierarchies() {
         return hierarchies;
     }
