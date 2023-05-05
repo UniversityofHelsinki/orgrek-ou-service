@@ -8,6 +8,8 @@ public class Relative {
     private Date startDate;
     private Date endDate;
     private String hierarchy;
+
+    private Integer edgeId;
     private Date edgeStartDate;
     private Date edgeEndDate;
     private String fullName;
@@ -51,6 +53,14 @@ public class Relative {
 
     public void setHierarchy(String hierarchy) {
         this.hierarchy = hierarchy;
+    }
+
+    public Integer getEdgeId() {
+        return edgeId;
+    }
+
+    public void setEdgeId(Integer edgeId) {
+        this.edgeId = edgeId;
     }
 
     public Date getEdgeStartDate() {
