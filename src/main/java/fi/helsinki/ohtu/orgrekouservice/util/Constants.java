@@ -57,6 +57,9 @@ public class Constants {
     public static final String ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY = "attribute_id_is_mandatory";
     public static final String ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY = "attribute_start_date_is_mandatory";
     public static final String ATTRIBUTE_KEY_VALIDATION_MESSAGE_KEY = "attribute_key_is_mandatory";
+    public static final String ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_child_node_id_is_mandatory";
+    public static final String ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_parent_node_id_is_mandatory";
+    public static final String ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY = "attribute_hierarchy_is_mandatory";
 
     public static final String NAME_ATTRIBUTES = "names";
     public static final String TYPE_ATTRIBUTES = "types";
