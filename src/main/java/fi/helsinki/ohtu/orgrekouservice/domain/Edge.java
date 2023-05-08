@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Edge {
         private Integer id;
-        private String parentNodeId;
+        private int parentUniqueId;
         private int childUniqueId;
         private Date startDate;
         private Date endDate;
@@ -20,15 +20,15 @@ public class Edge {
             this.id = id;
         }
 
-        public String getParentNodeId() {
-            return parentNodeId;
+        public int getParentUniqueId() {
+            return parentUniqueId;
         }
 
-        public void setParentNodeId(String parentNodeId) {
-            this.parentNodeId = parentNodeId;
+        public void setParentUniqueId(int parentUniqueId) {
+            this.parentUniqueId = parentUniqueId;
         }
 
-        public int getChildUniqueId() {
+    public int getChildUniqueId() {
             return childUniqueId;
         }
 

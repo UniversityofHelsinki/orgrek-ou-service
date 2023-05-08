@@ -61,7 +61,7 @@ public class EdgeService {
     private Edge edgeMapperToEdge(EdgeWrapper edgeWrapper) {
         Edge edge = new Edge();
         edge.setId(edgeWrapper.getId());
-        edge.setParentNodeId(edgeWrapper.getParentNodeId());
+        edge.setParentUniqueId(edgeWrapper.getParentUniqueId());
         edge.setChildUniqueId(edgeWrapper.getChildUniqueId());
         edge.setStartDate(edgeWrapper.getStartDate());
         edge.setEndDate(edgeWrapper.getEndDate());

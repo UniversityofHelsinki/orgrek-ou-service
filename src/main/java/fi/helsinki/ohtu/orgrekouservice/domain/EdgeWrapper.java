@@ -8,9 +8,9 @@ public class EdgeWrapper {
 
     public EdgeWrapper() { }
 
-    public EdgeWrapper(Integer id, String parentNodeId, Integer childUniqueId, String hierarchy, Date startDate, Date endDate, boolean isNew, boolean deleted) {
+    public EdgeWrapper(Integer id, Integer parentUniqueId, Integer childUniqueId, String hierarchy, Date startDate, Date endDate, boolean isNew, boolean deleted) {
         setId(id);
-        setParentNodeId(parentNodeId);
+        setParentUniqueId(parentUniqueId);
         setChildUniqueId(childUniqueId);
         setHierarchy(hierarchy);
         setStartDate(startDate);
@@ -19,7 +19,7 @@ public class EdgeWrapper {
         setDeleted(deleted);
     }
     private Integer id;
-    private String parentNodeId;
+    private Integer parentUniqueId;
     private Integer childUniqueId;
     private Date startDate;
     private Date endDate;
@@ -37,12 +37,12 @@ public class EdgeWrapper {
         this.id = id;
     }
 
-    public String getParentNodeId() {
-        return parentNodeId;
+    public Integer getParentUniqueId() {
+        return parentUniqueId;
     }
 
-    public void setParentNodeId(String parentNodeId) {
-        this.parentNodeId = parentNodeId;
+    public void setParentUniqueId(Integer parentUniqueId) {
+        this.parentUniqueId = parentUniqueId;
     }
 
     public Integer getChildUniqueId() {
