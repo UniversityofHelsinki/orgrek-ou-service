@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
 import fi.helsinki.ohtu.orgrekouservice.service.EdgeAttributeValidationService;
+import fi.helsinki.ohtu.orgrekouservice.domain.Edge;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyList;
 import fi.helsinki.ohtu.orgrekouservice.service.EdgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.Arrays;
 import java.util.List;
