@@ -39,7 +39,7 @@ public class EdgeValidationServiceTest {
         List<EdgeWrapper> attributeList = new ArrayList<>();
         EdgeWrapper validAttribute1 = new EdgeWrapper();
         validAttribute1.setId(123);
-        validAttribute1.setParentNodeId("6770");
+        validAttribute1.setParentUniqueId(42766115);
         validAttribute1.setChildUniqueId(93988778);
         validAttribute1.setHierarchy("henkilosto");
         validAttribute1.setStartDate(startDate);
@@ -49,7 +49,7 @@ public class EdgeValidationServiceTest {
 
         EdgeWrapper validAttribute2 = new EdgeWrapper();
         validAttribute2.setId(123);
-        validAttribute2.setParentNodeId("6770");
+        validAttribute2.setParentUniqueId(42766115);
         validAttribute2.setChildUniqueId(93988778);
         validAttribute2.setHierarchy("henkilosto");
         validAttribute2.setStartDate(startDate);
