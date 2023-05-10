@@ -11,8 +11,8 @@ public class Edge {
         private Date startDate;
         private Date endDate;
         private String hierarchy;
-    private boolean isNew;
-    private boolean deleted;
+        private boolean isNew;
+        private boolean deleted;
 
         public Integer getId() {
             return id;
@@ -30,7 +30,7 @@ public class Edge {
             this.parentUniqueId = parentUniqueId;
         }
 
-    public int getChildUniqueId() {
+        public int getChildUniqueId() {
             return childUniqueId;
         }
 
@@ -60,5 +60,18 @@ public class Edge {
 
         public void setHierarchy(String hierarchy) {
             this.hierarchy = hierarchy;
+        }
+        @JsonProperty("isNew")
+        public boolean isNew() {
+            return isNew;
+        }
+        public void setNew(boolean aNew) {
+            isNew = aNew;
+        }
+        public boolean isDeleted() {
+            return deleted;
+        }
+        public void setDeleted(boolean deleted) {
+            this.deleted = deleted;
         }
 }
