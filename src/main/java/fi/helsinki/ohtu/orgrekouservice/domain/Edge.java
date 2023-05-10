@@ -11,6 +11,8 @@ public class Edge {
         private Date startDate;
         private Date endDate;
         private String hierarchy;
+    private boolean isNew;
+    private boolean deleted;
 
         public Integer getId() {
             return id;

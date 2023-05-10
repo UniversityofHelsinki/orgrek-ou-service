@@ -6,9 +6,8 @@ import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
 import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 
 import java.text.DateFormat;
@@ -371,4 +370,11 @@ public class HierarchyController {
         Map<String, List<RelativeDTO>> parentsMap = byLanguage(selectedHierarchies, parents);
         return hierarchyService.mergeRelativeMaps(parentsMap);
     }
+
+    @PutMapping("/successor")
+    public List<Edge> updateSuccessors(@RequestBody List<Edge> edges) {
+        hierarchyService.updateSuccessors(edges);
+        return edges;
+    }
+
 }
