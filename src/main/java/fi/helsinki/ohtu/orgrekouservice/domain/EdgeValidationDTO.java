@@ -2,7 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 public class EdgeValidationDTO {
     private int id;
-    private String parentNodeId;
+    private int parentUniqueId;
     private int childUniqueId;
     private String errorMessage;
     public int getId() {
@@ -11,11 +11,13 @@ public class EdgeValidationDTO {
     public void setId(int id) {
         this.id = id;
     }
-    public String getParentNodeId() {
-        return parentNodeId;
+
+    public int getParentUniqueId() {
+        return parentUniqueId;
     }
-    public void setParentNodeId(String parentNodeId) {
-        this.parentNodeId = parentNodeId;
+
+    public void setParentUniqueId(int parentUniqueId) {
+        this.parentUniqueId = parentUniqueId;
     }
     public int getChildUniqueId() {
         return childUniqueId;
@@ -39,7 +41,7 @@ public class EdgeValidationDTO {
         EdgeValidationDTO that = (EdgeValidationDTO) o;
 
         if (getId() != that.getId()) return false;
-        if (!getParentNodeId().equals(that.getParentNodeId())) return false;
+        if (getParentUniqueId() != that.getParentUniqueId()) return false;
         if (getChildUniqueId() != that.getChildUniqueId()) return false;
         return getErrorMessage().equals(that.getErrorMessage());
     }
@@ -47,7 +49,7 @@ public class EdgeValidationDTO {
     @Override
     public int hashCode() {
         int result = getId();
-        result = 31 * result + getParentNodeId().hashCode();
+        result = 31 * result + getParentUniqueId();
         result = 31 * result + getChildUniqueId();
         result = 31 * result + getErrorMessage().hashCode();
         return result;

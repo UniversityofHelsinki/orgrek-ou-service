@@ -43,16 +43,12 @@ public class EdgeAttributeValidationService {
         validate(nodeAttribute.getId() == null, nodeAttribute, Constants.ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateValue(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getParentNodeId() == null || nodeAttribute.getParentNodeId().isEmpty() && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_VALUE_VALIDATION_MESSAGE_KEY, errorMessages);
-    };
-
     private void validateChildUniqueId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
         validate((nodeAttribute.getChildUniqueId() % 1 != 0 || nodeAttribute.getChildUniqueId() < 0), nodeAttribute, Constants.ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateParentNodeId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getParentNodeId() == null || nodeAttribute.getParentNodeId().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+        validate((nodeAttribute.getParentUniqueId()  % 1 != 0 || nodeAttribute.getParentUniqueId() < 0), nodeAttribute, Constants.ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
     private void validateHierarchy(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
@@ -66,9 +62,9 @@ public class EdgeAttributeValidationService {
     private static void validate(boolean notValid, EdgeWrapper nodeAttribute, String attributeValidationMessageKey, List<EdgeValidationDTO> errorMessages) {
         EdgeValidationDTO attributeValidationDTO = new EdgeValidationDTO();
         if (notValid) {
-            if (nodeAttribute.getId() != null && nodeAttribute.getParentNodeId() != null && nodeAttribute.getChildUniqueId() % 1 == 0) {
+            if (nodeAttribute.getId() != null && nodeAttribute.getParentUniqueId() != null && nodeAttribute.getChildUniqueId() % 1 == 0) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
-                attributeValidationDTO.setParentNodeId(nodeAttribute.getParentNodeId());
+                attributeValidationDTO.setParentUniqueId(nodeAttribute.getParentUniqueId());
                 attributeValidationDTO.setChildUniqueId(nodeAttribute.getChildUniqueId());
                 attributeValidationDTO.setErrorMessage(attributeValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
@@ -89,7 +85,7 @@ public class EdgeAttributeValidationService {
             Date convertedDate = convertToDateViaInstant(convertedEndDate);
             if (nodeAttribute.getStartDate().after(convertedDate)) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
-                attributeValidationDTO.setParentNodeId(nodeAttribute.getParentNodeId());
+                attributeValidationDTO.setParentUniqueId(nodeAttribute.getParentUniqueId());
                 attributeValidationDTO.setChildUniqueId(nodeAttribute.getChildUniqueId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
