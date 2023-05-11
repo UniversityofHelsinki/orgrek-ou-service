@@ -116,12 +116,12 @@ public class NodeAttributeController {
         }
     }
 
-    @GetMapping("/{id}/attributes/others")
-    public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId) {
+    @GetMapping("/{id}/attributes/others/hierarchies/{hierarchies}")
+    public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
         try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
+            List<Attribute> nodeOtherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId, selectedHierarchies);
             return new ResponseEntity<>(
-                    nodeAttributes,
+                    nodeOtherAttributes,
                     HttpStatus.OK
             );
         } catch (Exception e) {

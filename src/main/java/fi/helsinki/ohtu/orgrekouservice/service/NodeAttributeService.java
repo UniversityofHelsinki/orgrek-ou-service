@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class NodeAttributeService {
@@ -133,13 +138,57 @@ public class NodeAttributeService {
             throw new RuntimeException(e);
         }
     }
-    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId) {
+
+    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId, List<String> selectedHierarchies) {
         try {
             String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
-            return getNodeAttributes(nodeCodeAttributesUrl);
+            List <Attribute> otherAttributes = getNodeAttributes(nodeCodeAttributesUrl);
+            String selected = String.join(",", selectedHierarchies);
+            List<String> attributeKeys = getAttributeKeys(selected);
+            String attributeKeysString = String.join(",", attributeKeys);
+            List<HierarchyFilter> hierarchyFilters = getHierarchyFiltersByKeys(attributeKeysString);
+            List<HierarchyFilter> uniqueHierarchyFilters = uniqueHierarchyFilters(hierarchyFilters);
+            return otherAttributes;
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
+    private List<HierarchyFilter> uniqueHierarchyFilters(List<HierarchyFilter> hierarchyFilters) {
+        List<HierarchyFilter> hierarchyListFiltered = hierarchyFilters.stream()
+                .filter(distinctByKey(h -> h.getValue()))
+                .collect(Collectors.toList());
+        return hierarchyListFiltered;
+    };
+
+    private List<HierarchyFilter> getHierarchyFiltersByKeys(String keys) throws RestClientException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String hierarchyFiltersByKey = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
+            HttpEntity<Object> requestEntity = new HttpEntity(hierarchyFiltersByKey, headers);
+            ResponseEntity<HierarchyFilter[]> response = restTemplate.exchange(hierarchyFiltersByKey, HttpMethod.GET,  requestEntity, HierarchyFilter[].class);
+            return List.of(response.getBody());
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String nodeAttributeKeysUrl = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
+        HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributeKeysUrl, headers);
+        ResponseEntity<String[]> response = restTemplate.exchange(nodeAttributeKeysUrl, HttpMethod.GET,  requestEntity, String[].class);
+        return List.of(response.getBody());
     }
 
     private List<Attribute> getNodeAttributes(String nodeAttributesUrl) throws RestClientException {
