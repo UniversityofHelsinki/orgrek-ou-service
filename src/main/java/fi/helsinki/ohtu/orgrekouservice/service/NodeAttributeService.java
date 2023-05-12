@@ -19,6 +19,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+
 @Service
 public class NodeAttributeService {
     @Value("${server.url}")
@@ -147,11 +149,29 @@ public class NodeAttributeService {
             List<String> attributeKeys = getAttributeKeys(selected);
             String attributeKeysString = String.join(",", attributeKeys);
             List<HierarchyFilter> hierarchyFilters = getHierarchyFiltersByKeys(attributeKeysString);
-            List<HierarchyFilter> uniqueHierarchyFilters = uniqueHierarchyFilters(hierarchyFilters);
+            Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
+            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
+            updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
             return otherAttributes;
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+        for (Attribute otherNodeAttribute : otherNodeAttributes) {
+            for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
+                if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
+                    System.out.println("HIT");
+                }
+            }
+        }
+    };
+
+    public Map<String, List<HierarchyFilter>> convertListToMap(List<HierarchyFilter> hierarchyFilters) {
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = hierarchyFilters.stream()
+                .collect(groupingBy(HierarchyFilter::getKey));
+        return hierarchyFilterMap;
     }
 
     public static <T> Predicate<T> distinctByKey(
@@ -162,11 +182,15 @@ public class NodeAttributeService {
     }
 
 
-    private List<HierarchyFilter> uniqueHierarchyFilters(List<HierarchyFilter> hierarchyFilters) {
-        List<HierarchyFilter> hierarchyListFiltered = hierarchyFilters.stream()
-                .filter(distinctByKey(h -> h.getValue()))
-                .collect(Collectors.toList());
-        return hierarchyListFiltered;
+    private Map<String, List<HierarchyFilter>> uniqueHierarchyFilters(Map<String, List<HierarchyFilter>> hierarchyFilterMap) {
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap = new HashMap<>();
+        for (Map.Entry<String, List<HierarchyFilter>> hierarchyFilter : hierarchyFilterMap.entrySet()) {
+            List<HierarchyFilter> uniqueHierarchyFilterList = hierarchyFilter.getValue().stream()
+                    .filter(distinctByKey(h -> h.getValue()))
+                    .collect(Collectors.toList());
+            uniqueHierarchyFilterMap.put(hierarchyFilter.getKey(), uniqueHierarchyFilterList);
+        }
+        return uniqueHierarchyFilterMap;
     };
 
     private List<HierarchyFilter> getHierarchyFiltersByKeys(String keys) throws RestClientException {
