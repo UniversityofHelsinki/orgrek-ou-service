@@ -149,14 +149,19 @@ public class NodeAttributeService {
             String selected = String.join(",", selectedHierarchies);
             List<String> attributeKeys = getAttributeKeys(selected);
             String attributeKeysString = String.join(",", attributeKeys);
-            List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
-            Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
-            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
+            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = getUniqueHierarchyFilters(attributeKeysString);
             List<OtherAttributeDTO> otherAttributeList = updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
             return otherAttributeList;
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Map<String, List<HierarchyFilter>> getUniqueHierarchyFilters(String attributeKeysString) {
+        List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
+        return uniqueHierarchyFiltersMap;
     }
 
     private List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
