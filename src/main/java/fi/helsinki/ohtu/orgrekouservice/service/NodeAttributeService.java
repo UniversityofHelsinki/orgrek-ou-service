@@ -149,7 +149,7 @@ public class NodeAttributeService {
             String selected = String.join(",", selectedHierarchies);
             List<String> attributeKeys = getAttributeKeys(selected);
             String attributeKeysString = String.join(",", attributeKeys);
-            List<HierarchyFilter> hierarchyFilters = getHierarchyFiltersByKeys(attributeKeysString);
+            List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
             Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
             Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
             List<OtherAttributeDTO> otherAttributeList = updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
@@ -170,10 +170,13 @@ public class NodeAttributeService {
             otherAttributeDTO.setDeleted(otherNodeAttribute.isDeleted());
             otherAttributeDTO.setNodeId(otherNodeAttribute.getNodeId());
             otherAttributeDTO.setNew(otherAttributeDTO.isNew());
+            otherAttributeDTO.setValue(otherNodeAttribute.getValue());
+            otherAttributeDTO.setType("text");
             for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
                 if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
                     List<String> values = uniqueFilterMapEntry.getValue().stream().map(HierarchyFilter::getValue).collect(Collectors.toList());
                     otherAttributeDTO.setOptionValues(values);
+                    otherAttributeDTO.setType("options");
                 }
             }
             otherAttributeList.add(otherAttributeDTO);

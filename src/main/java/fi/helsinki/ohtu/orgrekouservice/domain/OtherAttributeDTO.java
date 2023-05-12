@@ -21,6 +21,8 @@ public class OtherAttributeDTO {
 
     private boolean deleted;
 
+    private String type;
+
 
     public OtherAttributeDTO() {
     }
@@ -95,5 +97,13 @@ public class OtherAttributeDTO {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
