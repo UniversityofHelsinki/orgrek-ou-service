@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
+import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -141,7 +142,7 @@ public class NodeAttributeService {
         }
     }
 
-    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId, List<String> selectedHierarchies) {
+    public List<OtherAttributeDTO> getNodeOtherAttributesByNodeId(int nodeUniqueId, List<String> selectedHierarchies) {
         try {
             String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
             List <Attribute> otherAttributes = getNodeAttributes(nodeCodeAttributesUrl);
@@ -151,21 +152,33 @@ public class NodeAttributeService {
             List<HierarchyFilter> hierarchyFilters = getHierarchyFiltersByKeys(attributeKeysString);
             Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
             Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
-            updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
-            return otherAttributes;
+            List<OtherAttributeDTO> otherAttributeList = updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
+            return otherAttributeList;
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+    private List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+        List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
         for (Attribute otherNodeAttribute : otherNodeAttributes) {
+            OtherAttributeDTO otherAttributeDTO = new OtherAttributeDTO();
+            otherAttributeDTO.setId(otherNodeAttribute.getId());
+            otherAttributeDTO.setKey(otherNodeAttribute.getKey());
+            otherAttributeDTO.setStartDate(otherNodeAttribute.getStartDate());
+            otherAttributeDTO.setEndDate(otherNodeAttribute.getEndDate());
+            otherAttributeDTO.setDeleted(otherNodeAttribute.isDeleted());
+            otherAttributeDTO.setNodeId(otherNodeAttribute.getNodeId());
+            otherAttributeDTO.setNew(otherAttributeDTO.isNew());
             for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
                 if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
-                    System.out.println("HIT");
+                    List<String> values = uniqueFilterMapEntry.getValue().stream().map(HierarchyFilter::getValue).collect(Collectors.toList());
+                    otherAttributeDTO.setOptionValues(values);
                 }
             }
+            otherAttributeList.add(otherAttributeDTO);
         }
+        return otherAttributeList;
     };
 
     public Map<String, List<HierarchyFilter>> convertListToMap(List<HierarchyFilter> hierarchyFilters) {

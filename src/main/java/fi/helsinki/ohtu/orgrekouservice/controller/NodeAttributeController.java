@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.Node;
+import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
@@ -117,9 +118,9 @@ public class NodeAttributeController {
     }
 
     @GetMapping("/{id}/attributes/others/hierarchies/{hierarchies}")
-    public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
+    public ResponseEntity<List<OtherAttributeDTO>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
         try {
-            List<Attribute> nodeOtherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId, selectedHierarchies);
+            List<OtherAttributeDTO> nodeOtherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId, selectedHierarchies);
             return new ResponseEntity<>(
                     nodeOtherAttributes,
                     HttpStatus.OK
