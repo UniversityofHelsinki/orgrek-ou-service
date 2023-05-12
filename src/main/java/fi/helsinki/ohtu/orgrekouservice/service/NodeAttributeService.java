@@ -5,6 +5,7 @@ import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
 import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class NodeAttributeService {
+
+    @Autowired
+    private HierarchyService hierarchyService;
+
     @Value("${server.url}")
     private String dbUrl;
 
@@ -142,29 +142,16 @@ public class NodeAttributeService {
         }
     }
 
-    public List<OtherAttributeDTO> getNodeOtherAttributesByNodeId(int nodeUniqueId, List<String> selectedHierarchies) {
+    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId) {
         try {
             String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
-            List <Attribute> otherAttributes = getNodeAttributes(nodeCodeAttributesUrl);
-            String selected = String.join(",", selectedHierarchies);
-            List<String> attributeKeys = getAttributeKeys(selected);
-            String attributeKeysString = String.join(",", attributeKeys);
-            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = getUniqueHierarchyFilters(attributeKeysString);
-            List<OtherAttributeDTO> otherAttributeList = updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
-            return otherAttributeList;
+            return getNodeAttributes(nodeCodeAttributesUrl);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Map<String, List<HierarchyFilter>> getUniqueHierarchyFilters(String attributeKeysString) {
-        List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
-        Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
-        Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
-        return uniqueHierarchyFiltersMap;
-    }
-
-    private List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+    public List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
         List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
         for (Attribute otherNodeAttribute : otherNodeAttributes) {
             OtherAttributeDTO otherAttributeDTO = new OtherAttributeDTO();
@@ -179,9 +166,11 @@ public class NodeAttributeService {
             otherAttributeDTO.setType("text");
             for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
                 if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
-                    List<String> values = uniqueFilterMapEntry.getValue().stream().map(HierarchyFilter::getValue).collect(Collectors.toList());
-                    otherAttributeDTO.setOptionValues(values);
-                    otherAttributeDTO.setType("options");
+                    List<String> values = uniqueFilterMapEntry.getValue().stream().filter(entry -> entry.getValue() != null).map(HierarchyFilter::getValue).collect(Collectors.toList());
+                    if (values != null && values.size() > 0) {
+                        otherAttributeDTO.setOptionValues(values);
+                        otherAttributeDTO.setType("options");
+                    }
                 }
             }
             otherAttributeList.add(otherAttributeDTO);
@@ -189,45 +178,7 @@ public class NodeAttributeService {
         return otherAttributeList;
     };
 
-    public Map<String, List<HierarchyFilter>> convertListToMap(List<HierarchyFilter> hierarchyFilters) {
-        Map<String, List<HierarchyFilter>> hierarchyFilterMap = hierarchyFilters.stream()
-                .collect(groupingBy(HierarchyFilter::getKey));
-        return hierarchyFilterMap;
-    }
-
-    public static <T> Predicate<T> distinctByKey(
-            Function<? super T, ?> keyExtractor) {
-
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
-
-
-    private Map<String, List<HierarchyFilter>> uniqueHierarchyFilters(Map<String, List<HierarchyFilter>> hierarchyFilterMap) {
-        Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap = new HashMap<>();
-        for (Map.Entry<String, List<HierarchyFilter>> hierarchyFilter : hierarchyFilterMap.entrySet()) {
-            List<HierarchyFilter> uniqueHierarchyFilterList = hierarchyFilter.getValue().stream()
-                    .filter(distinctByKey(h -> h.getValue()))
-                    .collect(Collectors.toList());
-            uniqueHierarchyFilterMap.put(hierarchyFilter.getKey(), uniqueHierarchyFilterList);
-        }
-        return uniqueHierarchyFilterMap;
-    };
-
-    private List<HierarchyFilter> getHierarchyFiltersByKeys(String keys) throws RestClientException {
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            String hierarchyFiltersByKey = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
-            HttpEntity<Object> requestEntity = new HttpEntity(hierarchyFiltersByKey, headers);
-            ResponseEntity<HierarchyFilter[]> response = restTemplate.exchange(hierarchyFiltersByKey, HttpMethod.GET,  requestEntity, HierarchyFilter[].class);
-            return List.of(response.getBody());
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
+    public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String nodeAttributeKeysUrl = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";

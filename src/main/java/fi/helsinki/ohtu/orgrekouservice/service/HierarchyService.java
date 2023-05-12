@@ -6,12 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class HierarchyService {
@@ -417,6 +423,52 @@ public class HierarchyService {
         HttpEntity<Object> requestEntity = new HttpEntity(stateGroupedEdges, headers);
         ResponseEntity<Map> a = restTemplate.exchange(edgeURL, HttpMethod.PUT,  requestEntity, Map.class);
         return successors;
+    }
+
+    public Map<String, List<HierarchyFilter>> convertListToMap(List<HierarchyFilter> hierarchyFilters) {
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = hierarchyFilters.stream()
+                .collect(groupingBy(HierarchyFilter::getKey));
+        return hierarchyFilterMap;
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
+    private Map<String, List<HierarchyFilter>> uniqueHierarchyFilters(Map<String, List<HierarchyFilter>> hierarchyFilterMap) {
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap = new HashMap<>();
+        for (Map.Entry<String, List<HierarchyFilter>> hierarchyFilter : hierarchyFilterMap.entrySet()) {
+            List<HierarchyFilter> uniqueHierarchyFilterList = hierarchyFilter.getValue().stream()
+                    .filter(h -> Objects.nonNull(h.getValue()))
+                    .filter(distinctByKey(h -> h.getValue()))
+                    .collect(Collectors.toList());
+            uniqueHierarchyFilterMap.put(hierarchyFilter.getKey(), uniqueHierarchyFilterList);
+        }
+        return uniqueHierarchyFilterMap;
+    };
+
+    public Map<String, List<HierarchyFilter>> getUniqueHierarchyFilters(String attributeKeysString) {
+        List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
+        return uniqueHierarchyFiltersMap;
+    }
+
+    public List<HierarchyFilter> getHierarchyFiltersByKeys(String keys) throws RestClientException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String hierarchyFiltersByKey = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
+            HttpEntity<Object> requestEntity = new HttpEntity(hierarchyFiltersByKey, headers);
+            ResponseEntity<HierarchyFilter[]> response = restTemplate.exchange(hierarchyFiltersByKey, HttpMethod.GET,  requestEntity, HierarchyFilter[].class);
+            return List.of(response.getBody());
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
