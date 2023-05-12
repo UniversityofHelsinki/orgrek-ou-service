@@ -1,5 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class OtherAttributeDTO {
     private Date startDate;
     private Date endDate;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> optionValues;
 
     private boolean isNew;
