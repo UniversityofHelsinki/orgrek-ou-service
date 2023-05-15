@@ -1,8 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
-import fi.helsinki.ohtu.orgrekouservice.domain.Node;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.*;
+import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeAttributeValidationService;
 import fi.helsinki.ohtu.orgrekouservice.service.NodeService;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/node")
@@ -21,6 +21,9 @@ public class NodeAttributeController {
 
     @Autowired
     private NodeAttributeService nodeAttributeService;
+
+    @Autowired
+    private HierarchyService hierarchyService;
 
     @Autowired
     private NodeAttributeValidationService nodeAttributeValidationService;
@@ -116,12 +119,17 @@ public class NodeAttributeController {
         }
     }
 
-    @GetMapping("/{id}/attributes/others")
-    public ResponseEntity<List<Attribute>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId) {
+    @GetMapping("/{id}/attributes/others/hierarchies/{hierarchies}")
+    public ResponseEntity<List<OtherAttributeDTO>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
         try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
+            List<Attribute> otherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
+            String selected = String.join(",", selectedHierarchies);
+            List<String> attributeKeys = nodeAttributeService.getAttributeKeys(selected);
+            String attributeKeysString = String.join(",", attributeKeys);
+            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = hierarchyService.getUniqueHierarchyFilters(attributeKeysString);
+            List<OtherAttributeDTO> otherAttributeList = nodeAttributeService.updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
             return new ResponseEntity<>(
-                    nodeAttributes,
+                    otherAttributeList,
                     HttpStatus.OK
             );
         } catch (Exception e) {
