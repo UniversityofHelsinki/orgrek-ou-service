@@ -1,8 +1,11 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
+import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class NodeAttributeService {
+
+    @Autowired
+    private HierarchyService hierarchyService;
+
     @Value("${server.url}")
     private String dbUrl;
 
@@ -133,6 +141,7 @@ public class NodeAttributeService {
             throw new RuntimeException(e);
         }
     }
+
     public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId) {
         try {
             String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
@@ -140,6 +149,42 @@ public class NodeAttributeService {
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+        List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
+        for (Attribute otherNodeAttribute : otherNodeAttributes) {
+            OtherAttributeDTO otherAttributeDTO = new OtherAttributeDTO();
+            otherAttributeDTO.setId(otherNodeAttribute.getId());
+            otherAttributeDTO.setKey(otherNodeAttribute.getKey());
+            otherAttributeDTO.setStartDate(otherNodeAttribute.getStartDate());
+            otherAttributeDTO.setEndDate(otherNodeAttribute.getEndDate());
+            otherAttributeDTO.setDeleted(otherNodeAttribute.isDeleted());
+            otherAttributeDTO.setNodeId(otherNodeAttribute.getNodeId());
+            otherAttributeDTO.setNew(otherAttributeDTO.isNew());
+            otherAttributeDTO.setValue(otherNodeAttribute.getValue());
+            otherAttributeDTO.setType("text");
+            for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
+                if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
+                    List<String> values = uniqueFilterMapEntry.getValue().stream().filter(entry -> entry.getValue() != null).map(HierarchyFilter::getValue).collect(Collectors.toList());
+                    if (values != null && values.size() > 0) {
+                        otherAttributeDTO.setOptionValues(values);
+                        otherAttributeDTO.setType("options");
+                    }
+                }
+            }
+            otherAttributeList.add(otherAttributeDTO);
+        }
+        return otherAttributeList;
+    };
+
+    public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String nodeAttributeKeysUrl = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
+        HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributeKeysUrl, headers);
+        ResponseEntity<String[]> response = restTemplate.exchange(nodeAttributeKeysUrl, HttpMethod.GET,  requestEntity, String[].class);
+        return List.of(response.getBody());
     }
 
     private List<Attribute> getNodeAttributes(String nodeAttributesUrl) throws RestClientException {
