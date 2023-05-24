@@ -26,18 +26,13 @@ public class NodeController {
         try {
             Node parentNode = nodeService.getNodeByUniqueId(parentNodeUniqueId);
             newNodeDTO = nodeService.updateParentNodeId(newNodeDTO, parentNode);
-            newNodeDTO = nodeService.insertNewNode(newNodeDTO);
-            return new ResponseEntity<>(newNodeDTO, HttpStatus.OK);
-
-            /*
-            ResponseEntity response = nodeValidationService.validateNode(node);
+            ResponseEntity response = nodeValidationService.validateNewNode(newNodeDTO);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                nodeService.updateNode(updatedNode);
-                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+                newNodeDTO = nodeService.insertNewNode(newNodeDTO);
+                return new ResponseEntity<>(newNodeDTO, HttpStatus.OK);
             } else {
                 return new ResponseEntity(response.getBody(), response.getStatusCode());
             }
-            */
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

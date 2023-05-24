@@ -71,4 +71,7 @@ public class Constants {
     public static final String NEW_EDGES = "NEW";
     public static final String UPDATED_EDGES = "UPDATED";
     public static final String DELETED_EDGES = "DELETED";
+    public static final String NODE_HIERARCHY_VALIDATION_MESSAGE_KEY = "node_hierarchy_is_mandatory";
+    public static final String NODE_START_DATE_VALIDATION_MESSAGE_KEY = "node_start_date_is_mandatory";
+    public static final String NODE_NAMES_VALIDATION_MESSAGE_KEY = "node_names_are_mandatory";
 }
