@@ -36,7 +36,7 @@ public class SectionAttributeService {
 
     public List<SectionAttribute> getAllSectionAttributes() {
         try {
-            String nodeAttributesForSectionUrl = dbUrl + Constants.NODE_API_PATH + "/section/" + "/attributes";
+            String nodeAttributesForSectionUrl = dbUrl + Constants.SECTION_API_PATH + "/all";
             return getSectionAttributes(nodeAttributesForSectionUrl);
         } catch (RestClientException e) {
             throw new RuntimeException(e);

@@ -6,6 +6,8 @@ public class Constants {
     public final static String EDGE_PATH = "/api/edge";
     public static final String NODE_API_PATH = "/api/node";
 
+    public static final String SECTION_API_PATH = "/api/section";
+
     public static final String NODE_HIERARCHY_FILTER_PATH = "/api/hierarchyfilter";
 
     public static final String PUBLIC_STEERING_GROUPS_API = "/api/public/steeringGroups";
