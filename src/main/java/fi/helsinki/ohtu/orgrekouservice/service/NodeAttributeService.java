@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class NodeAttributeService {
 
     @Autowired
-    private HierarchyService hierarchyService;
+    private SectionAttributeService sectionAttributeService;
 
     @Value("${server.url}")
     private String dbUrl;
@@ -195,25 +195,10 @@ public class NodeAttributeService {
         return List.of(response.getBody());
     }
 
-    private List<SectionAttribute> getSectionAttributes(String nodeAttributesForSectionUrl) throws RestClientException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributesForSectionUrl,headers);
-        ResponseEntity<SectionAttribute[]> response = restTemplate.exchange(nodeAttributesForSectionUrl, HttpMethod.GET,  requestEntity, SectionAttribute[].class);
-        return List.of(response.getBody());
-    }
 
     public List<Attribute> sanitizeAttributes(List<Attribute> attributes) {
         attributes.removeIf(x -> x.isDeleted() && x.isNew());
         return attributes;
     }
 
-    public List<SectionAttribute> getValidAttributesFor(String attributeType) {
-        try {
-            String nodeAttributesForSectionUrl = dbUrl + Constants.NODE_API_PATH + "/section/" + attributeType + "/attributes";
-            return getSectionAttributes(nodeAttributesForSectionUrl);
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
