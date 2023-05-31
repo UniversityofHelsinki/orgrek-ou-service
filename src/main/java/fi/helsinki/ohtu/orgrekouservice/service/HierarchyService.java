@@ -390,16 +390,16 @@ public class HierarchyService {
         return fullNames;
     }
 
-    private List<Edge> sanitizeEdges(List<Edge> edges) {
+    private List<EdgeWrapper> sanitizeEdges(List<EdgeWrapper> edges) {
         return edges.stream().filter(edge -> !(edge.isDeleted() && edge.isNew())).collect(Collectors.toList());
     }
 
-    private Map<String, List<Edge>> groupEdges(List<Edge> edges) {
-        Map<String, List<Edge>> container = new HashMap<>();
-        List<Edge> newEdges = new ArrayList<>();
-        List<Edge> deletedEdges = new ArrayList<>();
-        List<Edge> updatedEdges = new ArrayList<>();
-        for (Edge edge : edges) {
+    private Map<String, List<EdgeWrapper>> groupEdges(List<EdgeWrapper> edges) {
+        Map<String, List<EdgeWrapper>> container = new HashMap<>();
+        List<EdgeWrapper> newEdges = new ArrayList<>();
+        List<EdgeWrapper> deletedEdges = new ArrayList<>();
+        List<EdgeWrapper> updatedEdges = new ArrayList<>();
+        for (EdgeWrapper edge : edges) {
             if (edge.isNew()) {
                 newEdges.add(edge);
             } else if (edge.isDeleted()) {
@@ -414,9 +414,9 @@ public class HierarchyService {
         return container;
     }
 
-    public List<Edge> updateSuccessors(List<Edge> successors) {
-        List<Edge> sanitized = sanitizeEdges(successors);
-        Map<String, List<Edge>> stateGroupedEdges = groupEdges(sanitized);
+    public List<EdgeWrapper> updateSuccessors(List<EdgeWrapper> successors) {
+        List<EdgeWrapper> sanitized = sanitizeEdges(successors);
+        Map<String, List<EdgeWrapper>> stateGroupedEdges = groupEdges(sanitized);
         String edgeURL = dbUrl + Constants.EDGE_PATH + "/";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

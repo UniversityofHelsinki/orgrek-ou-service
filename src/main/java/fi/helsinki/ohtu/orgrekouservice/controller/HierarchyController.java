@@ -215,7 +215,7 @@ public class HierarchyController {
         return nodeDTOS;
     }
 
-    @RequestMapping(method = GET, value = "/successors/{id}/{date}")
+    @RequestMapping(method = GET, value = "/successor/{id}/{date}")
     public List<NodeDTO> getSuccessorsById(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
         List<NodeEdgeHistoryWrapper> predecessorNodes = List.of(hierarchyService.getSuccessorsById(nodeId));
         List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithPredecessorOrSuccessorAttributes(predecessorNodes, date,false);
@@ -289,8 +289,8 @@ public class HierarchyController {
         return predecessors.stream().sorted(byNameRelative).collect(Collectors.groupingBy(Relative::getLanguage));
     }
 
-    @RequestMapping(method = GET, value = "/successors1/{id}/{date}")
-    public Map<String, List<Relative>> getSuccessors1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/{id}/successor/{date}")
+    public Map<String, List<Relative>> getSuccessors(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<Relative> successors = hierarchyService.getSuccessors(uniqueId, date);
         if (successors.isEmpty()) {
             return emptyMap();
@@ -372,7 +372,7 @@ public class HierarchyController {
     }
 
     @PutMapping("/successor")
-    public List<Edge> updateSuccessors(@RequestBody List<Edge> edges) {
+    public List<EdgeWrapper> updateSuccessors(@RequestBody List<EdgeWrapper> edges) {
         hierarchyService.updateSuccessors(edges);
         return edges;
     }
