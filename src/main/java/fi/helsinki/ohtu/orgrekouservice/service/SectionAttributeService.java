@@ -54,6 +54,18 @@ public class SectionAttributeService {
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public SectionAttribute insertSectionAttribute(SectionAttribute sectionAttribute) {
+        try {
+            String insertNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/insert";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(sectionAttribute, headers);
+            ResponseEntity response = restTemplate.exchange(insertNodePropertiesUrl, HttpMethod.POST,  requestEntity, SectionAttribute.class);
+            return (SectionAttribute) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
