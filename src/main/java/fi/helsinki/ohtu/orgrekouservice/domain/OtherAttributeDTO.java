@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.List;
@@ -83,8 +84,9 @@ public class OtherAttributeDTO {
         this.optionValues = optionValues;
     }
 
+    @JsonProperty("isNew")
     public boolean isNew() {
-        return isNew;
+        return this.isNew;
     }
 
     public void setNew(boolean aNew) {
