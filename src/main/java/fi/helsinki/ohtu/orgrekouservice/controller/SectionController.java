@@ -24,6 +24,16 @@ public class SectionController {
         return new ResponseEntity<>(sectionAttributeList, HttpStatus.OK);
     }
 
+    @PostMapping("/insert")
+    public ResponseEntity insertSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
+        try {
+            SectionAttribute insertedSectionAttribute = sectionAttributeService.insertSectionAttribute(sectionAttribute);
+            return new ResponseEntity<>(insertedSectionAttribute, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new EmptyJsonResponse(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PutMapping("/update")
     public ResponseEntity updateSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
         try {
