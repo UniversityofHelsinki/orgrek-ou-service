@@ -44,7 +44,7 @@ public class SectionController {
         }
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity deleteSectionAttribute(@PathVariable("id") int sectionId) {
         try {
             HttpStatus httpStatus = sectionAttributeService.deleteSectionAttribute(sectionId);
