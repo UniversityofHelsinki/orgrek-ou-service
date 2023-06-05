@@ -7,6 +7,7 @@ import java.util.Date;
 public class NewNodeDTO {
     private String parentNodeId;
     private String childNodeId;
+    private String childUniqueId;
     private List<String> hierarchies;
     private Date startDate;
     private Date endDate;
@@ -21,6 +22,10 @@ public class NewNodeDTO {
         return parentNodeId;
     }
 
+    public void setParentNodeId(String parentNodeId) {
+        this.parentNodeId = parentNodeId;
+    }
+
     public String getChildNodeId() {
         return childNodeId;
     }
@@ -29,9 +34,14 @@ public class NewNodeDTO {
         this.childNodeId = childNodeId;
     }
 
-    public void setParentNodeId(String parentNodeId) {
-        this.parentNodeId = parentNodeId;
+    public String getChildUniqueId() {
+        return childUniqueId;
     }
+
+    public void setChildUniqueId(String childUniqueId) {
+        this.childUniqueId = childUniqueId;
+    }
+
 
     public List<String> getHierarchies() {
         return hierarchies;
