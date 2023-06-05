@@ -44,4 +44,14 @@ public class SectionController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteSectionAttribute(@PathVariable("id") int sectionId) {
+        try {
+            HttpStatus httpStatus = sectionAttributeService.deleteSectionAttribute(sectionId);
+            return new ResponseEntity<>(new EmptyJsonResponse(), httpStatus);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new EmptyJsonResponse(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
