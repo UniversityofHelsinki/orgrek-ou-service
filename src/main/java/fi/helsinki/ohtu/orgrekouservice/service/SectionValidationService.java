@@ -34,9 +34,9 @@ public class SectionValidationService {
             validationDTO.setId(sectionAttribute.getId());
             validationDTO.setSection(sectionAttribute.getSection());
             validationDTO.setAttr(sectionAttribute.getAttr());
-            validationDTO.setErrorMessage(Constants.SECTION_ATTRIBUTE_VALIDATION_FOUND_AT_HIERARCHY_FILTER_TABLE);
+            validationDTO.setErrorMessage(Constants.SECTION_ATTRIBUTE_VALIDATION_NOT_FOUND_AT_HIERARCHY_FILTER_TABLE);
             errorMessages.add(validationDTO);
-            logger.error("Validation failed for section attribute: " + sectionAttribute.getAttr() + " message : " + Constants.SECTION_ATTRIBUTE_VALIDATION_FOUND_AT_HIERARCHY_FILTER_TABLE);
+            logger.error("Validation failed for section attribute: " + sectionAttribute.getAttr() + " message : " + Constants.SECTION_ATTRIBUTE_VALIDATION_NOT_FOUND_AT_HIERARCHY_FILTER_TABLE);
         }
     }
 }
