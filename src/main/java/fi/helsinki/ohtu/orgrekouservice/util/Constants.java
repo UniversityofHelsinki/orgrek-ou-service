@@ -8,7 +8,7 @@ public class Constants {
 
     public static final String SECTION_API_PATH = "/api/section";
 
-    public static final String NODE_HIERARCHY_FILTER_PATH = "/api/hierarchyfilter";
+    public static final String HIERARCHY_FILTER_PATH = "/api/hierarchyfilter";
 
     public static final String PUBLIC_STEERING_GROUPS_API = "/api/public/steeringGroups";
     public static final String PUBLIC_DEGREE_TITLE_API = "/api/public/degreeTitles";
@@ -64,6 +64,8 @@ public class Constants {
     public static final String ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_child_node_id_is_mandatory";
     public static final String ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_parent_node_id_is_mandatory";
     public static final String ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY = "attribute_hierarchy_is_mandatory";
+
+    public static final String SECTION_ATTRIBUTE_VALIDATION_FOUND_AT_HIERARCHY_FILTER_TABLE = "section_attribute_found_at_hierarchy_filter_table";
 
     public static final String NAME_ATTRIBUTES = "names";
     public static final String TYPE_ATTRIBUTES = "types";

@@ -3,7 +3,6 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
 import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -181,7 +180,7 @@ public class NodeAttributeService {
     public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String nodeAttributeKeysUrl = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
+        String nodeAttributeKeysUrl = dbUrl + Constants.HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
         HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributeKeysUrl, headers);
         ResponseEntity<String[]> response = restTemplate.exchange(nodeAttributeKeysUrl, HttpMethod.GET,  requestEntity, String[].class);
         return List.of(response.getBody());

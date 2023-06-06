@@ -2,7 +2,9 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.EmptyJsonResponse;
 import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
+import fi.helsinki.ohtu.orgrekouservice.service.HierarchyFilterService;
 import fi.helsinki.ohtu.orgrekouservice.service.SectionAttributeService;
+import fi.helsinki.ohtu.orgrekouservice.service.SectionValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,12 @@ public class SectionController {
     @Autowired
     private SectionAttributeService sectionAttributeService;
 
+    @Autowired
+    private HierarchyFilterService hierarchyFilterService;
+
+    @Autowired
+    private SectionValidationService sectionValidationService;
+
     @GetMapping("/all")
     public ResponseEntity<List<SectionAttribute>> getSectionAttributes() {
         List<SectionAttribute> sectionAttributeList = sectionAttributeService.getAllSectionAttributes();
@@ -27,8 +35,14 @@ public class SectionController {
     @PostMapping("/insert")
     public ResponseEntity insertSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
         try {
-            SectionAttribute insertedSectionAttribute = sectionAttributeService.insertSectionAttribute(sectionAttribute);
-            return new ResponseEntity<>(insertedSectionAttribute, HttpStatus.OK);
+            List<String> distinctHierarchyFilterKeys = hierarchyFilterService.getDistinctHierarchyFilterKeys();
+            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                SectionAttribute insertedSectionAttribute = sectionAttributeService.insertSectionAttribute(sectionAttribute);
+                return new ResponseEntity<>(insertedSectionAttribute, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(new EmptyJsonResponse(),HttpStatus.BAD_REQUEST);
         }
