@@ -5,6 +5,7 @@ import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyFilterService;
 import fi.helsinki.ohtu.orgrekouservice.service.SectionAttributeService;
 import fi.helsinki.ohtu.orgrekouservice.service.SectionValidationService;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,8 @@ public class SectionController {
     public ResponseEntity insertSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
         try {
             List<String> distinctHierarchyFilterKeys = hierarchyFilterService.getDistinctHierarchyFilterKeys();
-            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute);
+            List<SectionAttribute> sectionAttributeList = sectionAttributeService.getAllSectionAttributes();
+            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute, Constants.NEW_SECTION_ATTRIBUTE, sectionAttributeList);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 SectionAttribute insertedSectionAttribute = sectionAttributeService.insertSectionAttribute(sectionAttribute);
                 return new ResponseEntity<>(insertedSectionAttribute, HttpStatus.OK);
@@ -51,8 +53,15 @@ public class SectionController {
     @PutMapping("/update")
     public ResponseEntity updateSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
         try {
-            sectionAttributeService.updateSectionAttribute(sectionAttribute);
-            return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);
+            List<String> distinctHierarchyFilterKeys = hierarchyFilterService.getDistinctHierarchyFilterKeys();
+            List<SectionAttribute> sectionAttributeList = sectionAttributeService.getAllSectionAttributes();
+            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute, Constants.UPDATE_SECTION_ATTRIBUTE, sectionAttributeList);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                sectionAttributeService.updateSectionAttribute(sectionAttribute);
+                return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(new EmptyJsonResponse(),HttpStatus.BAD_REQUEST);
         }

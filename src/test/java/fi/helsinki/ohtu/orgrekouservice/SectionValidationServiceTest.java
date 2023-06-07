@@ -32,7 +32,16 @@ public class SectionValidationServiceTest {
         sectionAttribute.setSection("codes");
         sectionAttribute.setAttr("emo_lyhenne");
 
-        ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute);
+        List<SectionAttribute> sectionAttributeList = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("codes");
+        sectionAttribute1.setAttr("hr_lyhenne");
+
+        sectionAttributeList.add(sectionAttribute1);
+
+
+        ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute, Constants.NEW_SECTION_ATTRIBUTE, sectionAttributeList);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -46,7 +55,15 @@ public class SectionValidationServiceTest {
         sectionAttribute.setSection("codes");
         sectionAttribute.setAttr("foobar");
 
-        ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute);
+        List<SectionAttribute> sectionAttributeList = new ArrayList<>();
+        SectionAttribute sectionAttribute1 = new SectionAttribute();
+        sectionAttribute1.setId(1);
+        sectionAttribute1.setSection("codes");
+        sectionAttribute1.setAttr("hr_lyhenne");
+
+        sectionAttributeList.add(sectionAttribute1);
+
+        ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute, Constants.NEW_SECTION_ATTRIBUTE, sectionAttributeList);
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
 
         List<SectionValidationDTO> result = (List<SectionValidationDTO>) response.getBody();
