@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -70,8 +70,16 @@ public class SectionController {
     @DeleteMapping("/{id}/delete")
     public ResponseEntity deleteSectionAttribute(@PathVariable("id") int sectionId) {
         try {
-            HttpStatus httpStatus = sectionAttributeService.deleteSectionAttribute(sectionId);
-            return new ResponseEntity<>(new EmptyJsonResponse(), httpStatus);
+            List<String> distinctHierarchyFilterKeys = hierarchyFilterService.getDistinctHierarchyFilterKeys();
+            List<SectionAttribute> sectionAttributeList = sectionAttributeService.getAllSectionAttributes();
+            SectionAttribute foundSectionAttribute = sectionAttributeService.getSectionAttributeById(sectionId);
+            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, foundSectionAttribute, Constants.DELETE_SECTION_ATTRIBUTE, sectionAttributeList);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                HttpStatus httpStatus = sectionAttributeService.deleteSectionAttribute(sectionId);
+                return new ResponseEntity<>(new EmptyJsonResponse(), httpStatus);
+            }  else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(new EmptyJsonResponse(),HttpStatus.BAD_REQUEST);
         }

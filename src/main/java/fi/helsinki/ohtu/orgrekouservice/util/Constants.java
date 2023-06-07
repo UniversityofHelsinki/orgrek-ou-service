@@ -84,4 +84,6 @@ public class Constants {
 
     public static final String NEW_SECTION_ATTRIBUTE = "new_section_attribute";
     public static final String UPDATE_SECTION_ATTRIBUTE = "update_section_attribute";
+
+    public static final String DELETE_SECTION_ATTRIBUTE = "delete_section_attribute";
 }

@@ -35,7 +35,7 @@ public class SectionValidationService {
     }
 
     private void validateId(SectionAttribute sectionAttribute, String type, List<SectionValidationDTO> errorMessages) {
-        if (sectionAttribute.getId() == null && type.equals(Constants.UPDATE_SECTION_ATTRIBUTE)) {
+        if (sectionAttribute.getId() == null && (type.equals(Constants.UPDATE_SECTION_ATTRIBUTE) || type.equals(Constants.DELETE_SECTION_ATTRIBUTE))) {
             validationMessage(sectionAttribute, Constants.SECTION_ATTRIBUTE_ID_IS_NULL, errorMessages);
         }
     }
