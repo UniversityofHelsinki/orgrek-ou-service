@@ -78,4 +78,25 @@ public class SectionAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public SectionAttribute getSectionAttributeById(int sectionId) {
+        try {
+            String getSectionAttributeUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/get";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(getSectionAttributeUrl, headers);
+            ResponseEntity response = restTemplate.exchange(getSectionAttributeUrl, HttpMethod.GET,  requestEntity, SectionAttribute.class);
+            return  (SectionAttribute) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SectionAttribute updateSectionAttributeInfo(SectionAttribute foundSectionAttribute, SectionAttribute sectionAttribute) {
+        SectionAttribute updatedSectionAttribute = new SectionAttribute();
+        updatedSectionAttribute.setId(foundSectionAttribute.getId());
+        updatedSectionAttribute.setSection(sectionAttribute.getSection());
+        updatedSectionAttribute.setAttr(sectionAttribute.getAttr());
+        return updatedSectionAttribute;
+    }
 }

@@ -8,7 +8,7 @@ public class Constants {
 
     public static final String SECTION_API_PATH = "/api/section";
 
-    public static final String NODE_HIERARCHY_FILTER_PATH = "/api/hierarchyfilter";
+    public static final String HIERARCHY_FILTER_PATH = "/api/hierarchyfilter";
 
     public static final String PUBLIC_STEERING_GROUPS_API = "/api/public/steeringGroups";
     public static final String PUBLIC_DEGREE_TITLE_API = "/api/public/degreeTitles";
@@ -65,6 +65,11 @@ public class Constants {
     public static final String ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_parent_node_id_is_mandatory";
     public static final String ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY = "attribute_hierarchy_is_mandatory";
 
+    public static final String SECTION_ATTRIBUTE_VALIDATION_NOT_FOUND_AT_HIERARCHY_FILTER_TABLE = "section_attribute_not_found_at_hierarchy_filter_table";
+
+    public static final String SECTION_ATTRIBUTE_FOUND_AT_SECTION_ATTRIBUTE_TABLE = "section_attribute_found_at_section_attribute_table";
+    public static final String SECTION_ATTRIBUTE_ID_IS_NULL = "section_attribute_id_is_null";
+
     public static final String NAME_ATTRIBUTES = "names";
     public static final String TYPE_ATTRIBUTES = "types";
     public static final String CODE_ATTRIBUTES = "codes";
@@ -76,4 +81,9 @@ public class Constants {
     public static final String NODE_HIERARCHY_VALIDATION_MESSAGE_KEY = "node_hierarchy_is_mandatory";
     public static final String NODE_START_DATE_VALIDATION_MESSAGE_KEY = "node_start_date_is_mandatory";
     public static final String NODE_NAMES_VALIDATION_MESSAGE_KEY = "node_names_are_mandatory";
+
+    public static final String NEW_SECTION_ATTRIBUTE = "new_section_attribute";
+    public static final String UPDATE_SECTION_ATTRIBUTE = "update_section_attribute";
+
+    public static final String DELETE_SECTION_ATTRIBUTE = "delete_section_attribute";
 }

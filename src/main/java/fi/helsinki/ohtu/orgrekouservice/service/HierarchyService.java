@@ -462,7 +462,7 @@ public class HierarchyService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            String hierarchyFiltersByKey = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
+            String hierarchyFiltersByKey = dbUrl + Constants.HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
             HttpEntity<Object> requestEntity = new HttpEntity(hierarchyFiltersByKey, headers);
             ResponseEntity<HierarchyFilter[]> response = restTemplate.exchange(hierarchyFiltersByKey, HttpMethod.GET,  requestEntity, HierarchyFilter[].class);
             return List.of(response.getBody());

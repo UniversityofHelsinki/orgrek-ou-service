@@ -2,7 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 import java.util.Date;
 
 public class SectionAttribute {
-    private int id;
+    private Integer id;
     private String section;
     private String attr;
     private Date startDate;
@@ -11,7 +11,7 @@ public class SectionAttribute {
     public SectionAttribute() {
     }
 
-    public SectionAttribute(int id, String section, String attr, Date startDate, Date endDate) {
+    public SectionAttribute(Integer id, String section, String attr, Date startDate, Date endDate) {
         this.id = id;
         this.section = section;
         this.attr = attr;
@@ -19,11 +19,11 @@ public class SectionAttribute {
         this.endDate = endDate;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -57,6 +57,24 @@ public class SectionAttribute {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SectionAttribute that = (SectionAttribute) o;
+
+        if (!getSection().equals(that.getSection())) return false;
+        return getAttr().equals(that.getAttr());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getSection().hashCode();
+        result = 31 * result + getAttr().hashCode();
+        return result;
     }
 }
 
