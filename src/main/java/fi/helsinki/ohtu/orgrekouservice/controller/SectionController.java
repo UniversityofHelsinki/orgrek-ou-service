@@ -54,8 +54,10 @@ public class SectionController {
     public ResponseEntity updateSectionAttribute(@RequestBody SectionAttribute sectionAttribute) {
         try {
             List<String> distinctHierarchyFilterKeys = hierarchyFilterService.getDistinctHierarchyFilterKeys();
+            SectionAttribute foundSectionAttribute = sectionAttributeService.getSectionAttributeById(sectionAttribute.getId());
+            SectionAttribute updatedSectionAttribute = sectionAttributeService.updateSectionAttributeInfo(foundSectionAttribute, sectionAttribute);
             List<SectionAttribute> sectionAttributeList = sectionAttributeService.getAllSectionAttributes();
-            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, sectionAttribute, Constants.UPDATE_SECTION_ATTRIBUTE, sectionAttributeList);
+            ResponseEntity response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, updatedSectionAttribute, Constants.UPDATE_SECTION_ATTRIBUTE, sectionAttributeList);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 sectionAttributeService.updateSectionAttribute(sectionAttribute);
                 return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);

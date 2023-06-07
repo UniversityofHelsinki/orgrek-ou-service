@@ -91,4 +91,12 @@ public class SectionAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public SectionAttribute updateSectionAttributeInfo(SectionAttribute foundSectionAttribute, SectionAttribute sectionAttribute) {
+        SectionAttribute updatedSectionAttribute = new SectionAttribute();
+        updatedSectionAttribute.setId(foundSectionAttribute.getId());
+        updatedSectionAttribute.setSection(sectionAttribute.getSection());
+        updatedSectionAttribute.setAttr(sectionAttribute.getAttr());
+        return updatedSectionAttribute;
+    }
 }
