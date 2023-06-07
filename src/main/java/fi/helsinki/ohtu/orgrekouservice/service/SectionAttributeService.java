@@ -68,4 +68,14 @@ public class SectionAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public HttpStatus deleteSectionAttribute(int sectionId) {
+        try {
+            String deleteNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/delete";
+            ResponseEntity response = restTemplate.exchange(deleteNodePropertiesUrl, HttpMethod.DELETE,  null, ResponseEntity.class);
+            return response.getStatusCode();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
