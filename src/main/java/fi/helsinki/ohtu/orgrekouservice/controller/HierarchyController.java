@@ -372,7 +372,7 @@ public class HierarchyController {
     }
 
     @PutMapping("/successor")
-    public List<Edge> updateSuccessors(@RequestBody List<Edge> edges) {
+    public List<EdgeWrapper> updateSuccessors(@RequestBody List<EdgeWrapper> edges) {
         hierarchyService.updateSuccessors(edges);
         return edges;
     }
