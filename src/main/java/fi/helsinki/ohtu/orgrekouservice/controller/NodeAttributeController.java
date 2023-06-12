@@ -122,12 +122,13 @@ public class NodeAttributeController {
     @GetMapping("/{id}/attributes/others/hierarchies/{hierarchies}")
     public ResponseEntity<List<OtherAttributeDTO>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
         try {
+            Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
             List<Attribute> otherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
             String selected = String.join(",", selectedHierarchies);
             List<String> attributeKeys = nodeAttributeService.getAttributeKeys(selected);
             String attributeKeysString = String.join(",", attributeKeys);
             Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = hierarchyService.getUniqueHierarchyFilters(attributeKeysString);
-            List<OtherAttributeDTO> otherAttributeList = nodeAttributeService.updateOtherNodeAttributes(otherAttributes, uniqueHierarchyFiltersMap);
+            List<OtherAttributeDTO> otherAttributeList = nodeAttributeService.updateOtherNodeAttributes(node.getId(), otherAttributes, uniqueHierarchyFiltersMap);
             return new ResponseEntity<>(
                     otherAttributeList,
                     HttpStatus.OK
