@@ -42,4 +42,61 @@ public class SectionAttributeService {
             throw new RuntimeException(e);
         }
     }
+
+    public SectionAttribute updateSectionAttribute(SectionAttribute sectionAttribute) {
+        try {
+            String insertNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/update";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(sectionAttribute, headers);
+            ResponseEntity response = restTemplate.exchange(insertNodePropertiesUrl, HttpMethod.PUT,  requestEntity, SectionAttribute.class);
+            return (SectionAttribute) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SectionAttribute insertSectionAttribute(SectionAttribute sectionAttribute) {
+        try {
+            String insertNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/insert";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(sectionAttribute, headers);
+            ResponseEntity response = restTemplate.exchange(insertNodePropertiesUrl, HttpMethod.POST,  requestEntity, SectionAttribute.class);
+            return (SectionAttribute) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public HttpStatus deleteSectionAttribute(int sectionId) {
+        try {
+            String deleteNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/delete";
+            ResponseEntity response = restTemplate.exchange(deleteNodePropertiesUrl, HttpMethod.DELETE,  null, ResponseEntity.class);
+            return response.getStatusCode();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SectionAttribute getSectionAttributeById(int sectionId) {
+        try {
+            String getSectionAttributeUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/get";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(getSectionAttributeUrl, headers);
+            ResponseEntity response = restTemplate.exchange(getSectionAttributeUrl, HttpMethod.GET,  requestEntity, SectionAttribute.class);
+            return  (SectionAttribute) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SectionAttribute updateSectionAttributeInfo(SectionAttribute foundSectionAttribute, SectionAttribute sectionAttribute) {
+        SectionAttribute updatedSectionAttribute = new SectionAttribute();
+        updatedSectionAttribute.setId(foundSectionAttribute.getId());
+        updatedSectionAttribute.setSection(sectionAttribute.getSection());
+        updatedSectionAttribute.setAttr(sectionAttribute.getAttr());
+        return updatedSectionAttribute;
+    }
 }

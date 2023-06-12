@@ -8,6 +8,18 @@ import java.util.List;
 
 public class OtherAttributeDTO {
 
+    public static void fromAttribute(OtherAttributeDTO destination, Attribute attribute) {
+        destination.setId(attribute.getId());
+        destination.setKey(attribute.getKey());
+        destination.setStartDate(attribute.getStartDate());
+        destination.setEndDate(attribute.getEndDate());
+        destination.setDeleted(attribute.isDeleted());
+        destination.setNodeId(attribute.getNodeId());
+        destination.setNew(attribute.isNew());
+        destination.setValue(attribute.getValue());
+        destination.setType("text");
+    }
+
     private Integer id;
     private String nodeId;
     private String key;

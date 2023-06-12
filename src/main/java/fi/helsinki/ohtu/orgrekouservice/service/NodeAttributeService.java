@@ -3,7 +3,6 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
 import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.print.DocFlavor;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -151,27 +148,30 @@ public class NodeAttributeService {
         }
     }
 
-    public List<OtherAttributeDTO> updateOtherNodeAttributes(List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
+    public List<OtherAttributeDTO> updateOtherNodeAttributes(String nodeId, List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
         List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
-        for (Attribute otherNodeAttribute : otherNodeAttributes) {
+        Set<String> attributeKeys = otherNodeAttributes.stream().map(Attribute::getKey).collect(Collectors.toSet());
+        for (String key : uniqueHierarchyFilterMap.keySet()) {
             OtherAttributeDTO otherAttributeDTO = new OtherAttributeDTO();
-            otherAttributeDTO.setId(otherNodeAttribute.getId());
-            otherAttributeDTO.setKey(otherNodeAttribute.getKey());
-            otherAttributeDTO.setStartDate(otherNodeAttribute.getStartDate());
-            otherAttributeDTO.setEndDate(otherNodeAttribute.getEndDate());
-            otherAttributeDTO.setDeleted(otherNodeAttribute.isDeleted());
-            otherAttributeDTO.setNodeId(otherNodeAttribute.getNodeId());
-            otherAttributeDTO.setNew(otherAttributeDTO.isNew());
-            otherAttributeDTO.setValue(otherNodeAttribute.getValue());
-            otherAttributeDTO.setType("text");
-            for (Map.Entry<String, List<HierarchyFilter>> uniqueFilterMapEntry : uniqueHierarchyFilterMap.entrySet()) {
-                if (otherNodeAttribute.getKey().equals(uniqueFilterMapEntry.getKey())) {
-                    List<String> values = uniqueFilterMapEntry.getValue().stream().filter(entry -> entry.getValue() != null).map(HierarchyFilter::getValue).collect(Collectors.toList());
-                    if (values != null && values.size() > 0) {
-                        otherAttributeDTO.setOptionValues(values);
-                        otherAttributeDTO.setType("options");
-                    }
-                }
+            if (!attributeKeys.contains(key)) {
+                otherAttributeDTO.setId((int) -Math.ceil(Math.random() * 1000));
+                otherAttributeDTO.setKey(key);
+                otherAttributeDTO.setValue(null);
+                otherAttributeDTO.setNodeId(nodeId);
+                otherAttributeDTO.setNew(true);
+                otherAttributeDTO.setDeleted(false);
+                otherAttributeDTO.setType("text");
+            } else {
+                List<Attribute> found = otherNodeAttributes.stream().filter(a -> a.getKey().equals(key)).collect(Collectors.toList());
+                Attribute existingAttribute = found.get(0);
+                OtherAttributeDTO.fromAttribute(otherAttributeDTO, existingAttribute);
+            }
+
+            List<HierarchyFilter> hierarchyFilters = uniqueHierarchyFilterMap.get(key);
+            if (hierarchyFilters != null && !hierarchyFilters.isEmpty()) {
+                List<String> optionValues = hierarchyFilters.stream().map(HierarchyFilter::getValue).collect(Collectors.toList());
+                otherAttributeDTO.setOptionValues(optionValues);
+                otherAttributeDTO.setType("options");
             }
             otherAttributeList.add(otherAttributeDTO);
         }
@@ -181,7 +181,7 @@ public class NodeAttributeService {
     public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String nodeAttributeKeysUrl = dbUrl + Constants.NODE_HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
+        String nodeAttributeKeysUrl = dbUrl + Constants.HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
         HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributeKeysUrl, headers);
         ResponseEntity<String[]> response = restTemplate.exchange(nodeAttributeKeysUrl, HttpMethod.GET,  requestEntity, String[].class);
         return List.of(response.getBody());
