@@ -45,10 +45,9 @@ public class EdgeService {
         User loggedUser = getUser(user);
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
-        List<String> types = List.of(response);
-        List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(types, loggedUser);
-
-        return filteredHierarchyTypes;
+        List<String> hierarchyTypes = List.of(response);
+        //List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(hierarchyTypes, loggedUser);
+        return hierarchyTypes;
     }
     public List<String> getHierarchyTypes() {
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
