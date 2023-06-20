@@ -7,11 +7,13 @@ public class HierarchyDTO {
     private String hierarchy;
     private Date startDate;
     private Date endDate;
+    private Integer edgeId;
 
     public HierarchyDTO(Relative relative) {
         this.hierarchy = relative.getHierarchy();
         this.startDate = relative.getEdgeStartDate();
         this.endDate = relative.getEdgeEndDate();
+        this.setEdgeId(relative.getEdgeId());
     }
 
     public String getHierarchy() {
@@ -38,4 +40,11 @@ public class HierarchyDTO {
         this.endDate = endDate;
     }
 
+    public Integer getEdgeId() {
+        return edgeId;
+    }
+
+    public void setEdgeId(Integer edgeId) {
+        this.edgeId = edgeId;
+    }
 }

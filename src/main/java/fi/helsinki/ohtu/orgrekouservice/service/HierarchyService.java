@@ -4,13 +4,20 @@ import fi.helsinki.ohtu.orgrekouservice.domain.*;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class HierarchyService {
@@ -38,10 +45,10 @@ public class HierarchyService {
         return hierarchyFilters;
     }
     public Node[] getParentNodesByIdAndDate(String nodeId, String date, int time) {
-       String timeParameter = "";
+        String timeParameter = "";
         if(time == 0){
             timeParameter = historyParameter;
-       }else if(time == 1){
+        }else if(time == 1){
             timeParameter = futureParameter;
         }
         String parentNodesResourceUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + timeParameter +  nodeId + "/" + date;
@@ -171,7 +178,7 @@ public class HierarchyService {
     }
 
     public List<NodeWrapper> filterOnlyHistoryAndCurrentNodes(List<NodeWrapper> nodeWrapperList, String date) throws ParseException {
-       List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
+        List<NodeWrapper> onlyHistoryAndCurrentNodes = new ArrayList<>();
         Map<String, Node> validHistoryAndCurrentNodes = new HashMap<String, Node>();
         Node node;
         for (NodeWrapper wrapper : nodeWrapperList) {
@@ -337,4 +344,131 @@ public class HierarchyService {
         List<Relative> children = List.of(response.getBody());
         return children;
     }
+
+    public List<RelationDTO> mergeRelativeMaps(Map<String, List<RelativeDTO>> relativeMaps) {
+        List<RelationDTO> relativeList = new ArrayList<>();
+        if (relativeMaps != null) {
+            relativeMaps.values().forEach(relativeDTOList -> {
+                relativeDTOList.forEach(relativeDTO -> {
+                    RelationDTO foundRelative = relativeList.stream()
+                            .filter(relative -> relativeDTO.getUniqueId().equals(relative.getUniqueId()))
+                            .findAny()
+                            .orElse(null);
+                    if (foundRelative != null) {
+                        updateRelation(relativeDTO , foundRelative);
+                    } else {
+                        addNewRelation(relativeList, relativeDTO);
+                    }
+                });
+            });
+        }
+        return relativeList;
+    }
+
+    private static void updateRelation(RelativeDTO relativeDTO, RelationDTO foundRelative) {
+        List<FullNameDTO> fullNames = foundRelative.getFullNames();
+        addFullName(fullNames, relativeDTO);
+        foundRelative.setFullNames(fullNames);
+    }
+
+    private static void addNewRelation(List<RelationDTO> relativeList, RelativeDTO relativeDTO) {
+        RelationDTO relationDTO = new RelationDTO();
+        relationDTO.setId(relativeDTO.getId());
+        relationDTO.setUniqueId(relativeDTO.getUniqueId());
+        relationDTO.setHierarchies(relativeDTO.getHierarchies());
+        List<FullNameDTO> emptyFullNameList = new ArrayList<>();
+        List<FullNameDTO> fullNames = addFullName(emptyFullNameList, relativeDTO);
+        relationDTO.setFullNames(fullNames);
+        relativeList.add(relationDTO);
+    }
+
+    private static List<FullNameDTO> addFullName(List<FullNameDTO> fullNames, RelativeDTO relativeDTO) {
+        FullNameDTO fullNameDTO = new FullNameDTO();
+        fullNameDTO.setName(relativeDTO.getFullName());
+        fullNameDTO.setLanguage(relativeDTO.getLanguage());
+        fullNames.add(fullNameDTO);
+        return fullNames;
+    }
+
+    private List<EdgeWrapper> sanitizeEdges(List<EdgeWrapper> edges) {
+        return edges.stream().filter(edge -> !(edge.isDeleted() && edge.isNew())).collect(Collectors.toList());
+    }
+
+    private Map<String, List<EdgeWrapper>> groupEdges(List<EdgeWrapper> edges) {
+        Map<String, List<EdgeWrapper>> container = new HashMap<>();
+        List<EdgeWrapper> newEdges = new ArrayList<>();
+        List<EdgeWrapper> deletedEdges = new ArrayList<>();
+        List<EdgeWrapper> updatedEdges = new ArrayList<>();
+        for (EdgeWrapper edge : edges) {
+            if (edge.isNew()) {
+                newEdges.add(edge);
+            } else if (edge.isDeleted()) {
+                deletedEdges.add(edge);
+            } else {
+                updatedEdges.add(edge);
+            }
+        }
+        container.put(Constants.NEW_EDGES, newEdges);
+        container.put(Constants.DELETED_EDGES, deletedEdges);
+        container.put(Constants.UPDATED_EDGES, updatedEdges);
+        return container;
+    }
+
+    public List<EdgeWrapper> updateSuccessors(List<EdgeWrapper> successors) {
+        List<EdgeWrapper> sanitized = sanitizeEdges(successors);
+        Map<String, List<EdgeWrapper>> stateGroupedEdges = groupEdges(sanitized);
+        String edgeURL = dbUrl + Constants.EDGE_PATH + "/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity(stateGroupedEdges, headers);
+        ResponseEntity<Map> a = restTemplate.exchange(edgeURL, HttpMethod.PUT,  requestEntity, Map.class);
+        return successors;
+    }
+
+    public Map<String, List<HierarchyFilter>> convertListToMap(List<HierarchyFilter> hierarchyFilters) {
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = hierarchyFilters.stream()
+                .collect(groupingBy(HierarchyFilter::getKey));
+        return hierarchyFilterMap;
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
+    private Map<String, List<HierarchyFilter>> uniqueHierarchyFilters(Map<String, List<HierarchyFilter>> hierarchyFilterMap) {
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap = new HashMap<>();
+        for (Map.Entry<String, List<HierarchyFilter>> hierarchyFilter : hierarchyFilterMap.entrySet()) {
+            List<HierarchyFilter> uniqueHierarchyFilterList = hierarchyFilter.getValue().stream()
+                    .filter(h -> Objects.nonNull(h.getValue()))
+                    .filter(distinctByKey(h -> h.getValue()))
+                    .collect(Collectors.toList());
+            uniqueHierarchyFilterMap.put(hierarchyFilter.getKey(), uniqueHierarchyFilterList);
+        }
+        return uniqueHierarchyFilterMap;
+    };
+
+    public Map<String, List<HierarchyFilter>> getUniqueHierarchyFilters(String attributeKeysString) {
+        List<HierarchyFilter> hierarchyFilters = !attributeKeysString.isEmpty() ? getHierarchyFiltersByKeys(attributeKeysString) : new ArrayList<>();
+        Map<String, List<HierarchyFilter>> hierarchyFilterMap = convertListToMap(hierarchyFilters);
+        Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = uniqueHierarchyFilters(hierarchyFilterMap);
+        return uniqueHierarchyFiltersMap;
+    }
+
+    public List<HierarchyFilter> getHierarchyFiltersByKeys(String keys) throws RestClientException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String hierarchyFiltersByKey = dbUrl + Constants.HIERARCHY_FILTER_PATH + "/hierarchyFiltersByKey/" + keys;
+            HttpEntity<Object> requestEntity = new HttpEntity(hierarchyFiltersByKey, headers);
+            ResponseEntity<HierarchyFilter[]> response = restTemplate.exchange(hierarchyFiltersByKey, HttpMethod.GET,  requestEntity, HierarchyFilter[].class);
+            return List.of(response.getBody());
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

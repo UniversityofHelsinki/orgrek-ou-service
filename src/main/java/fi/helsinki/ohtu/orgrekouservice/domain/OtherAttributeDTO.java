@@ -1,11 +1,24 @@
 package fi.helsinki.ohtu.orgrekouservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.List;
 
+public class OtherAttributeDTO {
 
-public class Attribute {
+    public static void fromAttribute(OtherAttributeDTO destination, Attribute attribute) {
+        destination.setId(attribute.getId());
+        destination.setKey(attribute.getKey());
+        destination.setStartDate(attribute.getStartDate());
+        destination.setEndDate(attribute.getEndDate());
+        destination.setDeleted(attribute.isDeleted());
+        destination.setNodeId(attribute.getNodeId());
+        destination.setNew(attribute.isNew());
+        destination.setValue(attribute.getValue());
+        destination.setType("text");
+    }
 
     private Integer id;
     private String nodeId;
@@ -14,25 +27,26 @@ public class Attribute {
     private Date startDate;
     private Date endDate;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> optionValues;
+
     private boolean isNew;
 
     private boolean deleted;
 
+    private String type;
 
-    public Attribute() {
+
+    public OtherAttributeDTO() {
     }
 
-    public Attribute(Integer id, String nodeId, String key, String value, Date startDate, Date endDate, boolean isNew, boolean deleted) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
-        this.nodeId = nodeId;
-        this.key = key;
-        this.value = value;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isNew = isNew;
-        this.deleted = deleted;
     }
-
 
     public String getNodeId() {
         return nodeId;
@@ -74,17 +88,17 @@ public class Attribute {
         this.endDate = endDate;
     }
 
-    public Integer getId() {
-        return id;
+    public List<String> getOptionValues() {
+        return optionValues;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOptionValues(List<String> optionValues) {
+        this.optionValues = optionValues;
     }
 
     @JsonProperty("isNew")
     public boolean isNew() {
-        return isNew;
+        return this.isNew;
     }
 
     public void setNew(boolean aNew) {
@@ -99,21 +113,11 @@ public class Attribute {
         this.deleted = deleted;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        if (!(o instanceof Attribute)) {
-            return false;
-        }
-        Attribute oa = (Attribute) o;
-        if (this.id != null && oa.id != null && this.id == oa.id) {
-            return true;
-        } else if (this.id == null && oa.id == null) {
-            return this.getKey().equals(oa.getKey()) &&
-                    this.getValue().equals(oa.getValue());
-        }
-        return false;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

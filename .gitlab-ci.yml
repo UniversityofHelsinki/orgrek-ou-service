@@ -1,13 +1,11 @@
-image: frolvlad/alpine-glibc
+image: quay.io/tike/alpine-oc-java-11
 
-before_script:
-  - apk update && apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python3 curl tar
-  - apk --no-cache add openjdk11 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-  - apk add maven
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
 cache:
   paths:
-    - .m2/repository/
+    - .m2/repository
 
 # Define the stages
 stages:
@@ -21,21 +19,21 @@ stages:
 test :
   stage: test
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   script:
     - mvn test
     - cat target/site/jacoco/index.html | grep -o 'Total[^%]*%'
   coverage: "/Total.*?([0-9]{1,3})%/"
   artifacts:
     paths:
-      - target/site/jacoco/jacoco.xml
-    expire_in: 1 mos
+      - target/site/jacoco
+    expire_in: 1 week
 
 
 build :
   stage: build
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   script:
     - java -version
     - mvn install
@@ -49,7 +47,7 @@ build :
 deploy_dev:
   stage: deploy
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   environment:
     name: development
   only:
@@ -57,8 +55,8 @@ deploy_dev:
   except:
     - schedules
   script:
-    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
-    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # set home path for openshift 1001 user
+    - export HOME=/home/1001
     # before any action, I connect to the OpenShift server with the appropriate credentials
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST
     - oc project organisaatiorekisteri
@@ -71,18 +69,21 @@ deploy_dev:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-dev --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-dev --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-dev --limits=memory=500Mi --requests=memory=200Mi
+
 
 deploy_test:
   stage: deploy
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   environment:
     name: test
   only:
     - test
   script:
-    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
-    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # set home path for openshift 1001 user
+    - export HOME=/home/1001
     # before any action, I connect to the OpenShift server with the appropriate credentials
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST
     - oc project organisaatiorekisteri
@@ -95,19 +96,21 @@ deploy_test:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-test --limits=memory=500Mi --requests=memory=200Mi
 
 deploy_prod:
   stage: deploy
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   environment:
     name: prod
   only:
     - prod
   when: manual
   script:
-    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
-    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
+    # set home path for openshift 1001 user
+    - export HOME=/home/1001
     # before any action, I connect to the OpenShift server with the appropriate credentials
     - oc login https://$OPENSHIFT_ADDR_PROD:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_PROD
     - oc project organisaatiorekisteri
@@ -120,40 +123,14 @@ deploy_prod:
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-prod --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
-
-
-  # Define the process for deploy stage to new database development environment
-deploy_organisation_dev:
-  stage: deploy
-  tags:
-    - ohtu-build-1
-  environment:
-    name: development
-  only:
-    - organisation-dev
-  except:
-    - schedules
-  script:
-    - curl -fsSLO --compressed "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz";
-    - tar xvzf openshift-client-linux.tar.gz -C /usr/local/bin
-    # before any action, I connect to the OpenShift server with the appropriate credentials
-    - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST
-    - oc project organisaatiorekisteri
-    # list environment variables here
-    - oc set env dc/organisation-ou-service-dev URL=$DB_POD_URL_ORGANISATION_DEV
-    - oc set env dc/organisation-ou-service-dev PORT=$OU_SERVICE_PORT
-    - oc set env dc/organisation-ou-service-dev TZ="Europe/Helsinki"
-    # start build process
-    - oc start-build organisation-ou-service-dev --from-dir=. --follow
-    # patch build config
-    - oc patch bc/organisation-ou-service-dev --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
-    - oc patch bc/organisation-ou-service-dev --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
+    # set pod memory quota to 200 MB and limit to 500 MB
+    - oc set resources dc/organisaatiorekisteri-ou-service-prod --limits=memory=500Mi --requests=memory=200Mi
 
 # Rules for the scheduled npm audit and outdated scans
 dependency scanning:
   stage: audit_scan
   tags:
-    - ohtu-build-1
+    - ohtu-build-3
   allow_failure: true
   only:
     - schedules
