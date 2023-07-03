@@ -39,8 +39,8 @@ public class EdgeAttributeServiceTest {
         Map<String, List<Edge>> map =  edgeService.extractEdgesToMap(edgeWrapperList);
 
         assertEquals(true, !map.entrySet().isEmpty());
-        assertEquals(1, map.get(Constants.NEW_ATTRIBUTES).size());
-        assertEquals(1, map.get(Constants.UPDATED_ATTRIBUTES).size());
-        assertEquals(1, map.get(Constants.DELETED_ATTRIBUTES).size());
+        assertEquals(1, map.get(Constants.NEW_EDGES).size());
+        assertEquals(1, map.get(Constants.UPDATED_EDGES).size());
+        assertEquals(1, map.get(Constants.DELETED_EDGES).size());
     }
 }
