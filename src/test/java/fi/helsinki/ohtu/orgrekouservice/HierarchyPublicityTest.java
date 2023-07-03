@@ -32,6 +32,19 @@ public class HierarchyPublicityTest {
         assertEquals("opetus", hierarchyList.get(2));
     }
 
+    @Test
+    public void testUserWithAdminRoleShouldReturnAllHierarchies() {
+        User adminUser = getRoleAdminUser();
+        List<HierarchyPublicity> hierarchyPublicityList = initializeHierarchyList();
+        List<String> hierarchyList =  hierarchyPublicityService.hierarchyTypes(adminUser, hierarchyPublicityList);
+        assertEquals(5, hierarchyList.size());
+        assertEquals("talous", hierarchyList.get(0));
+        assertEquals("tutkimus", hierarchyList.get(1));
+        assertEquals("opetus", hierarchyList.get(2));
+        assertEquals("toiminnanohjaus", hierarchyList.get(3));
+        assertEquals("johto", hierarchyList.get(4));
+    }
+
     private static List<HierarchyPublicity> initializeHierarchyList() {
         List<HierarchyPublicity> hierarchies = new ArrayList<>();
         HierarchyPublicity publishedHierarchy1 = new HierarchyPublicity();
@@ -68,6 +81,16 @@ public class HierarchyPublicityTest {
         testUser.setDisplayName("test");
         testUser.setHyGroupCn("");
         testUser.setRoles(Collections.singletonList("ROLE_READER"));
+        testUser.setPreferredLanguage("fi");
+        return testUser;
+    }
+
+    private static User getRoleAdminUser() {
+        User testUser = new User();
+        testUser.setEppn("test");
+        testUser.setDisplayName("test");
+        testUser.setHyGroupCn("grp-orgrek-role-admin");
+        testUser.setRoles(Collections.singletonList("ROLE_ADMIN"));
         testUser.setPreferredLanguage("fi");
         return testUser;
     }
