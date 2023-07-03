@@ -39,7 +39,7 @@ public class HierarchyPublicityService {
         return hierarchyTypes(loggedUser, hierarchyPublicityList);
     }
 
-    private static List<String> hierarchyTypes(User loggedUser, List<HierarchyPublicity> hierarchyPublicityList) {
+    public static List<String> hierarchyTypes(User loggedUser, List<HierarchyPublicity> hierarchyPublicityList) {
         List<String> hierarchyTypes = new ArrayList<>();
         for (HierarchyPublicity hierarchyPublicity :hierarchyPublicityList) {
             if (loggedUser.getRoles().stream().anyMatch(role -> Constants.MAPPED_ROLES.contains(role))) {
