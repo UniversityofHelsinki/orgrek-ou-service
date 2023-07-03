@@ -31,7 +31,6 @@ public class HierarchyPublicityService {
     public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
         User loggedUser = getUser(user);
         String getHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/all";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Object> requestEntity = new HttpEntity<>(getHierarchyPublicityUrl,headers);
