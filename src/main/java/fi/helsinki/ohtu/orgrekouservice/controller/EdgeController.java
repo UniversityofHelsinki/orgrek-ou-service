@@ -34,10 +34,10 @@ public class EdgeController {
     }
 
     @PutMapping("/parents")
-    public ResponseEntity updateNameAttributes(@RequestBody List<EdgeWrapper> attributes) {
+    public ResponseEntity updateParents(@RequestBody List<EdgeWrapper> attributes) {
         try {
             List<EdgeWrapper> sanitizedAttributes = edgeService.sanitizeAttributes(attributes);
-            ResponseEntity response = edgeAttributeValidationService.validateEdgeAttributes(sanitizedAttributes);
+            ResponseEntity response = edgeAttributeValidationService.validateEdges(sanitizedAttributes);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 edgeService.updateParents(sanitizedAttributes);
                 return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
