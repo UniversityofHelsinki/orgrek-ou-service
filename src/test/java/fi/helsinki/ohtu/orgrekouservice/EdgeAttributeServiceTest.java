@@ -36,7 +36,7 @@ public class EdgeAttributeServiceTest {
 
         edgeWrapperList.add(edgeWrapperToBeDeleted);
 
-        Map<String, List<Edge>> map =  edgeService.extractAttributesToMap(edgeWrapperList);
+        Map<String, List<Edge>> map =  edgeService.extractEdgesToMap(edgeWrapperList);
 
         assertEquals(true, !map.entrySet().isEmpty());
         assertEquals(1, map.get(Constants.NEW_ATTRIBUTES).size());

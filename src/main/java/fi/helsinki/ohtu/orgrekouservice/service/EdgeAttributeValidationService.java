@@ -21,17 +21,17 @@ public class EdgeAttributeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(EdgeAttributeValidationService.class);
 
-    public ResponseEntity validateEdgeAttributes(List<EdgeWrapper> nodeAttributes) {
+    public ResponseEntity validateEdges(List<EdgeWrapper> nodeAttributes) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
-        for (EdgeWrapper nodeAttribute : nodeAttributes) {
-            if (!nodeAttribute.isNew()) {
-                validateId(errorMessages, nodeAttribute);
+        for (EdgeWrapper edgeWrapper : nodeAttributes) {
+            if (!edgeWrapper.isNew()) {
+                validateId(errorMessages, edgeWrapper);
             }
-            validateChildUniqueId(errorMessages, nodeAttribute);
-            validateParentNodeId(errorMessages, nodeAttribute);
-            validateHierarchy(errorMessages, nodeAttribute);
-            validateStartDate(errorMessages, nodeAttribute);
-            validateDates(errorMessages, nodeAttribute);
+            validateChildUniqueId(errorMessages, edgeWrapper);
+            validateParentNodeId(errorMessages, edgeWrapper);
+            validateHierarchy(errorMessages, edgeWrapper);
+            validateStartDate(errorMessages, edgeWrapper);
+            validateDates(errorMessages, edgeWrapper);
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -39,36 +39,36 @@ public class EdgeAttributeValidationService {
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     }
 
-    private void validateId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate(nodeAttribute.getId() == null, nodeAttribute, Constants.ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateId(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate(edgeWrapper.getId() == null, edgeWrapper, Constants.ATTRIBUTE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateChildUniqueId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getChildUniqueId() % 1 != 0 || nodeAttribute.getChildUniqueId() < 0), nodeAttribute, Constants.ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateChildUniqueId(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate((edgeWrapper.getChildUniqueId() % 1 != 0 || edgeWrapper.getChildUniqueId() < 0), edgeWrapper, Constants.ATTRIBUTE_CHILD_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateParentNodeId(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getParentUniqueId()  % 1 != 0 || nodeAttribute.getParentUniqueId() < 0), nodeAttribute, Constants.ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateParentNodeId(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate((edgeWrapper.getParentUniqueId()  % 1 != 0 || edgeWrapper.getParentUniqueId() < 0), edgeWrapper, Constants.ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateHierarchy(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getHierarchy() == null || nodeAttribute.getHierarchy().isEmpty()), nodeAttribute, Constants.ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateHierarchy(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate((edgeWrapper.getHierarchy() == null || edgeWrapper.getHierarchy().isEmpty()), edgeWrapper, Constants.ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private void validateStartDate(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
-        validate((nodeAttribute.getStartDate() == null && !nodeAttribute.isDeleted()), nodeAttribute, Constants.ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY, errorMessages);
+    private void validateStartDate(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate((edgeWrapper.getStartDate() == null && !edgeWrapper.isDeleted()), edgeWrapper, Constants.ATTRIBUTE_START_DATE_VALIDATION_MESSAGE_KEY, errorMessages);
     };
 
-    private static void validate(boolean notValid, EdgeWrapper nodeAttribute, String attributeValidationMessageKey, List<EdgeValidationDTO> errorMessages) {
+    private static void validate(boolean notValid, EdgeWrapper edgeWrapper, String attributeValidationMessageKey, List<EdgeValidationDTO> errorMessages) {
         EdgeValidationDTO attributeValidationDTO = new EdgeValidationDTO();
         if (notValid) {
-            if (nodeAttribute.getId() != null && nodeAttribute.getParentUniqueId() != null && nodeAttribute.getChildUniqueId() % 1 == 0) {
-                attributeValidationDTO.setId(nodeAttribute.getId());
-                attributeValidationDTO.setParentUniqueId(nodeAttribute.getParentUniqueId());
-                attributeValidationDTO.setChildUniqueId(nodeAttribute.getChildUniqueId());
+            if (edgeWrapper.getId() != null && edgeWrapper.getParentUniqueId() != null && edgeWrapper.getChildUniqueId() % 1 == 0) {
+                attributeValidationDTO.setId(edgeWrapper.getId());
+                attributeValidationDTO.setParentUniqueId(edgeWrapper.getParentUniqueId());
+                attributeValidationDTO.setChildUniqueId(edgeWrapper.getChildUniqueId());
                 attributeValidationDTO.setErrorMessage(attributeValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
-                logger.error("Validation failed for attribute: " + nodeAttribute.getId() + " message : " + attributeValidationMessageKey);
+                logger.error("Validation failed for attribute: " + edgeWrapper.getId() + " message : " + attributeValidationMessageKey);
             } else {
                 attributeValidationDTO.setErrorMessage(attributeValidationMessageKey);
                 errorMessages.add(attributeValidationDTO);
@@ -77,19 +77,19 @@ public class EdgeAttributeValidationService {
         }
     };
 
-    private void validateDates(List<EdgeValidationDTO> errorMessages, EdgeWrapper nodeAttribute) {
+    private void validateDates(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
         EdgeValidationDTO attributeValidationDTO = new EdgeValidationDTO();
-        if (nodeAttribute.getStartDate() != null && nodeAttribute.getEndDate() != null) {
-            LocalDate convertedEndDate = convertToLocalDate(nodeAttribute.getEndDate());
+        if (edgeWrapper.getStartDate() != null && edgeWrapper.getEndDate() != null) {
+            LocalDate convertedEndDate = convertToLocalDate(edgeWrapper.getEndDate());
             convertedEndDate = convertedEndDate.minusDays(1);
             Date convertedDate = convertToDateViaInstant(convertedEndDate);
-            if (nodeAttribute.getStartDate().after(convertedDate)) {
-                attributeValidationDTO.setId(nodeAttribute.getId());
-                attributeValidationDTO.setParentUniqueId(nodeAttribute.getParentUniqueId());
-                attributeValidationDTO.setChildUniqueId(nodeAttribute.getChildUniqueId());
+            if (edgeWrapper.getStartDate().after(convertedDate)) {
+                attributeValidationDTO.setId(edgeWrapper.getId());
+                attributeValidationDTO.setParentUniqueId(edgeWrapper.getParentUniqueId());
+                attributeValidationDTO.setChildUniqueId(edgeWrapper.getChildUniqueId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
                 errorMessages.add(attributeValidationDTO);
-                logger.error("Validation failed for attribute: " + nodeAttribute.getId() + " message : " + Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
+                logger.error("Validation failed for attribute: " + edgeWrapper.getId() + " message : " + Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
             }
         }
     };
