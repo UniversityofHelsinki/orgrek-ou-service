@@ -35,8 +35,13 @@ public class HierarchyPublicityService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Object> requestEntity = new HttpEntity<>(getHierarchyPublicityUrl,headers);
         ResponseEntity<HierarchyPublicity[]> response = restTemplate.exchange(getHierarchyPublicityUrl, HttpMethod.GET,  requestEntity, HierarchyPublicity[].class);
+        List<HierarchyPublicity> hierarchyPublicityList = List.of(Objects.requireNonNull(response.getBody()));
+        return hierarchyTypes(loggedUser, hierarchyPublicityList);
+    }
+
+    private static List<String> hierarchyTypes(User loggedUser, List<HierarchyPublicity> hierarchyPublicityList) {
         List<String> hierarchyTypes = new ArrayList<>();
-        for (HierarchyPublicity hierarchyPublicity :List.of(Objects.requireNonNull(response.getBody()))) {
+        for (HierarchyPublicity hierarchyPublicity :hierarchyPublicityList) {
             if (loggedUser.getRoles().stream().anyMatch(role -> Constants.MAPPED_ROLES.contains(role))) {
                 hierarchyTypes.add(hierarchyPublicity.getHierarchy());
             } else if (loggedUser.getRoles().stream().anyMatch(Constants.ROLE_READER::equalsIgnoreCase) && hierarchyPublicity.isPublicity()) {
