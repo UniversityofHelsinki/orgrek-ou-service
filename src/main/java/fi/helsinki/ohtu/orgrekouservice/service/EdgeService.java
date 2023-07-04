@@ -91,10 +91,10 @@ public class EdgeService {
             throw new RuntimeException(e);
         }
     }
-    public void updateParents(List<EdgeWrapper> nodeNameAttributes) {
+    public void updateEdges(List<EdgeWrapper> nodeNameAttributes, String path) {
         try {
             Map<String, List<Edge>> upperUnitsMap = extractEdgesToMap(nodeNameAttributes);
-            String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + "/parents";
+            String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + path;
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity(upperUnitsMap, headers);
