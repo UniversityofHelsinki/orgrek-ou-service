@@ -2,7 +2,6 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
 import fi.helsinki.ohtu.orgrekouservice.domain.User;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
@@ -14,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class HierarchyPublicityService {
@@ -39,9 +39,18 @@ public class HierarchyPublicityService {
         return hierarchyTypes(loggedUser, hierarchyPublicityList);
     }
 
+    private static List<HierarchyPublicity> filterHistoryHierarchy(List<HierarchyPublicity> hierarchyPublicityList) {
+        List<HierarchyPublicity> filteredHierarchyPublicityList = hierarchyPublicityList
+                .stream()
+                .filter(hierarchyPublicity -> !hierarchyPublicity.getHierarchy().equalsIgnoreCase(Constants.HISTORY))
+                .collect(Collectors.toList());
+        return filteredHierarchyPublicityList;
+    }
+
     public static List<String> hierarchyTypes(User loggedUser, List<HierarchyPublicity> hierarchyPublicityList) {
         List<String> hierarchyTypes = new ArrayList<>();
-        for (HierarchyPublicity hierarchyPublicity :hierarchyPublicityList) {
+        List<HierarchyPublicity> filteredHierarchyPublicityList = filterHistoryHierarchy(hierarchyPublicityList);
+        for (HierarchyPublicity hierarchyPublicity :filteredHierarchyPublicityList) {
             if (loggedUser.getRoles().stream().anyMatch(role -> Constants.MAPPED_ROLES.contains(role))) {
                 hierarchyTypes.add(hierarchyPublicity.getHierarchy());
             } else if (loggedUser.getRoles().stream().anyMatch(Constants.ROLE_READER::equalsIgnoreCase) && hierarchyPublicity.isPublicity()) {
