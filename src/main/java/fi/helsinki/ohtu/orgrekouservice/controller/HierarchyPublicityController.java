@@ -12,13 +12,13 @@ import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
-@RequestMapping("/api/hierarchyTypes")
+@RequestMapping("/api/hierarchy")
 public class HierarchyPublicityController {
 
     @Autowired
     private HierarchyPublicityService hierarchyPublicityService;
 
-    @RequestMapping(method = GET, value = "/all", headers = "user", produces = "application/json")
+    @RequestMapping(method = GET, value = "/types", headers = "user", produces = "application/json")
     public List<String> getHierarchyTypes(@RequestHeader String user) throws JsonProcessingException {
         return hierarchyPublicityService.getHierarchyTypesForUser(user);
     }
