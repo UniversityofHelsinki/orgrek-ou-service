@@ -33,7 +33,7 @@ public class HierarchyPublicityTest {
     }
 
     @Test
-    public void testUserWithAdminRoleShouldReturnAllHierarchies() {
+    public void testUserWithAdminRoleShouldReturnAllHierarchiesExceptHistory() {
         User adminUser = getRoleAdminUser();
         List<HierarchyPublicity> hierarchyPublicityList = initializeHierarchyList();
         List<String> hierarchyList =  hierarchyPublicityService.hierarchyTypes(adminUser, hierarchyPublicityList);
@@ -72,6 +72,11 @@ public class HierarchyPublicityTest {
         unPublishedHierarchy2.setHierarchy("johto");
         unPublishedHierarchy2.setPublicity(false);
         hierarchies.add(unPublishedHierarchy2);
+        HierarchyPublicity unPublishedHierarchy3 = new HierarchyPublicity();
+        unPublishedHierarchy3.setId(6);
+        unPublishedHierarchy3.setHierarchy("history");
+        unPublishedHierarchy3.setPublicity(false);
+        hierarchies.add(unPublishedHierarchy3);
         return hierarchies;
     }
 
