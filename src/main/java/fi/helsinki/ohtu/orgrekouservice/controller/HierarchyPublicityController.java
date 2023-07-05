@@ -1,6 +1,7 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import fi.helsinki.ohtu.orgrekouservice.domain.EmptyJsonResponse;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyPublicityService;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyPublicityValidationService;
@@ -41,7 +42,7 @@ public class HierarchyPublicityController {
             ResponseEntity response = hierarchyPublicityValidationService.validateHierarchyPublicity(hierarchyPublicity, foundHierarchyPublicity);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 hierarchyPublicityService.update(hierarchyPublicity);
-                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+                return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);
             } else {
                 return new ResponseEntity(response.getBody(), response.getStatusCode());
             }
