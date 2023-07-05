@@ -30,12 +30,7 @@ public class HierarchyPublicityService {
 
     public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
         User loggedUser = getUser(user);
-        String getHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/all";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> requestEntity = new HttpEntity<>(getHierarchyPublicityUrl,headers);
-        ResponseEntity<HierarchyPublicity[]> response = restTemplate.exchange(getHierarchyPublicityUrl, HttpMethod.GET,  requestEntity, HierarchyPublicity[].class);
-        List<HierarchyPublicity> hierarchyPublicityList = List.of(Objects.requireNonNull(response.getBody()));
+        List<HierarchyPublicity> hierarchyPublicityList = getHierarchyPublicities();
         return hierarchyTypes(loggedUser, hierarchyPublicityList);
     }
 
@@ -58,5 +53,20 @@ public class HierarchyPublicityService {
             }
         }
         return hierarchyTypes;
+    }
+
+    public List<HierarchyPublicity> getHierarchyPublicityList() {
+        List<HierarchyPublicity> hierarchyPublicityList = getHierarchyPublicities();
+        return hierarchyPublicityList;
+    }
+
+    private List<HierarchyPublicity> getHierarchyPublicities() {
+        String getHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/all";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(getHierarchyPublicityUrl,headers);
+        ResponseEntity<HierarchyPublicity[]> response = restTemplate.exchange(getHierarchyPublicityUrl, HttpMethod.GET,  requestEntity, HierarchyPublicity[].class);
+        List<HierarchyPublicity> hierarchyPublicityList = List.of(Objects.requireNonNull(response.getBody()));
+        return hierarchyPublicityList;
     }
 }
