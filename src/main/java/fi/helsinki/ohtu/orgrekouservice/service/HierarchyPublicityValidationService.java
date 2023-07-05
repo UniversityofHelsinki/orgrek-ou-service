@@ -18,21 +18,28 @@ public class HierarchyPublicityValidationService {
 
     static Logger logger = LoggerFactory.getLogger(HierarchyPublicityValidationService.class);
 
-    public ResponseEntity validateHierarchyPublicity(HierarchyPublicity hierarchyPublicity) {
+    public ResponseEntity validateHierarchyPublicity(HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
         List<HierarchyPublicityValidationDTO> errorMessages = new ArrayList<>();
-        validatePublicity(errorMessages, hierarchyPublicity);
+        validatePublicity(errorMessages, hierarchyPublicity, foundHierarchyPublicity);
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     }
 
-    private void validatePublicity(List<HierarchyPublicityValidationDTO> errorMessages, HierarchyPublicity hierarchyPublicity) {
+    private void validatePublicity(List<HierarchyPublicityValidationDTO> errorMessages, HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
         HierarchyPublicityValidationDTO hierarchyPublicityValidationDTO = new HierarchyPublicityValidationDTO();
         if (hierarchyPublicity.getHierarchy().isEmpty()) {
+            hierarchyPublicityValidationDTO.setId(hierarchyPublicity.getId());
             hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_EMPTY);
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for hierarch publicity with id: " + hierarchyPublicity.getId() + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_EMPTY);
+        }
+        if (!hierarchyPublicity.getHierarchy().equalsIgnoreCase(foundHierarchyPublicity.getHierarchy())) {
+            hierarchyPublicityValidationDTO.setId(hierarchyPublicity.getId());
+            hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_NOT_MATCHING);
+            errorMessages.add(hierarchyPublicityValidationDTO);
+            logger.error("Validation failed for hierarch publicity with name: " + hierarchyPublicity.getHierarchy() + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_NOT_MATCHING);
         }
     };
 }

@@ -80,14 +80,6 @@ public class HierarchyPublicityService {
         return response.getBody();
     }
 
-    public HierarchyPublicity updateHierarchyPublicity(HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
-        HierarchyPublicity updatedHierarchyPublicity = foundHierarchyPublicity;
-        updatedHierarchyPublicity.setId(hierarchyPublicity.getId());
-        updatedHierarchyPublicity.setPublicity(hierarchyPublicity.isPublicity());
-        updatedHierarchyPublicity.setHierarchy(hierarchyPublicity.getHierarchy());
-        return updatedHierarchyPublicity;
-    }
-
     public HierarchyPublicity update(HierarchyPublicity updatedHierarchyPublicity) {
         try {
             String updateHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/update";

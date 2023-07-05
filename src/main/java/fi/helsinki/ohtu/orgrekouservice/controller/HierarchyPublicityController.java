@@ -38,10 +38,13 @@ public class HierarchyPublicityController {
     public ResponseEntity updatePublicity(@RequestBody HierarchyPublicity hierarchyPublicity) {
         try {
             HierarchyPublicity foundHierarchyPublicity = hierarchyPublicityService.getHierarchyTypeById(hierarchyPublicity.getId());
-            HierarchyPublicity updatedHierarchyPublicity = hierarchyPublicityService.updateHierarchyPublicity(hierarchyPublicity, foundHierarchyPublicity);
-            hierarchyPublicityValidationService.validateHierarchyPublicity(updatedHierarchyPublicity);
-            hierarchyPublicityService.update(updatedHierarchyPublicity);
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            ResponseEntity response = hierarchyPublicityValidationService.validateHierarchyPublicity(hierarchyPublicity, foundHierarchyPublicity);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                hierarchyPublicityService.update(hierarchyPublicity);
+                return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
