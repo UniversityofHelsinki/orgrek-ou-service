@@ -8,6 +8,7 @@ import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -68,5 +69,35 @@ public class HierarchyPublicityService {
         ResponseEntity<HierarchyPublicity[]> response = restTemplate.exchange(getHierarchyPublicityUrl, HttpMethod.GET,  requestEntity, HierarchyPublicity[].class);
         List<HierarchyPublicity> hierarchyPublicityList = List.of(Objects.requireNonNull(response.getBody()));
         return hierarchyPublicityList;
+    }
+
+    public HierarchyPublicity getHierarchyTypeById(int id) {
+        String getHierarchyPublicityByIdUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/" + id + "/properties";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(getHierarchyPublicityByIdUrl,headers);
+        ResponseEntity<HierarchyPublicity> response = restTemplate.exchange(getHierarchyPublicityByIdUrl, HttpMethod.GET,  requestEntity, HierarchyPublicity.class);
+        return response.getBody();
+    }
+
+    public HierarchyPublicity updateHierarchyPublicity(HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
+        HierarchyPublicity updatedHierarchyPublicity = foundHierarchyPublicity;
+        updatedHierarchyPublicity.setId(hierarchyPublicity.getId());
+        updatedHierarchyPublicity.setPublicity(hierarchyPublicity.isPublicity());
+        updatedHierarchyPublicity.setHierarchy(hierarchyPublicity.getHierarchy());
+        return updatedHierarchyPublicity;
+    }
+
+    public HierarchyPublicity update(HierarchyPublicity updatedHierarchyPublicity) {
+        try {
+            String updateHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/update";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity(updatedHierarchyPublicity, headers);
+            ResponseEntity response = restTemplate.exchange(updateHierarchyPublicityUrl, HttpMethod.PUT,  requestEntity, HierarchyPublicity.class);
+            return (HierarchyPublicity) response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
