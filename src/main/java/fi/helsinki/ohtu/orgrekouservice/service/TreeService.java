@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +27,10 @@ public class TreeService {
         return List.of(response.getBody());
     }
 
-    public List<TreeNode> getTreeNodes(String hierarchies, String date) {
+    public TreeNode[][] getTreeNodes(String hierarchies, String date) {
         String url = dbUrl + Constants.TREE_API_HIERARCHY + '/' + hierarchies + '/' + date;
-        ResponseEntity<TreeNode[]> response = restTemplate.getForEntity(url, TreeNode[].class);
-        return List.of(response.getBody());
+        ResponseEntity<TreeNode[][]> response = restTemplate.getForEntity(url, TreeNode[][].class);
+        return response.getBody();
     }
 
 }

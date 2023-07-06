@@ -14,6 +14,7 @@ public class TreeNode {
     private String parentName;
     private String childName;
     private String language;
+    private Boolean isRoot;
     private List<String> hierarchies;
 
     public Integer getParentNodeUniqueId() {
@@ -23,6 +24,7 @@ public class TreeNode {
     public void setParentNodeUniqueId(Integer parentNodeUniqueId) {
         this.parentNodeUniqueId = parentNodeUniqueId;
     }
+
 
     public Integer getChildNodeUniqueId() {
         return childNodeUniqueId;
@@ -95,4 +97,13 @@ public class TreeNode {
     public void setHierarchies(List<String> hierarchies) {
         this.hierarchies = hierarchies;
     }
+
+    public Boolean getIsRoot() {
+        return isRoot;
+    }
+
+    public void setIsRoot(Boolean isRoot) {
+        this.isRoot = isRoot;
+    }
+
 }

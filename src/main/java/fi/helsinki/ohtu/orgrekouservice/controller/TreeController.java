@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,15 +61,45 @@ public class TreeController {
         return node;
     }
 
+    private TreeNode findRoot(TreeNode[] nodes) {
+        for (TreeNode node : nodes) {
+            if (node.getIsRoot()) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private List<String> findRootNodeHierarchies(TreeNode[] nodes) {
+        TreeNode rootNode = findRoot(nodes);
+        Set<String> hierarchies = new HashSet<>();
+        for (TreeNode node : nodes) {
+            if (node.getParentNodeId().equals(rootNode.getParentNodeId())) {
+                hierarchies.addAll(node.getHierarchies());
+            }
+        }
+        return new ArrayList<>(hierarchies);
+    }
+
     @RequestMapping(method = GET, value = "/{hierarchyTypes}/{date}")
-    public Map<String, HierarchyNode> getTree(@PathVariable("hierarchyTypes") String hierarchyTypes, @PathVariable("date") String date) {
-        List<TreeNode> treeNodes = treeService.getTreeNodes(hierarchyTypes, date);
-        Map<String, List<TreeNode>> byParent = treeNodes.stream().collect(Collectors.groupingBy(TreeNode::getParentNodeId));
-        Map<String, HierarchyNode> byLanguage = new HashMap<>();
-        byLanguage.put("fi", asTree("a1", Arrays.asList(hierarchyTypes.split(",")), "fi", byParent));
-        byLanguage.put("en", asTree("a1", Arrays.asList(hierarchyTypes.split(",")), "en", byParent));
-        byLanguage.put("sv", asTree("a1", Arrays.asList(hierarchyTypes.split(",")), "sv", byParent));
-        return byLanguage;
+    public List<Map<String, HierarchyNode>> getTree(@PathVariable("hierarchyTypes") String hierarchyTypes, @PathVariable("date") String date) {
+        TreeNode[][] treeNodeLists = treeService.getTreeNodes(hierarchyTypes, date);
+        List<Map<String, HierarchyNode>> trees = new ArrayList<>();
+        for (TreeNode[] treeNodes : treeNodeLists) {
+            TreeNode rootNode = findRoot(treeNodes);
+            if (rootNode == null) {
+                return trees;
+            }
+            Map<String, List<TreeNode>> byParent = List.of(treeNodes).stream().collect(Collectors.groupingBy(TreeNode::getParentNodeId));
+            Map<String, HierarchyNode> byLanguage = new HashMap<>();
+            String rootNodeID = rootNode.getParentNodeId();
+            List<String> rootHierarchies = findRootNodeHierarchies(treeNodes);
+            byLanguage.put("fi", asTree(rootNodeID, rootHierarchies, "fi", byParent));
+            byLanguage.put("en", asTree(rootNodeID, rootHierarchies, "en", byParent));
+            byLanguage.put("sv", asTree(rootNodeID, rootHierarchies, "sv", byParent));
+            trees.add(byLanguage);
+        }
+        return trees;
     }
 
 
