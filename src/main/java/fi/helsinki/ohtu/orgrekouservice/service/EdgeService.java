@@ -68,7 +68,7 @@ public class EdgeService {
         return edge;
     }
 
-    public Map<String, List<Edge>> extractAttributesToMap(List<EdgeWrapper> nodeAttributes) {
+    public Map<String, List<Edge>> extractEdgesToMap(List<EdgeWrapper> nodeAttributes) {
         try {
             Map<String , List<Edge>> upperUnitsMap = new HashMap();
             List<Edge> newAttributes = new ArrayList<>();
@@ -83,9 +83,9 @@ public class EdgeService {
                     updatedAttributes.add(edgeMapperToEdge(nodeAttribute));
                 }
             }
-            upperUnitsMap.put(Constants.NEW_ATTRIBUTES , newAttributes);
-            upperUnitsMap.put(Constants.UPDATED_ATTRIBUTES, updatedAttributes);
-            upperUnitsMap.put(Constants.DELETED_ATTRIBUTES, deletedAttributes);
+            upperUnitsMap.put(Constants.NEW_EDGES , newAttributes);
+            upperUnitsMap.put(Constants.UPDATED_EDGES, updatedAttributes);
+            upperUnitsMap.put(Constants.DELETED_EDGES, deletedAttributes);
             return upperUnitsMap;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -93,12 +93,12 @@ public class EdgeService {
     }
     public void updateParents(List<EdgeWrapper> nodeNameAttributes) {
         try {
-            Map<String, List<Edge>> upperUnitsMap = extractAttributesToMap(nodeNameAttributes);
-            String updateNodeNameAttributesUrl = dbUrl + Constants.EDGE_PATH + "/parents";
+            Map<String, List<Edge>> upperUnitsMap = extractEdgesToMap(nodeNameAttributes);
+            String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + "/parents";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity(upperUnitsMap, headers);
-            restTemplate.exchange(updateNodeNameAttributesUrl, HttpMethod.PUT,  requestEntity, String.class);
+            restTemplate.exchange(updateNodeEdgesUrl, HttpMethod.PUT,  requestEntity, String.class);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
