@@ -25,30 +25,6 @@ public class EdgeService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private User getUser(String user) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        User userObject = objectMapper.readValue(user, User.class);
-        return userObject;
-    }
-
-    public List<String> filterHierarchyTypesForUser(List<String> types, User user){
-        List<String> hierarchyTypes = new ArrayList<>();
-        for (String hierarchyType : types) {
-            if (hierarchyType.equals(Constants.ECONOMY_HIERARCHY) || user.getRoles().stream().anyMatch(element -> Constants.MAPPED_ROLES.contains(element))) {
-                hierarchyTypes.add(hierarchyType);
-            }
-        }
-        return hierarchyTypes;
-    }
-
-    public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
-        User loggedUser = getUser(user);
-        String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
-        String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
-        List<String> hierarchyTypes = List.of(response);
-        //List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(hierarchyTypes, loggedUser);
-        return hierarchyTypes;
-    }
     public List<String> getHierarchyTypes() {
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
