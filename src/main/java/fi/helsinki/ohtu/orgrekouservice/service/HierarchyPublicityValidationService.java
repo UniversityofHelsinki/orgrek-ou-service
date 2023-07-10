@@ -56,20 +56,23 @@ public class HierarchyPublicityValidationService {
 
     private void validateNewPublicity(List<HierarchyPublicityValidationDTO> errorMessages, NewHierarchyPublicityDTO hierarchyPublicityDTO) {
         HierarchyPublicityValidationDTO hierarchyPublicityValidationDTO = new HierarchyPublicityValidationDTO();
-        if (hierarchyPublicityDTO.getHierarchy().isEmpty()) {
+        if (hierarchyPublicityDTO.getHierarchy() == null || hierarchyPublicityDTO.getHierarchy().isEmpty()) {
             hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_EMPTY);
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_EMPTY);
+            return;
         }
-        if (hierarchyPublicityDTO.getChildId().isEmpty()) {
+        if (hierarchyPublicityDTO.getChildId() == null || hierarchyPublicityDTO.getChildId().isEmpty()) {
             hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_CHILD_ID_EMPTY);
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_CHILD_ID_EMPTY);
+            return;
         }
-        if (hierarchyPublicityDTO.getNames().isEmpty()) {
+        if (hierarchyPublicityDTO.getNames() == null || hierarchyPublicityDTO.getNames().isEmpty()) {
             hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_LIST_EMPTY);
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_LIST_EMPTY);
+            return;
         }
         if (!hierarchyPublicityDTO.getNames().isEmpty()) {
             for (NameLanguageWrapper nameLanguageWrapper : hierarchyPublicityDTO.getNames()) {
@@ -77,6 +80,7 @@ public class HierarchyPublicityValidationService {
                     hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_OR_LANGUAGE_EMPTY);
                     errorMessages.add(hierarchyPublicityValidationDTO);
                     logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_OR_LANGUAGE_EMPTY);
+                    return;
                 }
             }
         }
