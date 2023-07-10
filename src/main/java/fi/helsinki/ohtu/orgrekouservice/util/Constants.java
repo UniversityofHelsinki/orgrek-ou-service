@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Constants {
     public final static String EDGE_PATH = "/api/edge";
+
+    public final static String HIERARCHY_PUBLICITY_PATH = "/api/hierarchyPublicity";
     public static final String NODE_API_PATH = "/api/node";
 
     public static final String SECTION_API_PATH = "/api/section";
@@ -24,6 +26,8 @@ public class Constants {
     public static final String LYHENNE = "lyhenne";
 
     public static final String ECONOMY_HIERARCHY = "talous";
+
+    public static final String ROLE_READER = "ROLE_READER";
 
     public static final List<String> MAPPED_ROLES = List.of("ROLE_ADMIN", "ROLE_WRITER", "ROLE_READER_ALL");
 
