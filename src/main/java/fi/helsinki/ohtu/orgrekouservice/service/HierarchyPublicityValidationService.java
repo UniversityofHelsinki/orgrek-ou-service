@@ -65,6 +65,11 @@ public class HierarchyPublicityValidationService {
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_CHILD_ID_EMPTY);
         }
+        if (hierarchyPublicityDTO.getNames().isEmpty()) {
+            hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_LIST_EMPTY);
+            errorMessages.add(hierarchyPublicityValidationDTO);
+            logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_LIST_EMPTY);
+        }
     }
 
 }

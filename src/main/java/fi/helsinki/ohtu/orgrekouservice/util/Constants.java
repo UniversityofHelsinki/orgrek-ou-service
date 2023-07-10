@@ -96,4 +96,5 @@ public class Constants {
     public static final String HIERARCHY_PUBLICITY_NAME_NOT_MATCHING = "hierarchy_publicity_name_not_matching";
 
     public static final String HIERARCHY_PUBLICITY_CHILD_ID_EMPTY = "hierarchy_child_id_is_empty";
+    public static final String HIERARCHY_PUBLICITY_NAME_LIST_EMPTY = "hierarchy_publicity_name_list_empty";
 }
