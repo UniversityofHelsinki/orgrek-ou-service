@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicityValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.NameLanguageWrapper;
 import fi.helsinki.ohtu.orgrekouservice.domain.NewHierarchyPublicityDTO;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.slf4j.Logger;
@@ -70,6 +71,14 @@ public class HierarchyPublicityValidationService {
             errorMessages.add(hierarchyPublicityValidationDTO);
             logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_LIST_EMPTY);
         }
+        if (!hierarchyPublicityDTO.getNames().isEmpty()) {
+            for (NameLanguageWrapper nameLanguageWrapper : hierarchyPublicityDTO.getNames()) {
+                if (nameLanguageWrapper.getName().isEmpty() || nameLanguageWrapper.getLanguage().isEmpty()) {
+                    hierarchyPublicityValidationDTO.setErrorMessage(Constants.HIERARCHY_PUBLICITY_NAME_OR_LANGUAGE_EMPTY);
+                    errorMessages.add(hierarchyPublicityValidationDTO);
+                    logger.error("Validation failed for new hierarch publicity :" + " message : " + Constants.HIERARCHY_PUBLICITY_NAME_OR_LANGUAGE_EMPTY);
+                }
+            }
+        }
     }
-
 }

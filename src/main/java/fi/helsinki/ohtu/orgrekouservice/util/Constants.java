@@ -97,4 +97,5 @@ public class Constants {
 
     public static final String HIERARCHY_PUBLICITY_CHILD_ID_EMPTY = "hierarchy_child_id_is_empty";
     public static final String HIERARCHY_PUBLICITY_NAME_LIST_EMPTY = "hierarchy_publicity_name_list_empty";
+    public static final String HIERARCHY_PUBLICITY_NAME_OR_LANGUAGE_EMPTY = "hierarchy_publicity_name_or_language_emtpy";
 }
