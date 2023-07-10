@@ -3,6 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fi.helsinki.ohtu.orgrekouservice.domain.EmptyJsonResponse;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
+import fi.helsinki.ohtu.orgrekouservice.domain.NewHierarchyPublicityDTO;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyPublicityService;
 import fi.helsinki.ohtu.orgrekouservice.service.HierarchyPublicityValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,4 +51,19 @@ public class HierarchyPublicityController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
- }
+
+    @PostMapping(value = "/insertPublicity", headers = "user", produces = "application/json")
+    public ResponseEntity insertPublicity(@RequestBody NewHierarchyPublicityDTO hierarchyPublicityDTO, @RequestHeader String user) {
+        try {
+            ResponseEntity response = hierarchyPublicityValidationService.validateNewHierarchyPublicity(hierarchyPublicityDTO);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                hierarchyPublicityService.insert(hierarchyPublicityDTO, user);
+                return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(response.getBody(), response.getStatusCode());
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
+        }
+    }
+}
