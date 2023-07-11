@@ -2,6 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeAttributeKeyValueDTO;
 import fi.helsinki.ohtu.orgrekouservice.domain.OtherAttributeDTO;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,10 +196,19 @@ public class NodeAttributeService {
         return List.of(response.getBody());
     }
 
-
     public List<Attribute> sanitizeAttributes(List<Attribute> attributes) {
         attributes.removeIf(x -> x.isDeleted() && x.isNew());
         return attributes;
+    }
+
+    public List<NodeAttributeKeyValueDTO> getDistinctNodeAttrs() throws RestClientException {
+        String nodeDistinctNodeAttrsUrl = dbUrl + Constants.NODE_API_PATH + "/distinctattributes/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity(nodeDistinctNodeAttrsUrl, headers);
+        ResponseEntity<NodeAttributeKeyValueDTO[]> response = restTemplate.exchange(nodeDistinctNodeAttrsUrl, HttpMethod.GET,  requestEntity, NodeAttributeKeyValueDTO[].class);
+        //return List.of(response.getBody());
+        return Arrays.asList(response.getBody());
     }
 
 }

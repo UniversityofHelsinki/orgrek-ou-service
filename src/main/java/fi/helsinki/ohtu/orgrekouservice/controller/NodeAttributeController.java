@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/node")
@@ -155,6 +155,20 @@ public class NodeAttributeController {
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/attributes/distinctattributes")
+    public Map<String, List<String>> getDistinctNodeAttrs() throws RestClientException {
+
+        List<NodeAttributeKeyValueDTO> nodeAttributeKeyValues = nodeAttributeService.getDistinctNodeAttrs();
+        Map<String, List<String>> nodeAttributeKeyValuesMap = new HashMap<>();
+        for (NodeAttributeKeyValueDTO nodeAttributeKeyValueDTO : nodeAttributeKeyValues) {
+            if (!nodeAttributeKeyValuesMap.containsKey(nodeAttributeKeyValueDTO.getKey())) {
+                nodeAttributeKeyValuesMap.put(nodeAttributeKeyValueDTO.getKey(), new ArrayList<String>());
+            }
+            nodeAttributeKeyValuesMap.get(nodeAttributeKeyValueDTO.getKey()).add(nodeAttributeKeyValueDTO.getValue());
+        }
+        return nodeAttributeKeyValuesMap;
     }
 
 }
