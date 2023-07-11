@@ -28,11 +28,6 @@ public class EdgeController {
     @Autowired
     private EdgeAttributeValidationService edgeAttributeValidationService;
 
-    @RequestMapping(method = GET, value = "/types", headers = "user", produces = "application/json")
-    public List<String> getHierarchyTypes(@RequestHeader String user) throws JsonProcessingException {
-        return edgeService.getHierarchyTypesForUser(user);
-    }
-
     @PutMapping("/parents")
     public ResponseEntity updateParents(@RequestBody List<EdgeWrapper> attributes) {
         try {
