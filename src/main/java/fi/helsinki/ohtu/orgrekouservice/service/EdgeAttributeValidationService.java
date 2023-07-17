@@ -25,9 +25,13 @@ public class EdgeAttributeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(EdgeAttributeValidationService.class);
 
-    public ResponseEntity validateEdges(List<EdgeWrapper> nodeAttributes) {
+    public ResponseEntity validateEdges(List<EdgeWrapper> edges) {
+        return validateEdges(edges, true);
+    }
+
+    public ResponseEntity validateEdges(List<EdgeWrapper> edges, boolean checkCyclicity) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
-        for (EdgeWrapper edgeWrapper : nodeAttributes) {
+        for (EdgeWrapper edgeWrapper : edges) {
             if (!edgeWrapper.isNew()) {
                 validateId(errorMessages, edgeWrapper);
             }
@@ -36,7 +40,9 @@ public class EdgeAttributeValidationService {
             validateHierarchy(errorMessages, edgeWrapper);
             validateStartDate(errorMessages, edgeWrapper);
             validateDates(errorMessages, edgeWrapper);
-            validateCyclicity(errorMessages, edgeWrapper);
+            if (checkCyclicity) {
+                validateCyclicity(errorMessages, edgeWrapper);
+            }
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
