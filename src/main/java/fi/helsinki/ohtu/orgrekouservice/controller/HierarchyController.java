@@ -140,93 +140,6 @@ public class HierarchyController {
         List<HierarchyFilter> hierarchyFilters = hierarchyService.getAllHierarchyFilters(date, whichtime);
         return hierarchyFilters;
     }
-    @RequestMapping(method = GET, value = "/parents/{id}/{date}")
-    public List<NodeDTO> getParentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
-        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 2));
-        List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, parentNodesIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithAttributes(parentNodes, nodeDTOS, date);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-    @RequestMapping(method = GET, value = "/parents/historyandcurrent/{id}/{date}")
-    public List<NodeDTO> getParentHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 0));
-        List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(parentNodesIdsWithTypes, date);
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithFutureOrHistoryAttributes(parentNodes, nodeDTOS, date, true);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-
-    @RequestMapping(method = GET, value = "/parents/futureandcurrent/{id}/{date}")
-    public List<NodeDTO> getParentFutureAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<Node> parentNodes = List.of(hierarchyService.getParentNodesByIdAndDate(nodeId, date, 1));
-        List<NodeWrapper> parentNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentParentNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(parentNodesIdsWithTypes, date);
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(parentNodes, filteredNodeIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithFutureOrHistoryAttributes(parentNodes, nodeDTOS, date, false);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-
-    @RequestMapping(method = GET, value = "/children/{id}/{date}")
-    public List<NodeDTO> getChildNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) {
-        List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 2));
-        List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getChildNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, childNodesIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithAttributes(childNodes, nodeDTOS, date);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-    @RequestMapping(method = GET, value = "/children/historyandcurrent/{id}/{date}")
-    public List<NodeDTO> getChildHistoryAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 0));
-        List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getHistoryAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyHistoryAndCurrentNodes(childNodesIdsWithTypes, date);
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithFutureOrHistoryAttributes(childNodes, nodeDTOS, date, true);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-
-    @RequestMapping(method = GET, value = "/children/futureandcurrent/{id}/{date}")
-    public List<NodeDTO> getChildFutureAndCurrentNodesWithTypesByIdAndDate(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<Node> childNodes = List.of(hierarchyService.getChildNodesByIdAndDate(nodeId, date, 1));
-        List<NodeWrapper> childNodesIdsWithTypes = List.of(hierarchyService.getFutureAndCurrentChildNodeTypesByChildNodeIdAndDate(nodeId, date));
-        List<NodeWrapper> filteredNodeIdsWithTypes = hierarchyService.filterOnlyFutureAndCurrentNodes(childNodesIdsWithTypes, date);
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithTypes(childNodes, filteredNodeIdsWithTypes);
-        nodeDTOS = hierarchyService.getNodesWithFutureOrHistoryAttributes(childNodes, nodeDTOS, date, false);
-        fullNameService.fillFullNames(nodeDTOS, date, nodeDTO -> nodeDTO.getNode().getUniqueId(), nodeDto -> nodeDto.getNode().getId());
-        return nodeDTOS;
-    }
-
-    @RequestMapping(method = GET, value = "/predecessors/{id}/{date}")
-    public List<NodeDTO> getPredecessorsById(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<NodeEdgeHistoryWrapper> predecessorNodes = List.of(hierarchyService.getPredecessorsById(nodeId));
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithPredecessorOrSuccessorAttributes(predecessorNodes, date,true);
-        fullNameService.fillFullNames(
-                nodeDTOS,
-                nodeDTO -> nodeDTO.getNodeEdgeHistoryWrapper().getUniqueId(),
-                nodeDto -> nodeDto.getNodeEdgeHistoryWrapper().getId(),
-                nodeDTO -> nodeDTO.getNodeEdgeHistoryWrapper().getEndDate()
-        );
-        return nodeDTOS;
-    }
-
-    @RequestMapping(method = GET, value = "/successors/{id}/{date}")
-    public List<NodeDTO> getSuccessorsById(@PathVariable("id") String nodeId, @PathVariable("date") String date) throws ParseException {
-        List<NodeEdgeHistoryWrapper> predecessorNodes = List.of(hierarchyService.getSuccessorsById(nodeId));
-        List<NodeDTO> nodeDTOS = hierarchyService.getNodesWithPredecessorOrSuccessorAttributes(predecessorNodes, date,false);
-        fullNameService.fillFullNames(
-                nodeDTOS,
-                nodeDTO -> nodeDTO.getNodeEdgeHistoryWrapper().getUniqueId(),
-                nodeDto -> nodeDto.getNodeEdgeHistoryWrapper().getId(),
-                nodeDTO -> nodeDTO.getNodeEdgeHistoryWrapper().getStartDate()
-        );
-        return nodeDTOS;
-    }
 
     private <T> Map<String, List<T>> emptyMap() {
         Map<String, List<T>> emptyMap = new HashMap<>();
@@ -280,8 +193,8 @@ public class HierarchyController {
         return in.stream().filter(r -> hierarchies.contains(r.getHierarchy())).collect(Collectors.toList());
     }
 
-    @RequestMapping(method = GET, value = "/predecessors1/{id}/{date}")
-    public Map<String, List<Relative>> getPredecessors1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/predecessors/{id}/{date}")
+    public Map<String, List<Relative>> getPredecessors(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<Relative> predecessors = hierarchyService.getPredecessors(uniqueId, date);
         if (predecessors.isEmpty()) {
             return emptyMap();
@@ -289,8 +202,8 @@ public class HierarchyController {
         return predecessors.stream().sorted(byNameRelative).collect(Collectors.groupingBy(Relative::getLanguage));
     }
 
-    @RequestMapping(method = GET, value = "/successors1/{id}/{date}")
-    public Map<String, List<Relative>> getSuccessors1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
+    @RequestMapping(method = GET, value = "/successors/{id}/{date}")
+    public Map<String, List<Relative>> getSuccessors(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<Relative> successors = hierarchyService.getSuccessors(uniqueId, date);
         if (successors.isEmpty()) {
             return emptyMap();
@@ -307,55 +220,55 @@ public class HierarchyController {
         ).sorted(byName).collect(Collectors.groupingBy(RelativeDTO::getLanguage));
     }
 
-    @RequestMapping(method = GET, value = "/parents1/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getParents1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
+    @RequestMapping(method = GET, value = "/parents/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getParents(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/futureandcurrent/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/parents/futureandcurrent/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getFutureAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getFutureAndCurrentParents(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/historyandcurrent/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/parents/historyandcurrent/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getHistoryAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getHistoryAndCurrentParents(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents1/all/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/parents/all/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getAllParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getAllParents(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, parents);
     }
-    @RequestMapping(method = GET, value = "/children1/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getChildren1(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
+    @RequestMapping(method = GET, value = "/children/{id}/{date}/{rawHierarchies}")
+    public Map<String, List<RelativeDTO>> getChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/futureandcurrent/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/children/futureandcurrent/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getFutureAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getFutureAndCurrentChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/historyandcurrent/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/children/historyandcurrent/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getHistoryAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getHistoryAndCurrentChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, children);
     }
 
-    @RequestMapping(method = GET, value = "/children1/all/{id}/{date}/{rawHierarchies}")
+    @RequestMapping(method = GET, value = "/children/all/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getAllChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getAllChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
