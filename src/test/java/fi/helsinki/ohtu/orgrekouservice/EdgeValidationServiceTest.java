@@ -60,7 +60,7 @@ public class EdgeValidationServiceTest {
         attributeList.add(validAttribute1);
         attributeList.add(validAttribute2);
 
-        ResponseEntity response =  edgeAttributeValidationService.validateEdges(attributeList);
+        ResponseEntity response =  edgeAttributeValidationService.validateEdges(attributeList, false);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(Arrays.asList() , response.getBody());

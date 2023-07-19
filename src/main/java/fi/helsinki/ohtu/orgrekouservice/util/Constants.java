@@ -69,6 +69,8 @@ public class Constants {
     public static final String ATTRIBUTE_PARENT_NODE_ID_VALIDATION_MESSAGE_KEY = "attribute_parent_node_id_is_mandatory";
     public static final String ATTRIBUTE_HIERARCHY_VALIDATION_MESSAGE_KEY = "attribute_hierarchy_is_mandatory";
 
+    public static final String EDGE_CYCLE_DETECTED_MESSAGE_KEY = "edge_cycle_detected";
+
     public static final String SECTION_ATTRIBUTE_VALIDATION_NOT_FOUND_AT_HIERARCHY_FILTER_TABLE = "section_attribute_not_found_at_hierarchy_filter_table";
 
     public static final String SECTION_ATTRIBUTE_FOUND_AT_SECTION_ATTRIBUTE_TABLE = "section_attribute_found_at_section_attribute_table";
