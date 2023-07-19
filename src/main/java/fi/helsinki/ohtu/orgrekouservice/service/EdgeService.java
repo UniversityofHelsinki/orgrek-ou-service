@@ -32,6 +32,13 @@ public class EdgeService {
 
         return types;
     }
+    
+    public List<EdgeWrapper> getPathsFrom(Integer startID, String hierarchy) {
+        String url = dbUrl + Constants.EDGE_PATH + "/paths/" + hierarchy + "/" + startID;
+        EdgeWrapper[] response = restTemplate.getForObject(url, EdgeWrapper[].class);
+        List<EdgeWrapper> edges = List.of(response);
+        return edges;
+    }
 
     private Edge edgeMapperToEdge(EdgeWrapper edgeWrapper) {
         Edge edge = new Edge();
