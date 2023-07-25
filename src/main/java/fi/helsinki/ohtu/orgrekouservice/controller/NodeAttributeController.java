@@ -128,6 +128,7 @@ public class NodeAttributeController {
             List<String> attributeKeys = nodeAttributeService.getAttributeKeys(selected);
             String attributeKeysString = String.join(",", attributeKeys);
             Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = hierarchyService.getUniqueHierarchyFilters(attributeKeysString);
+
             List<OtherAttributeDTO> otherAttributeList = nodeAttributeService.updateOtherNodeAttributes(node.getId(), otherAttributes, uniqueHierarchyFiltersMap);
             return new ResponseEntity<>(
                     otherAttributeList,
