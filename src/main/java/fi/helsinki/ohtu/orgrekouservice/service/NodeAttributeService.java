@@ -151,6 +151,7 @@ public class NodeAttributeService {
 
     public List<OtherAttributeDTO> updateOtherNodeAttributes(String nodeId, List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
         List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
+        List<OtherAttributeDTO> orderedAttributeList = new ArrayList<>();
         Set<String> attributeKeys = otherNodeAttributes.stream().map(Attribute::getKey).collect(Collectors.toSet());
         for (String key : uniqueHierarchyFilterMap.keySet()) {
             OtherAttributeDTO otherAttributeDTO = new OtherAttributeDTO();
@@ -176,7 +177,16 @@ public class NodeAttributeService {
             }
             otherAttributeList.add(otherAttributeDTO);
         }
-        return otherAttributeList;
+
+        for (Attribute otherNodeAttribute : otherNodeAttributes) {
+            for (OtherAttributeDTO otherAttributeDTO : otherAttributeList) {
+                if (otherNodeAttribute.getKey().equals(otherAttributeDTO.getKey())) {
+                    orderedAttributeList.add(otherAttributeDTO);
+                }
+            }
+        }
+
+        return orderedAttributeList;
     };
 
     public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
