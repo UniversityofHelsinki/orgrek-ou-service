@@ -75,15 +75,6 @@ public class NodeAttributeService {
         }
     }
 
-    public List<Attribute> getNodeNameAttributesByNodeId(int nodeUniqueId) {
-        try {
-            String nodeNameAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/name/attributes/" + nodeUniqueId;
-            return getNodeAttributes(nodeNameAttributesUrl);
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void updateNodeTypeAttributes(List<Attribute> nodeTypeAttributes) {
         try {
             Map<String, List<Attribute>> typeAttributesMap = extractAttributesToMap(nodeTypeAttributes);
@@ -97,14 +88,6 @@ public class NodeAttributeService {
         }
     }
 
-    public List<Attribute> getNodeTypeAttributesByNodeId(int nodeUniqueId) {
-        try {
-            String nodeTypeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/type/attributes/" + nodeUniqueId;
-            return getNodeAttributes(nodeTypeAttributesUrl);
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void updateNodeCodeAttributes(List<Attribute> nodeCodeAttributes) {
         try {
@@ -114,14 +97,6 @@ public class NodeAttributeService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity(codeAttributesMap, headers);
             restTemplate.exchange(updateNodeCodeAttributesUrl, HttpMethod.PUT, requestEntity, String.class);
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public List<Attribute> getNodeCodeAttributesByNodeId(int nodeUniqueId) {
-        try {
-            String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/code/attributes/" + nodeUniqueId;
-            return getNodeAttributes(nodeCodeAttributesUrl);
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
@@ -140,14 +115,6 @@ public class NodeAttributeService {
         }
     }
 
-    public List<Attribute> getNodeOtherAttributesByNodeId(int nodeUniqueId) {
-        try {
-            String nodeCodeAttributesUrl = dbUrl + Constants.NODE_API_PATH + "/other/attributes/" + nodeUniqueId;
-            return getNodeAttributes(nodeCodeAttributesUrl);
-        } catch (RestClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public List<OtherAttributeDTO> updateOtherNodeAttributes(String nodeId, List<Attribute> otherNodeAttributes, Map<String, List<HierarchyFilter>> uniqueHierarchyFilterMap) {
         List<OtherAttributeDTO> otherAttributeList = new ArrayList<>();
@@ -188,15 +155,6 @@ public class NodeAttributeService {
 
         return orderedAttributeList;
     };
-
-    public List<String> getAttributeKeys(String selectedHierarchies) throws RestClientException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        String nodeAttributeKeysUrl = dbUrl + Constants.HIERARCHY_FILTER_PATH + "/" + selectedHierarchies + "/" + Constants.OTHER_ATTRIBUTES + "/attributes/keys";
-        HttpEntity<Object> requestEntity = new HttpEntity(nodeAttributeKeysUrl, headers);
-        ResponseEntity<String[]> response = restTemplate.exchange(nodeAttributeKeysUrl, HttpMethod.GET,  requestEntity, String[].class);
-        return List.of(response.getBody());
-    }
 
     private List<Attribute> getNodeAttributes(String nodeAttributesUrl) throws RestClientException {
         HttpHeaders headers = new HttpHeaders();

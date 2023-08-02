@@ -302,35 +302,6 @@ public class HierarchyService {
         return parents;
     }
 
-
-    public List<Relative> getFutureAndCurrentChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children/futureandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
-        List<Relative> children = List.of(response.getBody());
-        return children;
-    }
-
-    public List<Relative> getFutureAndCurrentParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents/futureandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
-        List<Relative> parents = List.of(response.getBody());
-        return parents;
-    }
-
-    public List<Relative> getHistoryAndCurrentChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children/historyandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
-        List<Relative> children = List.of(response.getBody());
-        return children;
-    }
-
-    public List<Relative> getHistoryAndCurrentParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents/historyandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
-        List<Relative> parents = List.of(response.getBody());
-        return parents;
-    }
-
     public List<Relative> getAllParents(Integer uniqueId, String date) {
         String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents/all/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
