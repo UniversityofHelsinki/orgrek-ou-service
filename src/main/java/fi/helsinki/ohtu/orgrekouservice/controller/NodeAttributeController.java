@@ -31,16 +31,6 @@ public class NodeAttributeController {
     @Autowired
     private NodeService nodeService;
 
-    @GetMapping("/{id}/attributes/names")
-    public ResponseEntity<List<Attribute>> getNodeNameAttributes (@PathVariable("id") int nodeUniqueId) {
-        try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeNameAttributesByNodeId(nodeUniqueId);
-            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @PutMapping("/{id}/attributes/names")
     public ResponseEntity updateNameAttributes(@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
@@ -59,15 +49,7 @@ public class NodeAttributeController {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/{id}/attributes/types")
-    public ResponseEntity<List<Attribute>> getNodeTypeAttributes (@PathVariable("id") int nodeUniqueId) {
-        try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeTypeAttributesByNodeId(nodeUniqueId);
-            return new ResponseEntity<>(nodeAttributes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
     @PutMapping("/{id}/attributes/types")
     public ResponseEntity updateTypeAttributes(@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
         try {
@@ -87,18 +69,6 @@ public class NodeAttributeController {
         }
     }
 
-    @GetMapping("/{id}/attributes/codes")
-    public ResponseEntity<List<Attribute>> getNodeCodeAttributes (@PathVariable("id") int nodeUniqueId) {
-        try {
-            List<Attribute> nodeAttributes = nodeAttributeService.getNodeCodeAttributesByNodeId(nodeUniqueId);
-            return new ResponseEntity<>(
-                    nodeAttributes,
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @PutMapping("/{id}/attributes/codes")
     public ResponseEntity updateCodeAttributes (@PathVariable("id") int nodeUniqueId, @RequestBody List<Attribute> attributes) {
@@ -114,26 +84,6 @@ public class NodeAttributeController {
             } else {
                 return new ResponseEntity(response.getBody(), response.getStatusCode());
             }
-        } catch (Exception e) {
-            return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/{id}/attributes/others/hierarchies/{hierarchies}")
-    public ResponseEntity<List<OtherAttributeDTO>> getNodeOtherAttributes (@PathVariable("id") int nodeUniqueId, @PathVariable("hierarchies") List<String> selectedHierarchies) {
-        try {
-            Node node = nodeService.getNodeByUniqueId(nodeUniqueId);
-            List<Attribute> otherAttributes = nodeAttributeService.getNodeOtherAttributesByNodeId(nodeUniqueId);
-            String selected = String.join(",", selectedHierarchies);
-            List<String> attributeKeys = nodeAttributeService.getAttributeKeys(selected);
-            String attributeKeysString = String.join(",", attributeKeys);
-            Map<String, List<HierarchyFilter>> uniqueHierarchyFiltersMap = hierarchyService.getUniqueHierarchyFilters(attributeKeysString);
-
-            List<OtherAttributeDTO> otherAttributeList = nodeAttributeService.updateOtherNodeAttributes(node.getId(), otherAttributes, uniqueHierarchyFiltersMap);
-            return new ResponseEntity<>(
-                    otherAttributeList,
-                    HttpStatus.OK
-            );
         } catch (Exception e) {
             return new ResponseEntity<>(Arrays.asList(), HttpStatus.BAD_REQUEST);
         }
