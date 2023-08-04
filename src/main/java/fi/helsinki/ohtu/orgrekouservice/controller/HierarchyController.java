@@ -35,44 +35,6 @@ public class HierarchyController {
     @Autowired
     private EdgeService edgeService;
 
-    @RequestMapping(method = GET, value = "/{id}/{date}/{selectedHierarchy}/attributes")
-    public Attribute[] getNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
-
-        Attribute[] listAttributes = hierarchyService.getNodeAttributesByNodeIdAndDate(Integer.parseInt(id), date);
-
-        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.NOW);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
-        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
-        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
-
-        return selectedHierarchies;
-    }
-
-    @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
-    public Attribute[] getHistoryAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
-
-        Attribute[] listAttributes = hierarchyService.getNodeHistoryAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
-
-        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.HISTORY);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
-        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
-        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
-
-        return selectedHierarchies;
-    }
-    @RequestMapping(method = GET, value = "/futureandcurrent/{id}/{date}/{selectedHierarchy}/attributes")
-    public Attribute[] getFutureAndCurrentNodeAttributesByNodeIdAndDate(@PathVariable("id") String id, @PathVariable("date") String date, @PathVariable("selectedHierarchy") String selectedHierarchy) {
-
-        Attribute[] listAttributes = hierarchyService.getNodeFutureAndCurrentAttributesByNodeIdAndDate(Integer.parseInt(id), date);
-
-        List<HierarchyFilter> allHierarchyFilters = getAllHierarchyFilters(date, Constants.FUTURE);
-        Attribute[] selectedHierarchies = onlySelectedHierarchies(listAttributes, selectedHierarchy, allHierarchyFilters);
-        boolean areAllHierarhiesSelected = areAllHierarchiesSelected(selectedHierarchy);
-        selectedHierarchies = allOtherHierarchies(listAttributes, allHierarchyFilters, selectedHierarchies, areAllHierarhiesSelected);
-
-        return selectedHierarchies;
-    }
-
     /**
      * Check if all hierarchies are selected
      * @param selectedHierarchies
@@ -227,20 +189,6 @@ public class HierarchyController {
         return byLanguage(selectedHierarchies, parents);
     }
 
-    @RequestMapping(method = GET, value = "/parents/futureandcurrent/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getFutureAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
-        List<Relative> parents = hierarchyService.getFutureAndCurrentParents(uniqueId, date);
-        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
-        return byLanguage(selectedHierarchies, parents);
-    }
-
-    @RequestMapping(method = GET, value = "/parents/historyandcurrent/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getHistoryAndCurrentParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
-        List<Relative> parents = hierarchyService.getHistoryAndCurrentParents(uniqueId, date);
-        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
-        return byLanguage(selectedHierarchies, parents);
-    }
-
     @RequestMapping(method = GET, value = "/parents/all/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getAllParents(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> parents = hierarchyService.getAllParents(uniqueId, date);
@@ -250,20 +198,6 @@ public class HierarchyController {
     @RequestMapping(method = GET, value = "/children/{id}/{date}/{rawHierarchies}")
     public Map<String, List<RelativeDTO>> getChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
         List<Relative> children = hierarchyService.getChildren(uniqueId, date);
-        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
-        return byLanguage(selectedHierarchies, children);
-    }
-
-    @RequestMapping(method = GET, value = "/children/futureandcurrent/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getFutureAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
-        List<Relative> children = hierarchyService.getFutureAndCurrentChildren(uniqueId, date);
-        List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
-        return byLanguage(selectedHierarchies, children);
-    }
-
-    @RequestMapping(method = GET, value = "/children/historyandcurrent/{id}/{date}/{rawHierarchies}")
-    public Map<String, List<RelativeDTO>> getHistoryAndCurrentChildren(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date, @PathVariable("rawHierarchies") String rawHierarchies) {
-        List<Relative> children = hierarchyService.getHistoryAndCurrentChildren(uniqueId, date);
         List<String> selectedHierarchies = Arrays.asList(rawHierarchies.split(","));
         return byLanguage(selectedHierarchies, children);
     }
