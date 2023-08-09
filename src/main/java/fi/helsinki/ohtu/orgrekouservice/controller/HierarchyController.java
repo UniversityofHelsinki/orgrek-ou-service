@@ -1,23 +1,31 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.*;
-import fi.helsinki.ohtu.orgrekouservice.service.EdgeService;
-import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
-import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.RelationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.Relative;
+import fi.helsinki.ohtu.orgrekouservice.domain.RelativeDTO;
+import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
 
 @RestController
 @RequestMapping("/api/node")
@@ -25,83 +33,6 @@ public class HierarchyController {
 
     @Autowired
     private HierarchyService hierarchyService;
-
-    @Autowired
-    private UtilService utilService;
-
-    @Autowired
-    private FullNameService fullNameService;
-
-    @Autowired
-    private EdgeService edgeService;
-
-    /**
-     * Check if all hierarchies are selected
-     * @param selectedHierarchies
-     * @return
-     */
-    private boolean areAllHierarchiesSelected(String selectedHierarchies) {
-
-        String[] hierarchyArr = selectedHierarchies.split(",");
-        int selectedHierarchiesCount = hierarchyArr.length;
-
-        List<String> types = edgeService.getHierarchyTypes();
-        int typesCount = types.size() - 1; //subtract history
-
-        return (selectedHierarchiesCount == typesCount);
-    }
-    private Attribute[] allOtherHierarchies(Attribute[] listAttributes, List<HierarchyFilter> allHierarchyFilters, Attribute[] selectedAttributes, boolean allHierarhiesSelected) {
-        List<Attribute> attributeArr = new ArrayList<>();
-        List<Attribute> selectedAttrList =  new ArrayList<Attribute>(Arrays.asList(selectedAttributes));
-
-        Arrays.stream(listAttributes).forEach(attribute -> {
-            if (attribute.getKey().equalsIgnoreCase(Constants.TYPE)) {
-                //do not show in this case (attribute can be in selectedAttrList)
-            } else
-            if (allHierarhiesSelected && (attribute.getKey().equalsIgnoreCase(Constants.MAINARI) || attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS)) && !attributeArr.contains(attribute)) {
-                //mainari and laskutus_tunnus attributes are shown if all hierarchies are selected
-                //no neeed to check selectedAttrList, because mainari and laskutus_tunnus are not in HIERARCHY_FILTER table.
-                attributeArr.add(attribute);
-            } else if (!attribute.getKey().equalsIgnoreCase(Constants.MAINARI) && !attribute.getKey().equalsIgnoreCase(Constants.LASKUTUS_TUNNUS))  {
-                boolean notFoundInHierarchyFilters = isFoundInAllHierarchyFilters(allHierarchyFilters, attribute);
-                if (notFoundInHierarchyFilters && !attributeArr.contains(attribute) && !selectedAttrList.contains(attribute)) {
-                    //attributes which are not found in hierarchy_filter table are shown
-                    attributeArr.add(attribute);
-                }
-            }
-        });
-        selectedAttrList.addAll(attributeArr);
-
-        return selectedAttrList.toArray(new Attribute[]{});
-    }
-    private boolean isFoundInAllHierarchyFilters(List<HierarchyFilter> allHierarchyFilters, Attribute attribute) {
-        Stream<HierarchyFilter> attributeStream = allHierarchyFilters.stream().filter(
-                o -> o.getKey().equalsIgnoreCase(attribute.getKey()) &&
-                        (o.getValue() == null || o.getValue().equalsIgnoreCase(attribute.getValue()))
-        );
-        return (attributeStream.count() == 0);
-    }
-    private Attribute[] onlySelectedHierarchies(Attribute[] listAttributes, String selectedAttributes, List<HierarchyFilter> allHierarchyFilters) {
-        List<Attribute> attributeArr = new ArrayList<>();
-        String[] selectedAttributesArr = selectedAttributes.split(",");
-        List<String> selectedAttributeList = Arrays.asList(selectedAttributesArr);
-
-        Arrays.stream(listAttributes).forEach(attribute -> {
-            allHierarchyFilters.forEach(hierarchy -> {
-                if (selectedAttributeList.contains(hierarchy.getHierarchy()) && attribute.getKey().equalsIgnoreCase(hierarchy.getKey()) &&
-                        (hierarchy.getValue() == null || attribute.getValue().equalsIgnoreCase(hierarchy.getValue())) && !attributeArr.contains(attribute)) {
-                    attributeArr.add(attribute);
-                }
-            });
-        });
-
-        return attributeArr.toArray(new Attribute[]{});
-    }
-    private List<HierarchyFilter> getAllHierarchyFilters(String date, String whichtime) {
-
-        List<HierarchyFilter> hierarchyFilters = hierarchyService.getAllHierarchyFilters(date, whichtime);
-        return hierarchyFilters;
-    }
 
     private <T> Map<String, List<T>> emptyMap() {
         Map<String, List<T>> emptyMap = new HashMap<>();
@@ -145,14 +76,6 @@ public class HierarchyController {
             hierarchiesCombined.get(p.getId()).get(p.getLanguage()).addHierarchy(p);
         });
         return results;
-    }
-
-    private Collection<RelativeDTO> combineHierarchies(List<Relative> relatives) {
-        return combineHierarchies(relatives, null);
-    }
-
-    private List<Relative> filterRelativesBy(List<String> hierarchies, List<Relative> in) {
-        return in.stream().filter(r -> hierarchies.contains(r.getHierarchy())).collect(Collectors.toList());
     }
 
     @RequestMapping(method = GET, value = "/predecessors/{id}/{date}")

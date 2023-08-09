@@ -1,22 +1,24 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionValidationDTO;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class SectionValidationService {
     static Logger logger = LoggerFactory.getLogger(SectionValidationService.class);
-    public ResponseEntity validateSectionAttributes(List<String> distinctHierarchyFilterKeys, SectionAttribute sectionAttribute, String type, List<SectionAttribute> sectionAttributeList) {
+
+    public ResponseEntity<?> validateSectionAttributes(List<String> distinctHierarchyFilterKeys, SectionAttribute sectionAttribute, String type, List<SectionAttribute> sectionAttributeList) {
         List<SectionValidationDTO> errorMessages = new ArrayList<>();
         validateId(sectionAttribute, type, errorMessages);
         validateFoundAtHierarchyFilter(distinctHierarchyFilterKeys, sectionAttribute, errorMessages);

@@ -1,20 +1,27 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.FullName;
-import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.NodeEdgeHistoryWrapper;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.FullName;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class FullNameService {
@@ -23,9 +30,6 @@ public class FullNameService {
         private String dbUrl;
 
         RestTemplate restTemplate = new RestTemplate();
-
-        private String historyParameter = "historyandcurrent/";
-        private String futureParameter = "futureandcurrent/";
 
         public List<FullName> getFullNamesByUniqueIdAndDate(int uniqueId, String date) {
                 String url = dbUrl + Constants.FULL_NAME_API_PATH + "/" + uniqueId + "/" + date;
@@ -84,7 +88,7 @@ public class FullNameService {
         public void fillFullNames(List<NodeDTO> nodes, Function<NodeDTO, Integer> uniqueIdFn, Function<NodeDTO, String> nodeIdFn, Function<NodeDTO, Date> dateFn) {
                 nodes.forEach(node -> {
                         Integer uniqueId = uniqueIdFn.apply(node);
-                        String nodeId = nodeIdFn.apply(node);
+                        nodeIdFn.apply(node);
                         Date date = dateFn.apply(node);
                         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, new Locale("fi"));
                         List<FullName> fullNames = getFullNamesByUniqueIdAndDate(uniqueId, df.format(date));
