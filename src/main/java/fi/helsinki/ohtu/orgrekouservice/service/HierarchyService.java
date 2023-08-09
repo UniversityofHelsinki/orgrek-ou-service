@@ -275,71 +275,42 @@ public class HierarchyService {
     }
 
     public List<Relative> getPredecessors(Integer uniqueId, String date) {
-        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/predecessors1/" + uniqueId + "/" + date;
+        String predecessorsUrl = dbUrl + Constants.NODE_API_PATH + "/predecessors/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(predecessorsUrl, Relative[].class);
         List<Relative> predecessors = List.of(response.getBody());
         return predecessors;
     }
 
     public List<Relative> getSuccessors(Integer uniqueId, String date) {
-        String successorsUrl = dbUrl + Constants.NODE_API_PATH + "/successors1/" + uniqueId + "/" + date;
+        String successorsUrl = dbUrl + Constants.NODE_API_PATH + "/successors/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(successorsUrl, Relative[].class);
         List<Relative> successors = List.of(response.getBody());
         return successors;
     }
 
     public List<Relative> getChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/" + uniqueId + "/" + date;
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
         List<Relative> children = List.of(response.getBody());
         return children;
     }
 
     public List<Relative> getParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
-        List<Relative> parents = List.of(response.getBody());
-        return parents;
-    }
-
-
-    public List<Relative> getFutureAndCurrentChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/futureandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
-        List<Relative> children = List.of(response.getBody());
-        return children;
-    }
-
-    public List<Relative> getFutureAndCurrentParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/futureandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
-        List<Relative> parents = List.of(response.getBody());
-        return parents;
-    }
-
-    public List<Relative> getHistoryAndCurrentChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/historyandcurrent/" + uniqueId + "/" + date;
-        ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
-        List<Relative> children = List.of(response.getBody());
-        return children;
-    }
-
-    public List<Relative> getHistoryAndCurrentParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/historyandcurrent/" + uniqueId + "/" + date;
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
         List<Relative> parents = List.of(response.getBody());
         return parents;
     }
 
     public List<Relative> getAllParents(Integer uniqueId, String date) {
-        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents1/all/" + uniqueId + "/" + date;
+        String parentsUrl = dbUrl + Constants.NODE_API_PATH + "/parents/all/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(parentsUrl, Relative[].class);
         List<Relative> parents = List.of(response.getBody());
         return parents;
     }
 
     public List<Relative> getAllChildren(Integer uniqueId, String date) {
-        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children1/all/" + uniqueId + "/" + date;
+        String childrenUrl = dbUrl + Constants.NODE_API_PATH + "/children/all/" + uniqueId + "/" + date;
         ResponseEntity<Relative[]> response = restTemplate.getForEntity(childrenUrl, Relative[].class);
         List<Relative> children = List.of(response.getBody());
         return children;

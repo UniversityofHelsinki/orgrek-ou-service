@@ -5,6 +5,7 @@ import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
 import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,18 @@ import java.util.List;
 @Service
 public class EdgeAttributeValidationService {
 
+    @Autowired
+    private EdgeService edgeService;
+
     static Logger logger = LoggerFactory.getLogger(EdgeAttributeValidationService.class);
 
-    public ResponseEntity validateEdges(List<EdgeWrapper> nodeAttributes) {
+    public ResponseEntity validateEdges(List<EdgeWrapper> edges) {
+        return validateEdges(edges, true);
+    }
+
+    public ResponseEntity validateEdges(List<EdgeWrapper> edges, boolean checkCyclicity) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
-        for (EdgeWrapper edgeWrapper : nodeAttributes) {
+        for (EdgeWrapper edgeWrapper : edges) {
             if (!edgeWrapper.isNew()) {
                 validateId(errorMessages, edgeWrapper);
             }
@@ -32,11 +40,29 @@ public class EdgeAttributeValidationService {
             validateHierarchy(errorMessages, edgeWrapper);
             validateStartDate(errorMessages, edgeWrapper);
             validateDates(errorMessages, edgeWrapper);
+            if (checkCyclicity) {
+                validateCyclicity(errorMessages, edgeWrapper);
+            }
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
+    }
+
+    private void validateCyclicity(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
+        validate(containsCycle(edgeWrapper.getParentUniqueId(), edgeWrapper.getChildUniqueId(), edgeWrapper.getHierarchy()), edgeWrapper, Constants.EDGE_CYCLE_DETECTED_MESSAGE_KEY, errorMessages);
+    }
+
+    private boolean containsCycle(Integer parentUniqueId, Integer childUniqueId, String hierarchy) {
+        List<EdgeWrapper> edges = edgeService.getPathsFrom(childUniqueId, hierarchy);
+        for (EdgeWrapper edge : edges) {
+            if (edge.getParentUniqueId().equals(parentUniqueId) || 
+            edge.getChildUniqueId().equals(parentUniqueId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void validateId(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {

@@ -25,36 +25,19 @@ public class EdgeService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private User getUser(String user) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        User userObject = objectMapper.readValue(user, User.class);
-        return userObject;
-    }
-
-    public List<String> filterHierarchyTypesForUser(List<String> types, User user){
-        List<String> hierarchyTypes = new ArrayList<>();
-        for (String hierarchyType : types) {
-            if (hierarchyType.equals(Constants.ECONOMY_HIERARCHY) || user.getRoles().stream().anyMatch(element -> Constants.MAPPED_ROLES.contains(element))) {
-                hierarchyTypes.add(hierarchyType);
-            }
-        }
-        return hierarchyTypes;
-    }
-
-    public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
-        User loggedUser = getUser(user);
-        String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
-        String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
-        List<String> hierarchyTypes = List.of(response);
-        //List<String> filteredHierarchyTypes = filterHierarchyTypesForUser(hierarchyTypes, loggedUser);
-        return hierarchyTypes;
-    }
     public List<String> getHierarchyTypes() {
         String getHierarchyTypes = dbUrl + Constants.EDGE_PATH + "/types";
         String[] response = restTemplate.getForObject(getHierarchyTypes, String[].class);
         List<String> types = List.of(response);
 
         return types;
+    }
+    
+    public List<EdgeWrapper> getPathsFrom(Integer startID, String hierarchy) {
+        String url = dbUrl + Constants.EDGE_PATH + "/paths/" + hierarchy + "/" + startID;
+        EdgeWrapper[] response = restTemplate.getForObject(url, EdgeWrapper[].class);
+        List<EdgeWrapper> edges = List.of(response);
+        return edges;
     }
 
     private Edge edgeMapperToEdge(EdgeWrapper edgeWrapper) {
@@ -91,10 +74,10 @@ public class EdgeService {
             throw new RuntimeException(e);
         }
     }
-    public void updateParents(List<EdgeWrapper> nodeNameAttributes) {
+    public void updateEdges(List<EdgeWrapper> nodeNameAttributes, String path) {
         try {
             Map<String, List<Edge>> upperUnitsMap = extractEdgesToMap(nodeNameAttributes);
-            String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + "/parents";
+            String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + path;
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity(upperUnitsMap, headers);
