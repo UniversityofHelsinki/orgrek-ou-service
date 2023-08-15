@@ -51,14 +51,14 @@ public class EdgeAttributeValidationService {
     }
 
     private void validateCyclicity(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
-        validate(containsCycle(edgeWrapper.getParentUniqueId(), edgeWrapper.getChildUniqueId(), edgeWrapper.getHierarchy()), edgeWrapper, Constants.EDGE_CYCLE_DETECTED_MESSAGE_KEY, errorMessages);
+        validate(containsCycle(edgeWrapper), edgeWrapper, Constants.EDGE_CYCLE_DETECTED_MESSAGE_KEY, errorMessages);
     }
 
-    private boolean containsCycle(Integer parentUniqueId, Integer childUniqueId, String hierarchy) {
-        List<EdgeWrapper> edges = edgeService.getPathsFrom(childUniqueId, hierarchy);
+    private boolean containsCycle(EdgeWrapper newEdge) {
+        List<EdgeWrapper> edges = edgeService.getPathsFrom(newEdge);
         for (EdgeWrapper edge : edges) {
-            if (edge.getParentUniqueId().equals(parentUniqueId) || 
-            edge.getChildUniqueId().equals(parentUniqueId)) {
+            if (edge.getParentUniqueId().equals(newEdge.getParentUniqueId()) || 
+            edge.getChildUniqueId().equals(newEdge.getParentUniqueId())) {
                 return true;
             }
         }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,17 @@ public class EdgeService {
         return types;
     }
     
-    public List<EdgeWrapper> getPathsFrom(Integer startID, String hierarchy) {
-        String url = dbUrl + Constants.EDGE_PATH + "/paths/" + hierarchy + "/" + startID;
+    public List<EdgeWrapper> getPathsFrom(EdgeWrapper edge) {
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        Integer startID = edge.getChildUniqueId();
+        String start = edge.getStartDate() != null ? df.format(edge.getStartDate()) : "null";
+        String end = edge.getEndDate() != null ? df.format(edge.getEndDate()) : "null";
+        String url = dbUrl + Constants.EDGE_PATH + "/paths/" 
+          + edge.getHierarchy() + "/" 
+          + startID + "/" 
+          + start + "/" 
+          + end + "/";
+        System.out.println(url);
         EdgeWrapper[] response = restTemplate.getForObject(url, EdgeWrapper[].class);
         List<EdgeWrapper> edges = List.of(response);
         return edges;
