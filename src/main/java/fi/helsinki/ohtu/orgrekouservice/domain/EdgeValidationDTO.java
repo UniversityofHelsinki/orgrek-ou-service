@@ -23,7 +23,7 @@ public class EdgeValidationDTO {
         return childUniqueId;
     }
     public void setChildUniqueId(int childNodeId) {
-        this.childUniqueId = childUniqueId;
+        this.childUniqueId = childNodeId;
     }
     public String getErrorMessage() {
         return errorMessage;
