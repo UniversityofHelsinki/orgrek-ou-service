@@ -1,25 +1,25 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
-import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.SectionAttribute;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class NodeAttributeValidationService {
-
-    @Autowired
-    private NodeAttributeService nodeAttributeService;
 
     static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
 
@@ -34,7 +34,7 @@ public class NodeAttributeValidationService {
                 .toInstant());
     }
 
-    public ResponseEntity validateNodeAttributes(List<Attribute> nodeAttributes, List<SectionAttribute> sectionAttributes) {
+    public ResponseEntity<?> validateNodeAttributes(List<Attribute> nodeAttributes, List<SectionAttribute> sectionAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
             validateId(errorMessages, nodeAttribute);

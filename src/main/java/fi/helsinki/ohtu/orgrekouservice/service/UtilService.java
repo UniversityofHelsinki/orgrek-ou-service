@@ -1,14 +1,15 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
-import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class UtilService {
@@ -22,38 +23,38 @@ public class UtilService {
 
     public List<NodeDTO> getDisplayNames(List<NodeDTO> nodeDTOS){
         for (NodeDTO nodeDTO : nodeDTOS){
-            String emo_lyhenne = "";
+            String emoLyhenne = "";
             String lyhenne = "";
-            String name_fi = "";
-            String name_sv = "";
-            String name_en = "";
+            String nameFi = "";
+            String nameSv = "";
+            String nameEn = "";
             for (Attribute attribute : nodeDTO.getAttributes()){
                 switch (attribute.getKey()) {
                     case Constants.EMO_LYHENNE:
-                        emo_lyhenne = attribute.getValue() + ", ";
+                        emoLyhenne = attribute.getValue() + ", ";
                         break;
                     case Constants.LYHENNE:
                         lyhenne = " (" + attribute.getValue() + ")";
                         break;
                     case Constants.NAME_FI:
-                        name_fi = attribute.getValue();
+                        nameFi = attribute.getValue();
                         break;
                     case Constants.NAME_SV:
-                        name_sv = attribute.getValue();
+                        nameSv = attribute.getValue();
                         break;
                     case Constants.NAME_EN:
-                        name_en = attribute.getValue();
+                        nameEn = attribute.getValue();
                         break;
                 }
             }
-            if(!name_fi.equals("")){
-                nodeDTO.setDisplayNameFi(emo_lyhenne + name_fi + lyhenne );
+            if(!nameFi.equals("")){
+                nodeDTO.setDisplayNameFi(emoLyhenne + nameFi + lyhenne );
             }
-            if(!name_sv.equals("")){
-                nodeDTO.setDisplayNameSv(emo_lyhenne + name_sv + lyhenne );
+            if(!nameSv.equals("")){
+                nodeDTO.setDisplayNameSv(emoLyhenne + nameSv + lyhenne );
             }
-            if(!name_en.equals("")){
-                nodeDTO.setDisplayNameEn(emo_lyhenne + name_en + lyhenne );
+            if(!nameEn.equals("")){
+                nodeDTO.setDisplayNameEn(emoLyhenne + nameEn + lyhenne );
             }
         }
         return nodeDTOS;

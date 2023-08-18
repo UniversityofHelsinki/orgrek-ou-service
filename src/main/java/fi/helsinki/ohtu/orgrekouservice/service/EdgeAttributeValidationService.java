@@ -1,8 +1,12 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.EdgeValidationDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import fi.helsinki.ohtu.orgrekouservice.domain.EdgeValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class EdgeAttributeValidationService {
@@ -25,11 +26,11 @@ public class EdgeAttributeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(EdgeAttributeValidationService.class);
 
-    public ResponseEntity validateEdges(List<EdgeWrapper> edges) {
+    public ResponseEntity<?> validateEdges(List<EdgeWrapper> edges) {
         return validateEdges(edges, true);
     }
 
-    public ResponseEntity validateEdges(List<EdgeWrapper> edges, boolean checkCyclicity) {
+    public ResponseEntity<?> validateEdges(List<EdgeWrapper> edges, boolean checkCyclicity) {
         List<EdgeValidationDTO> errorMessages = new ArrayList<>();
         for (EdgeWrapper edgeWrapper : edges) {
             if (!edgeWrapper.isNew()) {

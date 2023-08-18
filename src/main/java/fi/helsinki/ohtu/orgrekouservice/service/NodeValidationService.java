@@ -1,15 +1,5 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.NewNodeDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.Node;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -17,12 +7,23 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.AttributeValidationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.NewNodeDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.Node;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+
 @Service
 public class NodeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(NodeValidationService.class);
 
-    public ResponseEntity validateNewNode(NewNodeDTO newNodeDTO) {
+    public ResponseEntity<?> validateNewNode(NewNodeDTO newNodeDTO) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         validateHierarchies(errorMessages, newNodeDTO);
         validateStartDate(errorMessages, newNodeDTO);
@@ -37,7 +38,7 @@ public class NodeValidationService {
         return new ResponseEntity<>(Arrays.asList(), HttpStatus.OK);
     }
 
-    public ResponseEntity validateNode(Node foundNode) {
+    public ResponseEntity<?> validateNode(Node foundNode) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         validateDates(errorMessages, foundNode);
         if (!errorMessages.isEmpty()) {
