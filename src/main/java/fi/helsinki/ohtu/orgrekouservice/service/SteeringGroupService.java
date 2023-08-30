@@ -1,13 +1,14 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.TextDTO;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import fi.helsinki.ohtu.orgrekouservice.domain.TextDTO;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class SteeringGroupService {

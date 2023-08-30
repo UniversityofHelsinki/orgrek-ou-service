@@ -1,20 +1,21 @@
 package fi.helsinki.ohtu.orgrekouservice.controller;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.FullName;
-import fi.helsinki.ohtu.orgrekouservice.domain.Relative;
-import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
-import fi.helsinki.ohtu.orgrekouservice.service.HierarchyService;
-import fi.helsinki.ohtu.orgrekouservice.service.UtilService;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Array;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import fi.helsinki.ohtu.orgrekouservice.domain.FullName;
+import fi.helsinki.ohtu.orgrekouservice.service.FullNameService;
 
 @RestController
 @RequestMapping("/api/node/fullname")

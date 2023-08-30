@@ -1,21 +1,27 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
-import fi.helsinki.ohtu.orgrekouservice.domain.NewHierarchyPublicityDTO;
-import fi.helsinki.ohtu.orgrekouservice.domain.User;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
+import fi.helsinki.ohtu.orgrekouservice.domain.NewHierarchyPublicityDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.User;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class HierarchyPublicityService {
@@ -86,8 +92,8 @@ public class HierarchyPublicityService {
             String updateHierarchyPublicityUrl = dbUrl + Constants.HIERARCHY_PUBLICITY_PATH + "/update";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity(updatedHierarchyPublicity, headers);
-            ResponseEntity response = restTemplate.exchange(updateHierarchyPublicityUrl, HttpMethod.PUT,  requestEntity, HierarchyPublicity.class);
+            HttpEntity<Object> requestEntity = new HttpEntity<>(updatedHierarchyPublicity, headers);
+            ResponseEntity<HierarchyPublicity> response = restTemplate.exchange(updateHierarchyPublicityUrl, HttpMethod.PUT,  requestEntity, HierarchyPublicity.class);
             return (HierarchyPublicity) response.getBody();
         } catch (RestClientException e) {
             throw new RuntimeException(e);
@@ -101,8 +107,8 @@ public class HierarchyPublicityService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("userName", loggedUser.getEppn());
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity(hierarchyPublicityDTO, headers);
-            ResponseEntity response = restTemplate.exchange(insertHierarchyPublicityUrl, HttpMethod.POST,  requestEntity, NewHierarchyPublicityDTO.class);
+            HttpEntity<Object> requestEntity = new HttpEntity<>(hierarchyPublicityDTO, headers);
+            ResponseEntity<NewHierarchyPublicityDTO> response = restTemplate.exchange(insertHierarchyPublicityUrl, HttpMethod.POST,  requestEntity, NewHierarchyPublicityDTO.class);
             return (NewHierarchyPublicityDTO) response.getBody();
         } catch (RestClientException | JsonProcessingException e) {
             throw new RuntimeException(e);

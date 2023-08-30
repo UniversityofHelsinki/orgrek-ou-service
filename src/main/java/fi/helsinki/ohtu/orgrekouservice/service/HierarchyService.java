@@ -1,23 +1,43 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import fi.helsinki.ohtu.orgrekouservice.domain.*;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import static java.util.stream.Collectors.groupingBy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+import fi.helsinki.ohtu.orgrekouservice.domain.Attribute;
+import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.FullNameDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyFilter;
+import fi.helsinki.ohtu.orgrekouservice.domain.Node;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeEdgeHistoryWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.NodeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.domain.RelationDTO;
+import fi.helsinki.ohtu.orgrekouservice.domain.Relative;
+import fi.helsinki.ohtu.orgrekouservice.domain.RelativeDTO;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class HierarchyService {

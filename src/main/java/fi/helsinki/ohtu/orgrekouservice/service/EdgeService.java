@@ -1,9 +1,11 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.helsinki.ohtu.orgrekouservice.domain.*;
-import fi.helsinki.ohtu.orgrekouservice.util.Constants;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,10 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import fi.helsinki.ohtu.orgrekouservice.domain.Edge;
+import fi.helsinki.ohtu.orgrekouservice.domain.EdgeWrapper;
+import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class EdgeService {
@@ -33,8 +34,17 @@ public class EdgeService {
         return types;
     }
     
-    public List<EdgeWrapper> getPathsFrom(Integer startID, String hierarchy) {
-        String url = dbUrl + Constants.EDGE_PATH + "/paths/" + hierarchy + "/" + startID;
+    public List<EdgeWrapper> getPathsFrom(EdgeWrapper edge) {
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        Integer startID = edge.getChildUniqueId();
+        String start = edge.getStartDate() != null ? df.format(edge.getStartDate()) : "null";
+        String end = edge.getEndDate() != null ? df.format(edge.getEndDate()) : "null";
+        String url = dbUrl + Constants.EDGE_PATH + "/paths/" 
+          + edge.getHierarchy() + "/" 
+          + startID + "/" 
+          + start + "/" 
+          + end + "/";
+        System.out.println(url);
         EdgeWrapper[] response = restTemplate.getForObject(url, EdgeWrapper[].class);
         List<EdgeWrapper> edges = List.of(response);
         return edges;
@@ -53,7 +63,7 @@ public class EdgeService {
 
     public Map<String, List<Edge>> extractEdgesToMap(List<EdgeWrapper> nodeAttributes) {
         try {
-            Map<String , List<Edge>> upperUnitsMap = new HashMap();
+            Map<String , List<Edge>> upperUnitsMap = new HashMap<>();
             List<Edge> newAttributes = new ArrayList<>();
             List<Edge> updatedAttributes = new ArrayList<>();
             List<Edge> deletedAttributes = new ArrayList<>();
@@ -80,7 +90,7 @@ public class EdgeService {
             String updateNodeEdgesUrl = dbUrl + Constants.EDGE_PATH + path;
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity(upperUnitsMap, headers);
+            HttpEntity<Object> requestEntity = new HttpEntity<>(upperUnitsMap, headers);
             restTemplate.exchange(updateNodeEdgesUrl, HttpMethod.PUT,  requestEntity, String.class);
         } catch (RestClientException e) {
             throw new RuntimeException(e);

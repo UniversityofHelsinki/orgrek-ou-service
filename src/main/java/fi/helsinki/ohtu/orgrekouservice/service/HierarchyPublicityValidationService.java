@@ -20,7 +20,7 @@ public class HierarchyPublicityValidationService {
 
     static Logger logger = LoggerFactory.getLogger(HierarchyPublicityValidationService.class);
 
-    public ResponseEntity validateHierarchyPublicity(HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
+    public ResponseEntity<?> validateHierarchyPublicity(HierarchyPublicity hierarchyPublicity, HierarchyPublicity foundHierarchyPublicity) {
         List<HierarchyPublicityValidationDTO> errorMessages = new ArrayList<>();
         validatePublicity(errorMessages, hierarchyPublicity, foundHierarchyPublicity);
         if (!errorMessages.isEmpty()) {
@@ -45,7 +45,7 @@ public class HierarchyPublicityValidationService {
         }
     };
 
-    public ResponseEntity validateNewHierarchyPublicity(NewHierarchyPublicityDTO hierarchyPublicityDTO) {
+    public ResponseEntity<?> validateNewHierarchyPublicity(NewHierarchyPublicityDTO hierarchyPublicityDTO) {
         List<HierarchyPublicityValidationDTO> errorMessages = new ArrayList<>();
         validateNewPublicity(errorMessages, hierarchyPublicityDTO);
         if (!errorMessages.isEmpty()) {
