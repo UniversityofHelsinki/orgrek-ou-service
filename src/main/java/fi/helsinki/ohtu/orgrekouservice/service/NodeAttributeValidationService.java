@@ -37,13 +37,16 @@ public class NodeAttributeValidationService {
     public ResponseEntity<?> validateNodeAttributes(List<Attribute> nodeAttributes, List<SectionAttribute> sectionAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
         for (Attribute nodeAttribute : nodeAttributes) {
-            validateId(errorMessages, nodeAttribute);
-            validateKey(errorMessages, nodeAttribute);
-            validateValue(errorMessages, nodeAttribute);
-            validateValueLength(errorMessages, nodeAttribute);
-            validateStartDate(errorMessages, nodeAttribute);
-            validateDates(errorMessages, nodeAttribute);
-            validateAttributeType(errorMessages, nodeAttribute, sectionAttributes);
+          validateId(errorMessages, nodeAttribute);
+          if (nodeAttribute.isDeleted()) {
+            continue;
+          }
+          validateKey(errorMessages, nodeAttribute);
+          validateValue(errorMessages, nodeAttribute);
+          validateValueLength(errorMessages, nodeAttribute);
+          validateStartDate(errorMessages, nodeAttribute);
+          validateDates(errorMessages, nodeAttribute);
+          validateAttributeType(errorMessages, nodeAttribute, sectionAttributes);
         }
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
