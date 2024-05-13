@@ -104,16 +104,16 @@ deploy_test:
     - oc login https://$OPENSHIFT_ADDR_TEST:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN_TEST
     - oc project organisaatiorekisteri
     # list environment variables here
-    - oc set env deployment/organisaatiorekisteri-ou-service-test URL=$DB_POD_URL_TEST
-    - oc set env deployment/organisaatiorekisteri-ou-service-test PORT=$OU_SERVICE_PORT
-    - oc set env deployment/organisaatiorekisteri-ou-service-test TZ="Europe/Helsinki"
+    - oc set env deploy/organisaatiorekisteri-ou-service-test URL=$DB_POD_URL_TEST
+    - oc set env deploy/organisaatiorekisteri-ou-service-test PORT=$OU_SERVICE_PORT
+    - oc set env deploy/organisaatiorekisteri-ou-service-test TZ="Europe/Helsinki"
     # start build process
     - oc start-build organisaatiorekisteri-ou-service-test --from-dir=. --follow
     # patch build config
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"successfulBuildsHistoryLimit":1}}'
     - oc patch bc/organisaatiorekisteri-ou-service-test --patch '{"spec":{"failedBuildsHistoryLimit":1}}'
     # set pod memory quota to 200 MB and limit to 500 MB
-    - oc set resources deployment/organisaatiorekisteri-ou-service-test --limits=memory=500Mi --requests=memory=200Mi
+    - oc set resources deploy/organisaatiorekisteri-ou-service-test --limits=memory=500Mi --requests=memory=200Mi
 
 deploy_prod:
   stage: deploy
