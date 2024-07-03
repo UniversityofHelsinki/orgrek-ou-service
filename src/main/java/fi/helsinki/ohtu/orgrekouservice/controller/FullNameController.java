@@ -55,15 +55,6 @@ public class FullNameController {
         return fullNames.stream().sorted(byDates).collect(Collectors.groupingBy(FullName::getLanguage));
     }
 
-    @RequestMapping(method = GET, value = "/all/{id}")
-    public Map<String, List<FullName>> getAllFullNames(@PathVariable("id") Integer uniqueId) {
-        List<FullName> fullNames = fullNameService.getAllFullNames(uniqueId);
-        if (fullNames.isEmpty()) {
-            return emptyMap();
-        }
-        return fullNames.stream().sorted(byDates).collect(Collectors.groupingBy(FullName::getLanguage));
-    }
-
     @RequestMapping(method = GET, value = "/historyandcurrent/{id}/{date}")
     public Map<String, List<FullName>> getHistoryAndCurrentFullNames(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<FullName> fullNames = fullNameService.getHistoryAndCurrentFullNames(uniqueId, date);
@@ -76,15 +67,6 @@ public class FullNameController {
     @RequestMapping(method = GET, value = "/futureandcurrent/{id}/{date}")
     public Map<String, List<FullName>> getFutureAndCurrentFullNames(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
         List<FullName> fullNames = fullNameService.getFutureAndCurrentFullNames(uniqueId, date);
-        if (fullNames.isEmpty()) {
-            return emptyMap();
-        }
-        return fullNames.stream().sorted(byDates).collect(Collectors.groupingBy(FullName::getLanguage));
-    }
-
-    @RequestMapping(method = GET, value = "/favorable/{id}/{date}")
-    public Map<String, List<FullName>> getFavorableNames(@PathVariable("id") Integer uniqueId, @PathVariable("date") String date) {
-        List<FullName> fullNames = fullNameService.getFavorableNames(uniqueId, date);
         if (fullNames.isEmpty()) {
             return emptyMap();
         }
