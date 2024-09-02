@@ -49,12 +49,6 @@ public class FullNameService {
                 return List.of(names.getBody());
         }
 
-        public List<FullName> getAllFullNames(int uniqueId) {
-                String url = dbUrl + Constants.FULL_NAME_API_PATH + "/all/" + uniqueId + "/";
-                ResponseEntity<FullName[]> names = restTemplate.getForEntity(url, FullName[].class);
-                return List.of(names.getBody());
-        }
-
         public Map<String, List<FullName>> getFullNamesByUniqueIdsAndDate(List<Integer> uniqueIds, String date) {
                 String url = dbUrl + Constants.FULL_NAME_API_PATH + "/" + date + "/mass";
                 HttpHeaders headers = new HttpHeaders();
@@ -67,12 +61,6 @@ public class FullNameService {
                 } catch (URISyntaxException use) {
                         return null;
                 }
-        }
-
-        public List<FullName> getFavorableNames(int uniqueId, String date) {
-                String url = dbUrl + Constants.FULL_NAME_API_PATH + "/favorable/" + uniqueId + "/" + date;
-                ResponseEntity<FullName[]> names = restTemplate.getForEntity(url, FullName[].class);
-                return List.of(names.getBody());
         }
 
         public void fillFullNames(List<NodeDTO> nodes, String date, Function<NodeDTO, Integer> uniqueIdFn, Function<NodeDTO, String> nodeIdFn) {
@@ -111,6 +99,4 @@ public class FullNameService {
                                 break;
                 }
         }
-
-
 }
