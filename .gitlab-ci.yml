@@ -1,4 +1,4 @@
-image: quay.io/tike/alpine-oc-java-11
+image: quay.io/tike/alpine-oc-java-17
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -29,7 +29,7 @@ test :
       - target/site/jacoco
     expire_in: 1 week
 sonarqube-check:
-  image: maven:3.6.3-jdk-11
+  image: maven:3.8.5-openjdk-17
   tags:
     - ohtu-build-3
   variables:

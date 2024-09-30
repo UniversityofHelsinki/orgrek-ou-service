@@ -14,7 +14,7 @@
 	<name>orgrek-ou-fi.helsinki.ohtu.orgrekouservice.service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 	</properties>
 	<dependencies>
@@ -95,8 +95,8 @@
 									<message>Invalid Maven version. It should, at least, be 3.6</message>
 								</requireMavenVersion>
 								<requireJavaVersion>
-									<version>11</version>
-									<message>Invalid Java version. It should, at least, be 11.0</message>
+									<version>17</version>
+									<message>Invalid Java version. It should, at least, be 17.0</message>
 								</requireJavaVersion>
 							</rules>
 						</configuration>
