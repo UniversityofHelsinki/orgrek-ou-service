@@ -11,6 +11,8 @@ cache:
 stages:
   - test
   - build
+  - dependency-check
+  - sonarqube-check
   - audit_scan
   - deploy
 
@@ -28,7 +30,31 @@ test :
     paths:
       - target/site/jacoco
     expire_in: 1 week
+
+# Dependency-Check Stage
+dependency-check:
+  stage: dependency-check
+  only:
+    - main
+  tags:
+    - ohtu-build-4
+  image:
+    name: owasp/dependency-check:latest
+    entrypoint: [""]
+  script:
+    - >
+      /usr/share/dependency-check/bin/dependency-check.sh
+      --project orgrek-ou-service --scan .
+      --format JSON --format HTML  -nvdApiKey $NVD_API_KEY
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - dependency-check-report.json
+      - dependency-check-report.html
+
 sonarqube-check:
+  stage: sonarqube-check
   image: maven:3.8.5-openjdk-17
   tags:
     - ohtu-build-3
@@ -40,10 +66,12 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.projectKey=orgrek-ou-service
+  - mvn verify sonar:sonar -Dsonar.projectKey=orgrek-ou-service -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.token=${SONAR_TOKEN} -Dsonar.dependencyCheck.jsonReportPath=dependency-check-report.json -Dsonar.dependencyCheck.htmlReportPath=dependency-check-report.html
   only:
     - main
-
+  needs:
+    - job: dependency-check
+      artifacts: true
 
 build :
   stage: build
