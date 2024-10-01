@@ -37,7 +37,7 @@ dependency-check:
   only:
     - main
   tags:
-    - ohtu-build-4
+    - ohtu-build-3
   image:
     name: owasp/dependency-check:latest
     entrypoint: [""]
