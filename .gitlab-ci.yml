@@ -9,11 +9,20 @@ cache:
 
 # Define the stages
 stages:
+  - clean-cache
   - test
   - build
   - dependency-check
   - sonarqube-check
   - deploy
+
+clean-cache:
+  stage: clean-cache
+  tags:
+    - ohtu-build-4
+  script:
+    - echo "Clearing Maven repository cache."
+    - rm -rf $CI_PROJECT_DIR/.m2/repository
 
 # Define the process for each stage
 
@@ -47,14 +56,13 @@ dependency-check:
       --format JSON --format HTML  -nvdApiKey $NVD_API_KEY
   artifacts:
     when: always
-    expire_in: 1 week
+    expire_in: 1 hour
     paths:
       - dependency-check-report.json
       - dependency-check-report.html
 
 sonarqube-check:
   stage: sonarqube-check
-  image: maven:3.8.5-openjdk-17
   tags:
     - ohtu-build-3
   variables:
@@ -78,7 +86,7 @@ build :
     - ohtu-build-3
   script:
     - java -version
-    - mvn install
+    - mvn clean install
   artifacts:
     name: orgrek-ous-build-$CI_BUILD_ID-$CI_BUILD_REF
     paths:
