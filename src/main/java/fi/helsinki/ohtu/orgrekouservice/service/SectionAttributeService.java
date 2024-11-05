@@ -3,12 +3,7 @@ package fi.helsinki.ohtu.orgrekouservice.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -75,16 +70,15 @@ public class SectionAttributeService {
         }
     }
 
-    public HttpStatus deleteSectionAttribute(int sectionId) {
+    public HttpStatusCode deleteSectionAttribute(int sectionId) {
         try {
             String deleteNodePropertiesUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/delete";
-            ResponseEntity response = restTemplate.exchange(deleteNodePropertiesUrl, HttpMethod.DELETE,  null, ResponseEntity.class);
+            ResponseEntity<?> response = restTemplate.exchange(deleteNodePropertiesUrl, HttpMethod.DELETE, null, ResponseEntity.class);
             return response.getStatusCode();
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
     }
-
     public SectionAttribute getSectionAttributeById(int sectionId) {
         try {
             String getSectionAttributeUrl = dbUrl + Constants.SECTION_API_PATH + "/" + sectionId + "/get";

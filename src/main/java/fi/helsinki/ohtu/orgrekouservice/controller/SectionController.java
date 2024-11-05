@@ -84,7 +84,7 @@ public class SectionController {
             SectionAttribute foundSectionAttribute = sectionAttributeService.getSectionAttributeById(sectionId);
             ResponseEntity<?> response = sectionValidationService.validateSectionAttributes(distinctHierarchyFilterKeys, foundSectionAttribute, Constants.DELETE_SECTION_ATTRIBUTE, sectionAttributeList);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                HttpStatus httpStatus = sectionAttributeService.deleteSectionAttribute(sectionId);
+                HttpStatus httpStatus = (HttpStatus) sectionAttributeService.deleteSectionAttribute(sectionId);
                 return new ResponseEntity<>(new EmptyJsonResponse(), httpStatus);
             }  else {
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
