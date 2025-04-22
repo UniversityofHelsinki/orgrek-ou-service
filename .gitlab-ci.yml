@@ -99,6 +99,8 @@ build :
 dtrack-sbom:
   tags:
     - ohtu-build-4
+  only:
+    - schedules
   stage: dtrack-sbom
   script:
     - mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
@@ -111,7 +113,7 @@ submit-sbom:
   image: alpine:latest
   stage: dependency-track-submit
   only:
-    - main
+    - schedules
   tags:
     - ohtu-build-4
   dependencies:
