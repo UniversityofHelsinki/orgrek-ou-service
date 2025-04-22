@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>fi.helsinki.ohtu</groupId>
@@ -14,6 +14,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<tomcat.version>10.1.40</tomcat.version>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 	</properties>
 	<dependencies>
@@ -30,8 +31,8 @@
 		<!-- Unit testing -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.10.3</version>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.8.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
