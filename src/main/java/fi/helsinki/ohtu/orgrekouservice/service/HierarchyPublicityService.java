@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
 import fi.helsinki.ohtu.orgrekouservice.domain.NewHierarchyPublicityDTO;
@@ -30,13 +30,13 @@ public class HierarchyPublicityService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private User getUser(String user) throws  JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        User userObject = objectMapper.readValue(user, User.class);
+    private User getUser(String user) throws JacksonException {
+        JsonMapper jsonMapper = JsonMapper.builder().build();
+        User userObject = jsonMapper.readValue(user, User.class);
         return userObject;
     }
 
-    public List<String> getHierarchyTypesForUser(String user) throws JsonProcessingException {
+    public List<String> getHierarchyTypesForUser(String user) throws JacksonException {
         User loggedUser = getUser(user);
         List<HierarchyPublicity> hierarchyPublicityList = getHierarchyPublicities();
         return hierarchyTypes(loggedUser, hierarchyPublicityList);
@@ -110,7 +110,7 @@ public class HierarchyPublicityService {
             HttpEntity<Object> requestEntity = new HttpEntity<>(hierarchyPublicityDTO, headers);
             ResponseEntity<NewHierarchyPublicityDTO> response = restTemplate.exchange(insertHierarchyPublicityUrl, HttpMethod.POST,  requestEntity, NewHierarchyPublicityDTO.class);
             return (NewHierarchyPublicityDTO) response.getBody();
-        } catch (RestClientException | JsonProcessingException e) {
+        } catch (RestClientException | JacksonException e) {
             throw new RuntimeException(e);
         }
     }
