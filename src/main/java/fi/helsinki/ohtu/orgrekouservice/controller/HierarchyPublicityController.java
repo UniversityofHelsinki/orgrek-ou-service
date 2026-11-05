@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import fi.helsinki.ohtu.orgrekouservice.domain.EmptyJsonResponse;
 import fi.helsinki.ohtu.orgrekouservice.domain.HierarchyPublicity;
@@ -35,7 +35,7 @@ public class HierarchyPublicityController {
     private HierarchyPublicityValidationService hierarchyPublicityValidationService;
 
     @RequestMapping(method = GET, value = "/types", headers = "user", produces = "application/json")
-    public List<String> getHierarchyTypes(@RequestHeader String user) throws JsonProcessingException {
+    public List<String> getHierarchyTypes(@RequestHeader String user) throws JacksonException {
         return hierarchyPublicityService.getHierarchyTypesForUser(user);
     }
 
