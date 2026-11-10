@@ -1,10 +1,8 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,16 +21,6 @@ public class NodeAttributeValidationService {
 
     static Logger logger = LoggerFactory.getLogger(NodeAttributeValidationService.class);
 
-    public LocalDate convertToLocalDate(Date dateToConvert) {
-        return LocalDate.ofInstant(
-                dateToConvert.toInstant(), ZoneId.systemDefault());
-    }
-
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-    }
 
     public ResponseEntity<?> validateNodeAttributes(List<Attribute> nodeAttributes, List<SectionAttribute> sectionAttributes) {
         List<AttributeValidationDTO> errorMessages = new ArrayList<>();
@@ -103,10 +91,7 @@ public class NodeAttributeValidationService {
     private void validateDates(List<AttributeValidationDTO> errorMessages, Attribute nodeAttribute) {
         AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
         if (nodeAttribute.getStartDate() != null && nodeAttribute.getEndDate() != null) {
-            LocalDate convertedEndDate = convertToLocalDate(nodeAttribute.getEndDate());
-            convertedEndDate = convertedEndDate.minusDays(1);
-            Date convertedDate = convertToDateViaInstant(convertedEndDate);
-            if (nodeAttribute.getStartDate().after(convertedDate)) {
+            if (!nodeAttribute.getStartDate().plusDays(1).isBefore(nodeAttribute.getEndDate())) {
                 attributeValidationDTO.setId(nodeAttribute.getId());
                 attributeValidationDTO.setNodeId(nodeAttribute.getNodeId());
                 attributeValidationDTO.setErrorMessage(Constants.ATTRIBUTE_DATE_VALIDATION_MESSAGE_KEY);
