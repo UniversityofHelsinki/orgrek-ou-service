@@ -90,6 +90,7 @@ deploy_dev:
     name: development
   only:
     - main
+    - date-conversion
   except:
     - schedules
   script:

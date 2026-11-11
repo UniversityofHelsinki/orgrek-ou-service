@@ -2,7 +2,7 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 public class Attribute {
@@ -11,8 +11,8 @@ public class Attribute {
     private String nodeId;
     private String key;
     private String value;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private boolean isNew;
 
@@ -22,7 +22,7 @@ public class Attribute {
     public Attribute() {
     }
 
-    public Attribute(Integer id, String nodeId, String key, String value, Date startDate, Date endDate, boolean isNew, boolean deleted) {
+    public Attribute(Integer id, String nodeId, String key, String value, LocalDate startDate, LocalDate endDate, boolean isNew, boolean deleted) {
         this.id = id;
         this.nodeId = nodeId;
         this.key = key;
@@ -58,19 +58,19 @@ public class Attribute {
         this.value = value;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

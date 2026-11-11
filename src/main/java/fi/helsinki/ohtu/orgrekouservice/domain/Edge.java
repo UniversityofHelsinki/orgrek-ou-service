@@ -2,14 +2,14 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Edge {
         private Integer id;
         private int parentUniqueId;
         private int childUniqueId;
-        private Date startDate;
-        private Date endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private String hierarchy;
         private boolean isNew;
         private boolean deleted;
@@ -38,19 +38,19 @@ public class Edge {
             this.childUniqueId = childUniqueId;
         }
 
-        public Date getStartDate() {
+        public LocalDate getStartDate() {
             return startDate;
         }
 
-        public void setStartDate(Date startDate) {
+        public void setStartDate(LocalDate startDate) {
             this.startDate = startDate;
         }
 
-        public Date getEndDate() {
+        public LocalDate getEndDate() {
             return endDate;
         }
 
-        public void setEndDate(Date endDate) {
+        public void setEndDate(LocalDate endDate) {
             this.endDate = endDate;
         }
 

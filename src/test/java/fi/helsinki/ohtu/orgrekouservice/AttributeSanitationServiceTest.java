@@ -9,7 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,12 +27,12 @@ public class AttributeSanitationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -69,12 +69,12 @@ public class AttributeSanitationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
