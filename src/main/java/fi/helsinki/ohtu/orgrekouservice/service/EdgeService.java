@@ -1,6 +1,6 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +21,7 @@ import fi.helsinki.ohtu.orgrekouservice.util.Constants;
 
 @Service
 public class EdgeService {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Value("${server.url}")
     private String dbUrl;
 
@@ -35,10 +36,9 @@ public class EdgeService {
     }
     
     public List<EdgeWrapper> getPathsFrom(EdgeWrapper edge) {
-        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         Integer startID = edge.getChildUniqueId();
-        String start = edge.getStartDate() != null ? df.format(edge.getStartDate()) : "null";
-        String end = edge.getEndDate() != null ? df.format(edge.getEndDate()) : "null";
+        String start = edge.getStartDate() != null ? edge.getStartDate().format(DATE_FORMATTER) : "null";
+        String end = edge.getEndDate() != null ? edge.getEndDate().format(DATE_FORMATTER) : "null";
         String url = dbUrl + Constants.EDGE_PATH + "/paths/" 
           + edge.getHierarchy() + "/" 
           + startID + "/" 
@@ -68,9 +68,9 @@ public class EdgeService {
             List<Edge> updatedAttributes = new ArrayList<>();
             List<Edge> deletedAttributes = new ArrayList<>();
             for (EdgeWrapper nodeAttribute : nodeAttributes) {
-                if (nodeAttribute.isNew()) {
+                if (Boolean.TRUE.equals(nodeAttribute.isNew())) {
                     newAttributes.add(edgeMapperToEdge(nodeAttribute));
-                } else if (nodeAttribute.isDeleted()) {
+                } else if (Boolean.TRUE.equals(nodeAttribute.isDeleted())) {
                     deletedAttributes.add(edgeMapperToEdge(nodeAttribute));
                 } else {
                     updatedAttributes.add(edgeMapperToEdge(nodeAttribute));
@@ -99,7 +99,7 @@ public class EdgeService {
 
 
     public List<EdgeWrapper> sanitizeAttributes(List<EdgeWrapper> attributes) {
-        attributes.removeIf(x -> x.isDeleted() && x.isNew());
+        attributes.removeIf(x -> Boolean.TRUE.equals(x.isDeleted()) && Boolean.TRUE.equals(x.isNew()));
         return attributes;
     }
 

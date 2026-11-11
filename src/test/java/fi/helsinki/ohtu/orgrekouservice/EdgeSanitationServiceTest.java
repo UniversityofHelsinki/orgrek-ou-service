@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,16 +23,8 @@ public class EdgeSanitationServiceTest {
 
     @Test
     public void testTwoValidEdgeWrappersShouldReturnTwoEdgeWrappersFromSanitation() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 20);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, 15);
+        LocalDate endDate = LocalDate.of(2022, 2, 20);
 
         List<EdgeWrapper> attributeList = new ArrayList<>();
         EdgeWrapper validAttribute1 = new EdgeWrapper();
@@ -66,16 +57,8 @@ public class EdgeSanitationServiceTest {
 
     @Test
     public void testOneInValidAndOneValidEdgeWrapperShouldReturnOneAttributeAfterSanitation() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 20);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, 15);
+        LocalDate endDate = LocalDate.of(2022, 2, 20);
 
         List<EdgeWrapper> attributeList = new ArrayList<>();
         EdgeWrapper validAttribute1 = new EdgeWrapper();

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,12 +30,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -93,12 +94,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 5);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -168,12 +169,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 16);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -225,12 +226,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -276,12 +277,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -327,12 +328,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -384,12 +385,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -441,12 +442,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 16);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -504,12 +505,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
@@ -566,12 +567,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 17);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
@@ -635,12 +636,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -701,12 +702,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute inValidAttribute1 = new Attribute();
@@ -766,12 +767,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();
@@ -832,12 +833,12 @@ public class AttributeValidationServiceTest {
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 15);
         c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 20);
         c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate endDate = LocalDate.of(2022, 2, c.get(Calendar.DATE));
 
         List<Attribute> attributeList = new ArrayList<>();
         Attribute validAttribute1 = new Attribute();

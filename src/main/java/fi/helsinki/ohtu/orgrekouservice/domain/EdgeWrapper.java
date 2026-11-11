@@ -2,13 +2,13 @@ package fi.helsinki.ohtu.orgrekouservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class EdgeWrapper {
 
     public EdgeWrapper() { }
 
-    public EdgeWrapper(Integer id, Integer parentUniqueId, Integer childUniqueId, String hierarchy, Date startDate, Date endDate, boolean isNew, boolean deleted) {
+    public EdgeWrapper(Integer id, Integer parentUniqueId, Integer childUniqueId, String hierarchy, LocalDate startDate, LocalDate endDate, Boolean isNew, Boolean deleted) {
         setId(id);
         setParentUniqueId(parentUniqueId);
         setChildUniqueId(childUniqueId);
@@ -21,13 +21,13 @@ public class EdgeWrapper {
     private Integer id;
     private Integer parentUniqueId;
     private Integer childUniqueId;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String hierarchy;
 
-    private boolean isNew;
+    private Boolean isNew;
 
-    private boolean deleted;
+    private Boolean deleted;
 
     public Integer getId() {
         return id;
@@ -53,19 +53,19 @@ public class EdgeWrapper {
         this.childUniqueId = childUniqueId;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -78,19 +78,19 @@ public class EdgeWrapper {
     }
 
     @JsonProperty("isNew")
-    public boolean isNew() {
+    public Boolean isNew() {
         return isNew;
     }
 
-    public void setNew(boolean aNew) {
+    public void setNew(Boolean aNew) {
         isNew = aNew;
     }
 
-    public boolean isDeleted() {
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 }

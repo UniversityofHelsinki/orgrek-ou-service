@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,15 +83,9 @@ public class NodeValidationServiceTest {
 
     @Test
     public void testNewNodeWithValidDatesShouldReturnEmptyArrayWithStatusCode200() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
         NewNodeDTO node = new NewNodeDTO();
         node.setParentNodeId("a1");
-        node.setStartDate(startDate);
+        node.setStartDate(LocalDate.of(2022, 2, 15));
         node.setEndDate(null);
 
         List<String> hierarchies = new ArrayList<>();
@@ -112,21 +107,10 @@ public class NodeValidationServiceTest {
 
     @Test
     public void testNewNodeWithInValidDatesShouldReturnEmptyArrayWithStatusCode422() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 16);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
-
         NewNodeDTO node = new NewNodeDTO();
         node.setParentNodeId("a1");
-        node.setStartDate(startDate);
-        node.setEndDate(endDate);
+        node.setStartDate(LocalDate.of(2022, 2, 15));
+        node.setEndDate(LocalDate.of(2022, 2, 16));
 
         List<String> hierarchies = new ArrayList<>();
         hierarchies.add("talous");
@@ -148,21 +132,10 @@ public class NodeValidationServiceTest {
 
     @Test
     public void testNewNodeWithInValidHierarchiesShouldReturnEmptyArrayWithStatusCode422() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 17);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
-
         NewNodeDTO node = new NewNodeDTO();
         node.setParentNodeId("a1");
-        node.setStartDate(startDate);
-        node.setEndDate(endDate);
+        node.setStartDate(LocalDate.of(2022, 2, 15));
+        node.setEndDate(LocalDate.of(2022, 2, 17));
 
         List<String> hierarchies = new ArrayList<>();
         node.setHierarchies(hierarchies);
@@ -181,21 +154,10 @@ public class NodeValidationServiceTest {
 
     @Test
     public void testNewNodeWithInValidNamesShouldReturnEmptyArrayWithStatusCode422() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 17);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
-
         NewNodeDTO node = new NewNodeDTO();
         node.setParentNodeId("a1");
-        node.setStartDate(startDate);
-        node.setEndDate(endDate);
+        node.setStartDate(LocalDate.of(2022, 2, 15));
+        node.setEndDate(LocalDate.of(2022, 2, 17));
 
         List<String> hierarchies = new ArrayList<>();
         hierarchies.add("talous");

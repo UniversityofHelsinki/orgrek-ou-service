@@ -1,10 +1,8 @@
 package fi.helsinki.ohtu.orgrekouservice.service;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -107,10 +105,7 @@ public class EdgeAttributeValidationService {
     private void validateDates(List<EdgeValidationDTO> errorMessages, EdgeWrapper edgeWrapper) {
         EdgeValidationDTO attributeValidationDTO = new EdgeValidationDTO();
         if (edgeWrapper.getStartDate() != null && edgeWrapper.getEndDate() != null) {
-            LocalDate convertedEndDate = convertToLocalDate(edgeWrapper.getEndDate());
-            convertedEndDate = convertedEndDate.minusDays(1);
-            Date convertedDate = convertToDateViaInstant(convertedEndDate);
-            if (edgeWrapper.getStartDate().after(convertedDate)) {
+            if (!edgeWrapper.getStartDate().isBefore(edgeWrapper.getEndDate())) {
                 attributeValidationDTO.setId(edgeWrapper.getId());
                 attributeValidationDTO.setParentUniqueId(edgeWrapper.getParentUniqueId());
                 attributeValidationDTO.setChildUniqueId(edgeWrapper.getChildUniqueId());
@@ -121,14 +116,4 @@ public class EdgeAttributeValidationService {
         }
     };
 
-    public LocalDate convertToLocalDate(Date dateToConvert) {
-        return LocalDate.ofInstant(
-                dateToConvert.toInstant(), ZoneId.systemDefault());
-    }
-
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-    }
 }
