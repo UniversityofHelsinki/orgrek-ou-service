@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,16 +28,8 @@ public class EdgeValidationServiceTest {
 
     @Test
     public void testAttributesWithValidDatesShouldReturnEmptyArrayWithStatusCode200() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 15);
-        c.set(Calendar.YEAR, 2022);
-        Date startDate = c.getTime();
-
-        c.set(Calendar.MONTH, 1);
-        c.set(Calendar.DATE, 20);
-        c.set(Calendar.YEAR, 2022);
-        Date endDate = c.getTime();
+        LocalDate startDate = LocalDate.of(2022, 2, 15);
+        LocalDate endDate = LocalDate.of(2022, 2, 20);
 
         List<EdgeWrapper> attributeList = new ArrayList<>();
         EdgeWrapper validAttribute1 = new EdgeWrapper();

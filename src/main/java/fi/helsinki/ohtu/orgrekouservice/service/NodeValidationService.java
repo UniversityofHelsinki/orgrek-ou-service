@@ -28,10 +28,7 @@ public class NodeValidationService {
         validateHierarchies(errorMessages, newNodeDTO);
         validateStartDate(errorMessages, newNodeDTO);
         validateNames(errorMessages, newNodeDTO);
-        Node newNode = new Node();
-        newNode.setStartDate(newNodeDTO.getStartDate());
-        newNode.setEndDate(newNodeDTO.getEndDate());
-        validateDates(errorMessages, newNode);
+        validateDates(errorMessages, newNodeDTO.getStartDate(), newNodeDTO.getEndDate());
         if (!errorMessages.isEmpty()) {
             return new ResponseEntity<>(errorMessages, HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -100,4 +97,12 @@ public class NodeValidationService {
             }
         }
     };
+
+    private void validateDates(List<AttributeValidationDTO> errorMessages, LocalDate startDate, LocalDate endDate) {
+        if (startDate != null && endDate != null && !startDate.plusDays(1).isBefore(endDate)) {
+            AttributeValidationDTO attributeValidationDTO = new AttributeValidationDTO();
+            attributeValidationDTO.setErrorMessage(Constants.NODE_DATE_VALIDATION_MESSAGE_KEY);
+            errorMessages.add(attributeValidationDTO);
+        }
+    }
 }

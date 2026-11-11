@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         JsonMapper mapper = JsonMapper.builder()
+                .findAndAddModules()
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .defaultDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
                 .build();
